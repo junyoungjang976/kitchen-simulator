@@ -1,0 +1,10 @@
+{
+  "restaurant_type": "fast_food",
+  "seat_count": 30,
+  "shape": "rectangle",
+  "width": 6.0,
+  "depth": 5.0,
+  "optimization": {
+    "iterations": 100
+  }
+}

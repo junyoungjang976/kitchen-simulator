@@ -1,0 +1,169 @@
+{
+  "success": true,
+  "simulation_id": "demo1234",
+  "timestamp": "2026-02-01T12:00:00",
+  "input_summary": {
+    "restaurant_type": "casual",
+    "seat_count": 50,
+    "shape": "rectangle"
+  },
+  "total_area_sqm": 48.0,
+  "zones": [
+    {
+      "type": "storage",
+      "polygon": [[0, 4.8], [4.32, 4.8], [4.32, 8.0], [0, 8.0]],
+      "area_sqm": 13.82,
+      "ratio": 0.288,
+      "equipment_ids": ["reach_in_refrigerator_2door_0", "reach_in_freezer_1door_1", "dry_storage_shelf_2"]
+    },
+    {
+      "type": "preparation",
+      "polygon": [[0, 0], [4.32, 0], [4.32, 4.8], [0, 4.8]],
+      "area_sqm": 20.74,
+      "ratio": 0.432,
+      "equipment_ids": ["work_table_large_3", "prep_sink_4"]
+    },
+    {
+      "type": "cooking",
+      "polygon": [[4.32, 0], [10.0, 0], [10.0, 4.8], [4.32, 4.8]],
+      "area_sqm": 27.26,
+      "ratio": 0.568,
+      "equipment_ids": ["gas_range_6burner_5", "deep_fryer_single_6", "convection_oven_7"]
+    },
+    {
+      "type": "washing",
+      "polygon": [[4.32, 4.8], [10.0, 4.8], [10.0, 8.0], [4.32, 8.0]],
+      "area_sqm": 18.18,
+      "ratio": 0.379,
+      "equipment_ids": ["three_compartment_sink_8", "dishwasher_undercounter_9", "hand_wash_sink_10"]
+    }
+  ],
+  "placements": [
+    {
+      "equipment_id": "reach_in_refrigerator_2door_0",
+      "equipment_name": "업소용 냉장고 2도어",
+      "zone": "storage",
+      "x": 0.15,
+      "y": 5.0,
+      "width": 1.32,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "reach_in_freezer_1door_1",
+      "equipment_name": "업소용 냉동고 1도어",
+      "zone": "storage",
+      "x": 1.62,
+      "y": 5.0,
+      "width": 0.66,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "dry_storage_shelf_2",
+      "equipment_name": "건조 저장 선반",
+      "zone": "storage",
+      "x": 2.43,
+      "y": 5.0,
+      "width": 1.2,
+      "depth": 0.45,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "work_table_large_3",
+      "equipment_name": "작업대 대형",
+      "zone": "preparation",
+      "x": 0.15,
+      "y": 0.15,
+      "width": 2.0,
+      "depth": 0.75,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "prep_sink_4",
+      "equipment_name": "전처리 싱크대",
+      "zone": "preparation",
+      "x": 2.3,
+      "y": 0.15,
+      "width": 0.6,
+      "depth": 0.55,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "gas_range_6burner_5",
+      "equipment_name": "가스레인지 6구",
+      "zone": "cooking",
+      "x": 4.5,
+      "y": 0.15,
+      "width": 0.91,
+      "depth": 0.7,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "deep_fryer_single_6",
+      "equipment_name": "튀김기 단일",
+      "zone": "cooking",
+      "x": 5.6,
+      "y": 0.15,
+      "width": 0.4,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "convection_oven_7",
+      "equipment_name": "컨벡션 오븐",
+      "zone": "cooking",
+      "x": 6.2,
+      "y": 0.15,
+      "width": 0.9,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "three_compartment_sink_8",
+      "equipment_name": "3조 싱크대",
+      "zone": "washing",
+      "x": 4.5,
+      "y": 5.0,
+      "width": 1.8,
+      "depth": 0.6,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "dishwasher_undercounter_9",
+      "equipment_name": "언더카운터 식기세척기",
+      "zone": "washing",
+      "x": 6.5,
+      "y": 5.0,
+      "width": 0.6,
+      "depth": 0.6,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "hand_wash_sink_10",
+      "equipment_name": "손 세척 싱크",
+      "zone": "washing",
+      "x": 7.3,
+      "y": 5.0,
+      "width": 0.4,
+      "depth": 0.35,
+      "rotation": 0
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "errors": [],
+    "warnings": [
+      "preparation 구역이 권장 최대 비율(30%)보다 큽니다 (현재: 43.2%)"
+    ]
+  },
+  "scores": {
+    "workflow_efficiency": 0.847,
+    "space_utilization": 0.623,
+    "safety_compliance": 0.95,
+    "accessibility": 0.812,
+    "overall": 78.4
+  },
+  "iterations_run": 87,
+  "computation_time_ms": 2341.5
+}

@@ -1,0 +1,16 @@
+{
+  "restaurant_type": "casual",
+  "seat_count": 50,
+  "shape": "rectangle",
+  "width": 8.0,
+  "depth": 6.0,
+  "fixed_elements": [
+    {"type": "entry", "x": 8.0, "y": 3.0, "width": 1.0},
+    {"type": "water", "x": 0.5, "y": 5.5},
+    {"type": "drain", "x": 7.5, "y": 0.5}
+  ],
+  "optimization": {
+    "iterations": 50,
+    "seed": 42
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "restaurant_type": "casual",
+  "seat_count": 60,
+  "shape": "L",
+  "vertices": [
+    [0, 0],
+    [10, 0],
+    [10, 4],
+    [6, 4],
+    [6, 8],
+    [0, 8]
+  ],
+  "optimization": {
+    "iterations": 100
+  }
+}

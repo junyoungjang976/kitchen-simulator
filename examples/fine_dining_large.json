@@ -1,0 +1,10 @@
+{
+  "restaurant_type": "fine_dining",
+  "seat_count": 80,
+  "shape": "rectangle",
+  "width": 12.0,
+  "depth": 8.0,
+  "optimization": {
+    "iterations": 200
+  }
+}
