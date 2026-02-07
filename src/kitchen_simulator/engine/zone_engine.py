@@ -8,6 +8,7 @@ from ..geometry.polygon import create_polygon, create_rectangle, get_area, get_v
 from ..geometry.partitioner import (
     partition_rectangle_for_zones,
     partition_l_shape_for_zones,
+    partition_u_shape_for_zones,
     adjust_zone_ratios_for_restaurant_type,
     adjust_zone_ratios_from_patterns,
 )
@@ -49,8 +50,7 @@ class ZoneEngine:
         elif kitchen.shape == KitchenShape.L_SHAPED:
             zone_polys = partition_l_shape_for_zones(kitchen_poly, self.zone_ratios)
         elif kitchen.shape == KitchenShape.U_SHAPED:
-            # U자는 L자와 유사하게 처리
-            zone_polys = partition_l_shape_for_zones(kitchen_poly, self.zone_ratios)
+            zone_polys = partition_u_shape_for_zones(kitchen_poly, self.zone_ratios)
         else:
             # 불규칙 형태는 바운딩 박스 기반 분할
             zone_polys = partition_rectangle_for_zones(kitchen_poly, self.zone_ratios)

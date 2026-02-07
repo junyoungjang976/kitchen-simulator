@@ -6,7 +6,7 @@ import math
 
 from ..domain.zone import Zone, ZoneType, WORKFLOW_ORDER
 from ..domain.equipment import EquipmentPlacement
-from ..domain.constraint import ConstraintViolation
+from ..domain.constraint import ConstraintViolation, CONSTRAINTS
 from ..geometry.polygon import create_polygon, get_area, get_centroid, get_bounds
 
 @dataclass
@@ -109,12 +109,29 @@ class ScoringEngine:
                 dist = math.sqrt((c1[0] - c2[0])**2 + (c1[1] - c2[1])**2)
                 total_distance += dist
 
-        # 이상적 거리 대비 점수 (짧을수록 좋음)
-        # 5m를 기준으로 정규화
-        ideal_distance = 5.0
-        efficiency = max(0, 1 - (total_distance / (ideal_distance * 3)))
+        # 주방 크기 기반 적응형 점수
+        all_bounds = [poly.bounds for poly in zone_polys.values()]
+        if all_bounds:
+            overall_minx = min(b[0] for b in all_bounds)
+            overall_miny = min(b[1] for b in all_bounds)
+            overall_maxx = max(b[2] for b in all_bounds)
+            overall_maxy = max(b[3] for b in all_bounds)
+            kitchen_w = overall_maxx - overall_minx
+            kitchen_h = overall_maxy - overall_miny
+        else:
+            kitchen_w, kitchen_h = 10.0, 8.0
 
-        return min(1.0, efficiency)
+        perimeter = 2 * (kitchen_w + kitchen_h)
+        optimal = (kitchen_w + kitchen_h) * 0.75  # 2D 배치 현실 반영
+        max_dist = perimeter
+
+        if max_dist <= optimal:
+            return 0.5
+
+        efficiency = (max_dist - total_distance) / (max_dist - optimal)
+        efficiency = max(0.0, min(1.0, efficiency))
+
+        return efficiency
 
     def _calculate_space_utilization(
         self,
@@ -134,16 +151,15 @@ class ScoringEngine:
             for poly in polys:
                 total_equipment_area += poly.area
 
-        # 이상적 활용률은 40-60%
+        # 상업용 주방 현실 반영: 장비 면적 비율 12-35%가 이상적
         utilization = total_equipment_area / total_zone_area
 
-        # 40-60% 범위에서 최고점
-        if 0.4 <= utilization <= 0.6:
+        if 0.12 <= utilization <= 0.35:
             return 1.0
-        elif utilization < 0.4:
-            return utilization / 0.4
+        elif utilization < 0.12:
+            return utilization / 0.12
         else:
-            return max(0, 1 - (utilization - 0.6) / 0.4)
+            return max(0, 1 - (utilization - 0.35) / 0.35)
 
     def _calculate_safety_compliance(
         self,
@@ -171,7 +187,7 @@ class ScoringEngine:
     ) -> float:
         """접근성 점수
 
-        장비 간 평균 간격이 적절한지 평가
+        각 장비의 최근접 이웃 간격으로 평가 (전체 쌍이 아닌 인접 장비만)
         """
         all_gaps = []
 
@@ -180,19 +196,25 @@ class ScoringEngine:
                 continue
 
             for i in range(len(polys)):
-                for j in range(i + 1, len(polys)):
-                    gap = polys[i].distance(polys[j])
-                    all_gaps.append(gap)
+                min_gap = float('inf')
+                for j in range(len(polys)):
+                    if i != j:
+                        gap = polys[i].distance(polys[j])
+                        min_gap = min(min_gap, gap)
+                if min_gap < float('inf'):
+                    all_gaps.append(min_gap)
 
         if not all_gaps:
-            return 0.8  # 장비가 적으면 기본 점수
+            return 0.8
 
         avg_gap = sum(all_gaps) / len(all_gaps)
 
-        # 이상적 간격은 0.9-1.2m
-        if 0.9 <= avg_gap <= 1.2:
+        # 이상적 간격: 0.3m(장비 간격) ~ 1.5m
+        # 벽면 라인 배치 시 측면 간격 0.30m은 정상
+        min_ideal = CONSTRAINTS["equipment_spacing"]  # 0.30m
+        if min_ideal <= avg_gap <= 1.5:
             return 1.0
-        elif avg_gap < 0.9:
-            return avg_gap / 0.9
+        elif avg_gap < min_ideal:
+            return avg_gap / min_ideal
         else:
-            return max(0.5, 1 - (avg_gap - 1.2) / 2)
+            return max(0.5, 1 - (avg_gap - 1.5) / 3)

@@ -7,6 +7,7 @@ class ConstraintType(Enum):
     WALL_CLEARANCE = "wall_clearance"
     EQUIPMENT_SPACING = "equipment_spacing"
     ZONE_ADJACENCY = "zone_adjacency"
+    RANGE_SPACING = "range_spacing"
     VENTILATION = "ventilation"
     WATER_ACCESS = "water_access"
     DRAIN_ACCESS = "drain_access"

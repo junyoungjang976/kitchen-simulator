@@ -154,6 +154,74 @@ def partition_l_shape_for_zones(
 
     return zones
 
+def partition_u_shape_for_zones(
+    kitchen_poly: Polygon,
+    zone_ratios: Optional[Dict[ZoneType, float]] = None
+) -> Dict[ZoneType, Polygon]:
+    """U자형 주방을 4구역으로 분할
+
+    U자형은 3열 분할:
+    - 좌측: 저장(상) + 전처리(하)
+    - 중앙: 조리 (U자 바닥부)
+    - 우측: 세척
+    """
+    if zone_ratios is None:
+        zone_ratios = {
+            ZoneType.STORAGE: 0.20,
+            ZoneType.PREPARATION: 0.25,
+            ZoneType.COOKING: 0.35,
+            ZoneType.WASHING: 0.20,
+        }
+
+    minx, miny, maxx, maxy = kitchen_poly.bounds
+    width = maxx - minx
+    height = maxy - miny
+
+    # 3열 비율: 좌측(저장+전처리) | 중앙(조리) | 우측(세척)
+    left_ratio = zone_ratios[ZoneType.STORAGE] + zone_ratios[ZoneType.PREPARATION]
+    center_ratio = zone_ratios[ZoneType.COOKING]
+    right_ratio = zone_ratios[ZoneType.WASHING]
+    total = left_ratio + center_ratio + right_ratio
+
+    left_x = minx + width * (left_ratio / total)
+    right_x = minx + width * ((left_ratio + center_ratio) / total)
+
+    left_box = create_rectangle(minx, miny, left_x - minx, height)
+    center_box = create_rectangle(left_x, miny, right_x - left_x, height)
+    right_box = create_rectangle(right_x, miny, maxx - right_x, height)
+
+    left_region = kitchen_poly.intersection(left_box)
+    center_region = kitchen_poly.intersection(center_box)
+    right_region = kitchen_poly.intersection(right_box)
+
+    if left_region.is_empty or center_region.is_empty or right_region.is_empty:
+        return partition_l_shape_for_zones(kitchen_poly, zone_ratios)
+
+    # 좌측: 저장(상) + 전처리(하)
+    left_bounds = left_region.bounds
+    storage_ratio = zone_ratios[ZoneType.STORAGE] / (
+        zone_ratios[ZoneType.STORAGE] + zone_ratios[ZoneType.PREPARATION]
+    )
+    left_mid_y = left_bounds[1] + (left_bounds[3] - left_bounds[1]) * (1 - storage_ratio)
+
+    zones = {}
+    zones[ZoneType.STORAGE] = left_region.intersection(
+        create_rectangle(left_bounds[0], left_mid_y,
+                        left_bounds[2] - left_bounds[0],
+                        left_bounds[3] - left_mid_y)
+    )
+    zones[ZoneType.PREPARATION] = left_region.intersection(
+        create_rectangle(left_bounds[0], left_bounds[1],
+                        left_bounds[2] - left_bounds[0],
+                        left_mid_y - left_bounds[1])
+    )
+
+    zones[ZoneType.COOKING] = center_region
+    zones[ZoneType.WASHING] = right_region
+
+    return zones
+
+
 def adjust_zone_ratios_for_restaurant_type(
     restaurant_type: str
 ) -> Dict[ZoneType, float]:

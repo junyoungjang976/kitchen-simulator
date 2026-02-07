@@ -31,7 +31,8 @@ def find_placement_candidates(
     item_height: float,
     existing: List[Polygon],
     clearance: float = 0.15,
-    grid_step: float = 0.1
+    grid_step: float = 0.1,
+    equip_clearance: float = None
 ) -> List[Tuple[float, float]]:
     """배치 가능한 후보 위치 찾기
 
@@ -39,27 +40,31 @@ def find_placement_candidates(
         container: 배치할 영역
         item_width, item_height: 배치할 아이템 크기
         existing: 기존 배치된 다각형들
-        clearance: 최소 이격 거리
+        clearance: 벽 이격 거리
         grid_step: 그리드 샘플링 간격
+        equip_clearance: 장비 간 최소 이격 거리 (None이면 clearance 사용, 하위호환)
 
     Returns:
         배치 가능한 (x, y) 좌표 리스트
     """
     from .polygon import create_rectangle
 
+    equip_gap = equip_clearance if equip_clearance is not None else clearance
+    wall_clearance = clearance
+
     minx, miny, maxx, maxy = container.bounds
     candidates = []
 
-    # 이격 거리를 고려한 유효 영역
-    effective_container = container.buffer(-clearance)
+    # 벽 이격만 고려한 유효 영역
+    effective_container = container.buffer(-wall_clearance)
     if effective_container.is_empty:
         return []
 
     # 그리드 탐색
-    x = minx + clearance
-    while x + item_width <= maxx - clearance:
-        y = miny + clearance
-        while y + item_height <= maxy - clearance:
+    x = minx + wall_clearance
+    while x + item_width <= maxx - wall_clearance:
+        y = miny + wall_clearance
+        while y + item_height <= maxy - wall_clearance:
             item_poly = create_rectangle(x, y, item_width, item_height)
 
             # 컨테이너 내부에 있는지
@@ -67,11 +72,10 @@ def find_placement_candidates(
                 y += grid_step
                 continue
 
-            # 기존 배치와 충돌하는지
+            # 기존 배치와 충돌하는지 (장비 간 간격 사용)
             collision = False
             for existing_poly in existing:
-                # 이격 거리 포함해서 확인
-                if item_poly.buffer(clearance).intersects(existing_poly):
+                if item_poly.buffer(equip_gap).intersects(existing_poly):
                     collision = True
                     break
 

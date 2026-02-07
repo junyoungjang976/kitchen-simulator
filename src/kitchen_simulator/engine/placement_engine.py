@@ -93,14 +93,21 @@ class PlacementEngine:
 
             zone_poly = zone_polys[target_zone]
 
+            # 장비별 측면 간격 기반 배치 (벽면 라인 배치 허용)
+            per_equip_clearance = max(
+                equip.clearance_sides,
+                CONSTRAINTS["equipment_spacing"]
+            )
+
             # 배치 후보 위치 찾기
             candidates = find_placement_candidates(
                 container=zone_poly,
                 item_width=equip.width,
                 item_height=equip.depth,
                 existing=self.placed_polys[target_zone],
-                clearance=max(equip.clearance_sides, CONSTRAINTS["wall_clearance"]),
-                grid_step=0.1
+                clearance=CONSTRAINTS["wall_clearance"],
+                grid_step=0.2,
+                equip_clearance=per_equip_clearance
             )
 
             if not candidates:
@@ -110,8 +117,9 @@ class PlacementEngine:
                     item_width=equip.depth,  # 회전
                     item_height=equip.width,
                     existing=self.placed_polys[target_zone],
-                    clearance=max(equip.clearance_sides, CONSTRAINTS["wall_clearance"]),
-                    grid_step=0.1
+                    clearance=CONSTRAINTS["wall_clearance"],
+                    grid_step=0.2,
+                    equip_clearance=per_equip_clearance
                 )
                 rotation = 90
             else:
@@ -164,34 +172,43 @@ class PlacementEngine:
 
         우선순위:
         1. 벽면 장비는 벽 가까이
-        2. 중앙 접근성 확보
-        3. 기존 장비와의 간격
+        2. 기존 장비 근처 (밀집 배치로 공간 효율 향상)
+        3. 중앙 접근성 확보
         """
         if not candidates:
             return None
 
         minx, miny, maxx, maxy = zone_poly.bounds
         zone_center = ((minx + maxx) / 2, (miny + maxy) / 2)
+        w = equip.depth if rotation == 90 else equip.width
+        h = equip.width if rotation == 90 else equip.depth
+
+        # 현재 구역에 배치된 장비들
+        target_zone = CATEGORY_TO_ZONE.get(equip.category)
+        existing = self.placed_polys.get(target_zone, [])
 
         def score_position(pos: Tuple[float, float]) -> float:
             x, y = pos
             score = 0.0
 
-            # 벽 가까이 (벽면 장비인 경우)
+            # 벽 가까이 배치 선호 (모든 장비)
+            dist_to_wall = min(
+                abs(x - minx), abs(x + w - maxx),
+                abs(y - miny), abs(y + h - maxy)
+            )
             if equip.requires_wall:
-                dist_to_wall = min(
-                    abs(x - minx), abs(x + equip.width - maxx),
-                    abs(y - miny), abs(y + equip.depth - maxy)
-                )
-                score -= dist_to_wall * 10  # 벽에서 멀수록 감점
-
-            # 중앙 접근성 (비벽면 장비)
+                score -= dist_to_wall * 15
             else:
-                dist_to_center = ((x - zone_center[0])**2 + (y - zone_center[1])**2)**0.5
-                score -= dist_to_center * 2
+                score -= dist_to_wall * 3
+
+            # 기존 장비 근처 배치 (밀집도 향상)
+            if existing:
+                item_poly = create_rectangle(x, y, w, h)
+                nearest = min(item_poly.distance(ep) for ep in existing)
+                score -= nearest * 5  # 가까울수록 높은 점수
 
             # 약간의 랜덤성
-            score += self.rng.random() * 0.5
+            score += self.rng.random() * 0.3
 
             return score
 

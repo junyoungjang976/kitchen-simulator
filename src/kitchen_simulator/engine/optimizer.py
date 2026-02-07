@@ -77,6 +77,15 @@ class Optimizer:
                 fixed_elements=fixed_elements
             )
 
+            # 구역별 equipment_ids 기록
+            for zone in zones:
+                zone.equipment_ids = []
+            for p in placements.placements:
+                for zone in zones:
+                    if zone.zone_type == p.zone_type:
+                        zone.equipment_ids.append(p.equipment_id)
+                        break
+
             # 폴리곤 준비
             zone_polys = {z.zone_type: create_polygon(z.polygon) for z in zones}
             placement_polys = placement_engine.get_placement_polygons()

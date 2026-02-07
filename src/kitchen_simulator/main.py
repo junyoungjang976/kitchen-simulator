@@ -181,10 +181,35 @@ def _create_output(result, kitchen_input, kitchen) -> SimulationOutput:
                 rotation=p.rotation,
             ))
 
+    # 최종 결과에 대해 검증 재실행하여 실제 결과 포함
+    zone_polys = {z.zone_type: create_polygon(z.polygon) for z in result.best_zones}
+    # placement_polys 재구성
+    placement_polys = {zt: [] for zt in zone_polys}
+    for p in result.best_placements.placements:
+        equip_id = p.equipment_id.rsplit("_", 1)[0]
+        equip = EQUIPMENT_CATALOG.get(equip_id)
+        if equip:
+            w = equip.depth if p.rotation == 90 else equip.width
+            h = equip.width if p.rotation == 90 else equip.depth
+            poly = create_rectangle(p.x, p.y, w, h)
+            if p.zone_type in placement_polys:
+                placement_polys[p.zone_type].append(poly)
+
+    val_engine = ValidationEngine()
+    _, violations = val_engine.validate_all(
+        result.best_zones,
+        result.best_placements.placements,
+        zone_polys,
+        placement_polys,
+        fixed_elements=kitchen_input.fixed_elements if hasattr(kitchen_input, 'fixed_elements') else None,
+    )
+    val_summary = val_engine.get_summary()
+
     validation = ValidationResult(
-        passed=result.best_score.safety_compliance >= 0.8,
-        errors=[],
-        warnings=result.best_placements.warnings,
+        passed=val_summary["passed"],
+        errors=val_summary["errors"],
+        warnings=val_summary["warnings"] + result.best_placements.warnings,
+        infos=val_summary.get("infos", []),
     )
 
     scores = ScoreMetrics(

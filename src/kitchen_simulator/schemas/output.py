@@ -27,6 +27,7 @@ class ValidationResult(BaseModel):
     passed: bool
     errors: List[str] = Field(default_factory=list)
     warnings: List[str] = Field(default_factory=list)
+    infos: List[str] = Field(default_factory=list)
 
 class ScoreMetrics(BaseModel):
     """점수 지표"""
