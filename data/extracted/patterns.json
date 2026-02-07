@@ -1,0 +1,4228 @@
+{
+  "version": "1.0.0",
+  "created_at": "2026-02-07T09:05:02.122630",
+  "total_cases": 396,
+  "total_equipment_items": 6472,
+  "business_type_patterns": {
+    "cafe": {
+      "business_type": "cafe",
+      "case_count": 26,
+      "avg_kitchen_area_py": 9.4,
+      "avg_equipment_count": 15.8,
+      "equipment_frequencies": [
+        {
+          "equipment_name": "2단작업대",
+          "category": "prep",
+          "count": 26,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "테이블냉장고",
+          "category": "refrigeration",
+          "count": 15,
+          "ratio": 0.577
+        },
+        {
+          "equipment_name": "벽선반",
+          "category": "storage",
+          "count": 12,
+          "ratio": 0.462
+        },
+        {
+          "equipment_name": "상부선반",
+          "category": "storage",
+          "count": 9,
+          "ratio": 0.346
+        },
+        {
+          "equipment_name": "다단식선반",
+          "category": "storage",
+          "count": 8,
+          "ratio": 0.308
+        },
+        {
+          "equipment_name": "2단 작업대",
+          "category": "prep",
+          "count": 7,
+          "ratio": 0.269
+        },
+        {
+          "equipment_name": "(unknown)",
+          "category": "other",
+          "count": 7,
+          "ratio": 0.269
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "dishwashing",
+          "count": 6,
+          "ratio": 0.231
+        },
+        {
+          "equipment_name": "커피그라인더",
+          "category": "other",
+          "count": 6,
+          "ratio": 0.231
+        },
+        {
+          "equipment_name": "제과쇼케이스",
+          "category": "serving",
+          "count": 6,
+          "ratio": 0.231
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "prep",
+          "count": 6,
+          "ratio": 0.231
+        },
+        {
+          "equipment_name": "45BOX냉동냉장고",
+          "category": "refrigeration",
+          "count": 6,
+          "ratio": 0.231
+        },
+        {
+          "equipment_name": "커피머신",
+          "category": "other",
+          "count": 5,
+          "ratio": 0.192
+        },
+        {
+          "equipment_name": "배기후드",
+          "category": "ventilation",
+          "count": 5,
+          "ratio": 0.192
+        },
+        {
+          "equipment_name": "식기세척기",
+          "category": "dishwashing",
+          "count": 5,
+          "ratio": 0.192
+        },
+        {
+          "equipment_name": "파니니그릴",
+          "category": "cooking",
+          "count": 5,
+          "ratio": 0.192
+        },
+        {
+          "equipment_name": "다단식 선반",
+          "category": "storage",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "잔반처리대",
+          "category": "dishwashing",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "가스 튀김기",
+          "category": "cooking",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "전자레인지",
+          "category": "cooking",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "백선반",
+          "category": "storage",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "제빙기",
+          "category": "refrigeration",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "1조세척기세정대",
+          "category": "dishwashing",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "제빙기",
+          "category": "other",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "야채절단기",
+          "category": "other",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "그라인더",
+          "category": "other",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "싱크",
+          "category": "dishwashing",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "JS-WALL SHELF",
+          "category": "storage",
+          "count": 4,
+          "ratio": 0.154
+        },
+        {
+          "equipment_name": "테이블 냉장고",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.115
+        },
+        {
+          "equipment_name": "잔반통",
+          "category": "dishwashing",
+          "count": 3,
+          "ratio": 0.115
+        }
+      ],
+      "category_distribution": {
+        "other": 0.22,
+        "refrigeration": 0.191,
+        "cooking": 0.156,
+        "prep": 0.14,
+        "storage": 0.127,
+        "dishwashing": 0.113,
+        "serving": 0.04,
+        "ventilation": 0.013
+      },
+      "common_shapes": {
+        "unknown": 10,
+        "irregular": 7,
+        "rectangle": 6,
+        "U": 1,
+        "square": 1,
+        "L": 1
+      }
+    },
+    "western": {
+      "business_type": "western",
+      "case_count": 12,
+      "avg_kitchen_area_py": 15.1,
+      "avg_equipment_count": 27.6,
+      "equipment_frequencies": [
+        {
+          "equipment_name": "2단작업대",
+          "category": "prep",
+          "count": 20,
+          "ratio": 1.667
+        },
+        {
+          "equipment_name": "벽선반",
+          "category": "storage",
+          "count": 16,
+          "ratio": 1.333
+        },
+        {
+          "equipment_name": "백선반",
+          "category": "storage",
+          "count": 16,
+          "ratio": 1.333
+        },
+        {
+          "equipment_name": "다단식선반",
+          "category": "storage",
+          "count": 15,
+          "ratio": 1.25
+        },
+        {
+          "equipment_name": "테이블냉장고",
+          "category": "refrigeration",
+          "count": 11,
+          "ratio": 0.917
+        },
+        {
+          "equipment_name": "상부선반",
+          "category": "storage",
+          "count": 9,
+          "ratio": 0.75
+        },
+        {
+          "equipment_name": "잔반처리대",
+          "category": "dishwashing",
+          "count": 7,
+          "ratio": 0.583
+        },
+        {
+          "equipment_name": "잔반통",
+          "category": "dishwashing",
+          "count": 7,
+          "ratio": 0.583
+        },
+        {
+          "equipment_name": "2단 작업대",
+          "category": "prep",
+          "count": 7,
+          "ratio": 0.583
+        },
+        {
+          "equipment_name": "식기건조대",
+          "category": "dishwashing",
+          "count": 6,
+          "ratio": 0.5
+        },
+        {
+          "equipment_name": "식기세척기",
+          "category": "dishwashing",
+          "count": 6,
+          "ratio": 0.5
+        },
+        {
+          "equipment_name": "음료냉장고",
+          "category": "refrigeration",
+          "count": 6,
+          "ratio": 0.5
+        },
+        {
+          "equipment_name": "제빙기",
+          "category": "other",
+          "count": 5,
+          "ratio": 0.417
+        },
+        {
+          "equipment_name": "가스튀김기",
+          "category": "cooking",
+          "count": 4,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "토핑테이블냉장고",
+          "category": "refrigeration",
+          "count": 4,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "음료 냉장고",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.25
+        },
+        {
+          "equipment_name": "식기 건조대",
+          "category": "dishwashing",
+          "count": 3,
+          "ratio": 0.25
+        },
+        {
+          "equipment_name": "낮은서랍냉장고",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.25
+        },
+        {
+          "equipment_name": "가스그리들",
+          "category": "cooking",
+          "count": 3,
+          "ratio": 0.25
+        },
+        {
+          "equipment_name": "밧드테이블냉장고",
+          "category": "serving",
+          "count": 3,
+          "ratio": 0.25
+        },
+        {
+          "equipment_name": "테이블 냉장고",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.25
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "dishwashing",
+          "count": 3,
+          "ratio": 0.25
+        },
+        {
+          "equipment_name": "배기후드",
+          "category": "ventilation",
+          "count": 3,
+          "ratio": 0.25
+        },
+        {
+          "equipment_name": "식기 자동 세척기",
+          "category": "dishwashing",
+          "count": 2,
+          "ratio": 0.167
+        },
+        {
+          "equipment_name": "가스 튀김기",
+          "category": "cooking",
+          "count": 2,
+          "ratio": 0.167
+        },
+        {
+          "equipment_name": "오픈 캐비닛",
+          "category": "serving",
+          "count": 2,
+          "ratio": 0.167
+        },
+        {
+          "equipment_name": "45BOX냉동냉장고",
+          "category": "refrigeration",
+          "count": 2,
+          "ratio": 0.167
+        },
+        {
+          "equipment_name": "보조작업대",
+          "category": "prep",
+          "count": 2,
+          "ratio": 0.167
+        },
+        {
+          "equipment_name": "가스4구렌지",
+          "category": "cooking",
+          "count": 2,
+          "ratio": 0.167
+        },
+        {
+          "equipment_name": "배기후드/유지망",
+          "category": "ventilation",
+          "count": 2,
+          "ratio": 0.167
+        }
+      ],
+      "category_distribution": {
+        "refrigeration": 0.217,
+        "storage": 0.194,
+        "dishwashing": 0.163,
+        "prep": 0.157,
+        "cooking": 0.117,
+        "other": 0.086,
+        "serving": 0.049,
+        "ventilation": 0.017
+      },
+      "common_shapes": {
+        "unknown": 5,
+        "irregular": 5,
+        "square": 1,
+        "rectangle": 1
+      }
+    },
+    "cafeteria": {
+      "business_type": "cafeteria",
+      "case_count": 43,
+      "avg_kitchen_area_py": 13.2,
+      "avg_equipment_count": 22.3,
+      "equipment_frequencies": [
+        {
+          "equipment_name": "2단작업대",
+          "category": "prep",
+          "count": 93,
+          "ratio": 2.163
+        },
+        {
+          "equipment_name": "다단식선반",
+          "category": "storage",
+          "count": 44,
+          "ratio": 1.023
+        },
+        {
+          "equipment_name": "상부선반",
+          "category": "storage",
+          "count": 29,
+          "ratio": 0.674
+        },
+        {
+          "equipment_name": "식기세척기",
+          "category": "dishwashing",
+          "count": 27,
+          "ratio": 0.628
+        },
+        {
+          "equipment_name": "벽선반",
+          "category": "storage",
+          "count": 27,
+          "ratio": 0.628
+        },
+        {
+          "equipment_name": "식기건조대",
+          "category": "dishwashing",
+          "count": 20,
+          "ratio": 0.465
+        },
+        {
+          "equipment_name": "잔반통",
+          "category": "dishwashing",
+          "count": 19,
+          "ratio": 0.442
+        },
+        {
+          "equipment_name": "잔반처리대",
+          "category": "dishwashing",
+          "count": 18,
+          "ratio": 0.419
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "dishwashing",
+          "count": 15,
+          "ratio": 0.349
+        },
+        {
+          "equipment_name": "1조세척기세정대",
+          "category": "dishwashing",
+          "count": 15,
+          "ratio": 0.349
+        },
+        {
+          "equipment_name": "2조세정대",
+          "category": "dishwashing",
+          "count": 15,
+          "ratio": 0.349
+        },
+        {
+          "equipment_name": "백선반",
+          "category": "storage",
+          "count": 14,
+          "ratio": 0.326
+        },
+        {
+          "equipment_name": "가스3구렌지",
+          "category": "cooking",
+          "count": 13,
+          "ratio": 0.302
+        },
+        {
+          "equipment_name": "가스밥솥",
+          "category": "cooking",
+          "count": 13,
+          "ratio": 0.302
+        },
+        {
+          "equipment_name": "칼도마소독기",
+          "category": "other",
+          "count": 13,
+          "ratio": 0.302
+        },
+        {
+          "equipment_name": "45BOX냉동냉장고",
+          "category": "refrigeration",
+          "count": 13,
+          "ratio": 0.302
+        },
+        {
+          "equipment_name": "배기후드",
+          "category": "ventilation",
+          "count": 12,
+          "ratio": 0.279
+        },
+        {
+          "equipment_name": "2단 작업대",
+          "category": "prep",
+          "count": 12,
+          "ratio": 0.279
+        },
+        {
+          "equipment_name": "가스자동밥솥",
+          "category": "cooking",
+          "count": 11,
+          "ratio": 0.256
+        },
+        {
+          "equipment_name": "캐비넷작업대",
+          "category": "prep",
+          "count": 9,
+          "ratio": 0.209
+        },
+        {
+          "equipment_name": "가스그리들",
+          "category": "cooking",
+          "count": 9,
+          "ratio": 0.209
+        },
+        {
+          "equipment_name": "테이블냉장고",
+          "category": "refrigeration",
+          "count": 8,
+          "ratio": 0.186
+        },
+        {
+          "equipment_name": "45BOX올냉장고",
+          "category": "refrigeration",
+          "count": 8,
+          "ratio": 0.186
+        },
+        {
+          "equipment_name": "전기밥솥",
+          "category": "cooking",
+          "count": 8,
+          "ratio": 0.186
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "prep",
+          "count": 8,
+          "ratio": 0.186
+        },
+        {
+          "equipment_name": "보조작업대",
+          "category": "prep",
+          "count": 8,
+          "ratio": 0.186
+        },
+        {
+          "equipment_name": "배기후드/유지망/등",
+          "category": "ventilation",
+          "count": 8,
+          "ratio": 0.186
+        },
+        {
+          "equipment_name": "국보온운반차",
+          "category": "serving",
+          "count": 8,
+          "ratio": 0.186
+        },
+        {
+          "equipment_name": "수저식판배분대",
+          "category": "serving",
+          "count": 7,
+          "ratio": 0.163
+        },
+        {
+          "equipment_name": "밥배식대",
+          "category": "serving",
+          "count": 7,
+          "ratio": 0.163
+        }
+      ],
+      "category_distribution": {
+        "dishwashing": 0.197,
+        "prep": 0.18,
+        "cooking": 0.159,
+        "storage": 0.145,
+        "serving": 0.102,
+        "other": 0.095,
+        "refrigeration": 0.093,
+        "ventilation": 0.028
+      },
+      "common_shapes": {
+        "irregular": 18,
+        "unknown": 16,
+        "rectangle": 6,
+        "square": 2,
+        "U": 1
+      }
+    },
+    "korean": {
+      "business_type": "korean",
+      "case_count": 142,
+      "avg_kitchen_area_py": 10.2,
+      "avg_equipment_count": 18.1,
+      "equipment_frequencies": [
+        {
+          "equipment_name": "2단작업대",
+          "category": "prep",
+          "count": 273,
+          "ratio": 1.923
+        },
+        {
+          "equipment_name": "벽선반",
+          "category": "storage",
+          "count": 173,
+          "ratio": 1.218
+        },
+        {
+          "equipment_name": "상부선반",
+          "category": "storage",
+          "count": 140,
+          "ratio": 0.986
+        },
+        {
+          "equipment_name": "테이블냉장고",
+          "category": "refrigeration",
+          "count": 89,
+          "ratio": 0.627
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "dishwashing",
+          "count": 81,
+          "ratio": 0.57
+        },
+        {
+          "equipment_name": "다단식선반",
+          "category": "storage",
+          "count": 72,
+          "ratio": 0.507
+        },
+        {
+          "equipment_name": "식기세척기",
+          "category": "dishwashing",
+          "count": 70,
+          "ratio": 0.493
+        },
+        {
+          "equipment_name": "백선반",
+          "category": "storage",
+          "count": 67,
+          "ratio": 0.472
+        },
+        {
+          "equipment_name": "밧드테이블냉장고",
+          "category": "refrigeration",
+          "count": 64,
+          "ratio": 0.451
+        },
+        {
+          "equipment_name": "2단 작업대",
+          "category": "prep",
+          "count": 55,
+          "ratio": 0.387
+        },
+        {
+          "equipment_name": "식기건조대",
+          "category": "dishwashing",
+          "count": 38,
+          "ratio": 0.268
+        },
+        {
+          "equipment_name": "1조세척기세정대",
+          "category": "dishwashing",
+          "count": 34,
+          "ratio": 0.239
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "prep",
+          "count": 33,
+          "ratio": 0.232
+        },
+        {
+          "equipment_name": "음료냉장고",
+          "category": "refrigeration",
+          "count": 32,
+          "ratio": 0.225
+        },
+        {
+          "equipment_name": "육수냉장고",
+          "category": "refrigeration",
+          "count": 30,
+          "ratio": 0.211
+        },
+        {
+          "equipment_name": "45BOX냉동냉장고",
+          "category": "refrigeration",
+          "count": 25,
+          "ratio": 0.176
+        },
+        {
+          "equipment_name": "잔반통",
+          "category": "dishwashing",
+          "count": 22,
+          "ratio": 0.155
+        },
+        {
+          "equipment_name": "잔반처리대",
+          "category": "dishwashing",
+          "count": 22,
+          "ratio": 0.155
+        },
+        {
+          "equipment_name": "가스1구낮은렌지",
+          "category": "cooking",
+          "count": 20,
+          "ratio": 0.141
+        },
+        {
+          "equipment_name": "45BOX올냉장고",
+          "category": "refrigeration",
+          "count": 19,
+          "ratio": 0.134
+        },
+        {
+          "equipment_name": "작업대",
+          "category": "prep",
+          "count": 18,
+          "ratio": 0.127
+        },
+        {
+          "equipment_name": "밥보온고",
+          "category": "serving",
+          "count": 17,
+          "ratio": 0.12
+        },
+        {
+          "equipment_name": "배기후드/유지망",
+          "category": "ventilation",
+          "count": 16,
+          "ratio": 0.113
+        },
+        {
+          "equipment_name": "2조세척기세정대",
+          "category": "dishwashing",
+          "count": 16,
+          "ratio": 0.113
+        },
+        {
+          "equipment_name": "2조세정대",
+          "category": "dishwashing",
+          "count": 15,
+          "ratio": 0.106
+        },
+        {
+          "equipment_name": "가스밥솥",
+          "category": "cooking",
+          "count": 15,
+          "ratio": 0.106
+        },
+        {
+          "equipment_name": "음료쇼케이스",
+          "category": "refrigeration",
+          "count": 15,
+          "ratio": 0.106
+        },
+        {
+          "equipment_name": "냉장고",
+          "category": "refrigeration",
+          "count": 15,
+          "ratio": 0.106
+        },
+        {
+          "equipment_name": "1조 세정대",
+          "category": "dishwashing",
+          "count": 14,
+          "ratio": 0.099
+        },
+        {
+          "equipment_name": "음료 냉장고",
+          "category": "refrigeration",
+          "count": 14,
+          "ratio": 0.099
+        }
+      ],
+      "category_distribution": {
+        "refrigeration": 0.216,
+        "storage": 0.194,
+        "prep": 0.19,
+        "dishwashing": 0.158,
+        "cooking": 0.127,
+        "other": 0.072,
+        "serving": 0.027,
+        "ventilation": 0.016
+      },
+      "common_shapes": {
+        "unknown": 63,
+        "irregular": 47,
+        "rectangle": 22,
+        "L": 7,
+        "U": 2,
+        "square": 1
+      }
+    },
+    "chinese": {
+      "business_type": "chinese",
+      "case_count": 17,
+      "avg_kitchen_area_py": 9.9,
+      "avg_equipment_count": 22.8,
+      "equipment_frequencies": [
+        {
+          "equipment_name": "2단작업대",
+          "category": "prep",
+          "count": 25,
+          "ratio": 1.471
+        },
+        {
+          "equipment_name": "벽선반",
+          "category": "storage",
+          "count": 20,
+          "ratio": 1.176
+        },
+        {
+          "equipment_name": "상부선반",
+          "category": "storage",
+          "count": 18,
+          "ratio": 1.059
+        },
+        {
+          "equipment_name": "다단식선반",
+          "category": "storage",
+          "count": 17,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "백선반",
+          "category": "storage",
+          "count": 13,
+          "ratio": 0.765
+        },
+        {
+          "equipment_name": "냉장 테이블",
+          "category": "refrigeration",
+          "count": 9,
+          "ratio": 0.529
+        },
+        {
+          "equipment_name": "보조 작업대",
+          "category": "prep",
+          "count": 8,
+          "ratio": 0.471
+        },
+        {
+          "equipment_name": "테이블냉장고",
+          "category": "refrigeration",
+          "count": 8,
+          "ratio": 0.471
+        },
+        {
+          "equipment_name": "식기세척기",
+          "category": "dishwashing",
+          "count": 7,
+          "ratio": 0.412
+        },
+        {
+          "equipment_name": "보조작업대",
+          "category": "prep",
+          "count": 7,
+          "ratio": 0.412
+        },
+        {
+          "equipment_name": "2단 작업대",
+          "category": "prep",
+          "count": 7,
+          "ratio": 0.412
+        },
+        {
+          "equipment_name": "음료쇼케이스",
+          "category": "refrigeration",
+          "count": 7,
+          "ratio": 0.412
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "dishwashing",
+          "count": 6,
+          "ratio": 0.353
+        },
+        {
+          "equipment_name": "작업대",
+          "category": "prep",
+          "count": 5,
+          "ratio": 0.294
+        },
+        {
+          "equipment_name": "배기후드/유지망",
+          "category": "ventilation",
+          "count": 5,
+          "ratio": 0.294
+        },
+        {
+          "equipment_name": "밧드테이블냉장고",
+          "category": "refrigeration",
+          "count": 5,
+          "ratio": 0.294
+        },
+        {
+          "equipment_name": "잔반통",
+          "category": "dishwashing",
+          "count": 4,
+          "ratio": 0.235
+        },
+        {
+          "equipment_name": "면렌지",
+          "category": "cooking",
+          "count": 4,
+          "ratio": 0.235
+        },
+        {
+          "equipment_name": "가스 면렌지",
+          "category": "cooking",
+          "count": 4,
+          "ratio": 0.235
+        },
+        {
+          "equipment_name": "제면기",
+          "category": "other",
+          "count": 4,
+          "ratio": 0.235
+        },
+        {
+          "equipment_name": "1-조 세정대",
+          "category": "dishwashing",
+          "count": 3,
+          "ratio": 0.176
+        },
+        {
+          "equipment_name": "밧드냉장고",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.176
+        },
+        {
+          "equipment_name": "반죽기",
+          "category": "other",
+          "count": 3,
+          "ratio": 0.176
+        },
+        {
+          "equipment_name": "음료냉장고",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.176
+        },
+        {
+          "equipment_name": "잔반처리대",
+          "category": "dishwashing",
+          "count": 3,
+          "ratio": 0.176
+        },
+        {
+          "equipment_name": "1조세정작업대",
+          "category": "prep",
+          "count": 3,
+          "ratio": 0.176
+        },
+        {
+          "equipment_name": "가스면렌지",
+          "category": "cooking",
+          "count": 3,
+          "ratio": 0.176
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "prep",
+          "count": 3,
+          "ratio": 0.176
+        },
+        {
+          "equipment_name": "2조 세정대",
+          "category": "dishwashing",
+          "count": 3,
+          "ratio": 0.176
+        },
+        {
+          "equipment_name": "작업대/2단",
+          "category": "prep",
+          "count": 3,
+          "ratio": 0.176
+        }
+      ],
+      "category_distribution": {
+        "storage": 0.208,
+        "prep": 0.194,
+        "refrigeration": 0.189,
+        "dishwashing": 0.15,
+        "cooking": 0.15,
+        "other": 0.063,
+        "ventilation": 0.027,
+        "serving": 0.019
+      },
+      "common_shapes": {
+        "irregular": 10,
+        "rectangle": 4,
+        "unknown": 3
+      }
+    },
+    "fast_food": {
+      "business_type": "fast_food",
+      "case_count": 1,
+      "avg_kitchen_area_py": 5.4,
+      "avg_equipment_count": 27.0,
+      "equipment_frequencies": [
+        {
+          "equipment_name": "백선반",
+          "category": "storage",
+          "count": 2,
+          "ratio": 2.0
+        },
+        {
+          "equipment_name": "전기 튀김기",
+          "category": "cooking",
+          "count": 2,
+          "ratio": 2.0
+        },
+        {
+          "equipment_name": "1조 세척 세정대",
+          "category": "dishwashing",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "식기세척기",
+          "category": "dishwashing",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "식기 건조대",
+          "category": "dishwashing",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "45 Box 냉동냉장고",
+          "category": "refrigeration",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "배기후드/필터",
+          "category": "ventilation",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "덤프 스테이션",
+          "category": "prep",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "4구 인덕션렌지",
+          "category": "cooking",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "작업대/1단",
+          "category": "prep",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "전기 그리들",
+          "category": "cooking",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "낮은 서랍식 냉장고",
+          "category": "refrigeration",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "전기 구이기",
+          "category": "cooking",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "까치선반",
+          "category": "storage",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "고기 민찌기",
+          "category": "prep",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "콤비스티머 오븐",
+          "category": "cooking",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "1단 작업대",
+          "category": "prep",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "토핑 냉장 테이블",
+          "category": "refrigeration",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "상부선반",
+          "category": "storage",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "냉동 쇼케이스",
+          "category": "refrigeration",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "작업대/2단",
+          "category": "prep",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "냉장 테이블",
+          "category": "refrigeration",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "제빙기",
+          "category": "other",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "작업대/하부제빙기",
+          "category": "prep",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "2단 작업대",
+          "category": "prep",
+          "count": 1,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "제과 쇼케이스",
+          "category": "serving",
+          "count": 1,
+          "ratio": 1.0
+        }
+      ],
+      "category_distribution": {
+        "prep": 0.25,
+        "cooking": 0.214,
+        "refrigeration": 0.179,
+        "storage": 0.143,
+        "dishwashing": 0.107,
+        "ventilation": 0.036,
+        "other": 0.036,
+        "serving": 0.036
+      },
+      "common_shapes": {
+        "rectangle": 1
+      }
+    },
+    "franchise": {
+      "business_type": "franchise",
+      "case_count": 11,
+      "avg_kitchen_area_py": 5.2,
+      "avg_equipment_count": 14.3,
+      "equipment_frequencies": [
+        {
+          "equipment_name": "벽선반",
+          "category": "storage",
+          "count": 19,
+          "ratio": 1.727
+        },
+        {
+          "equipment_name": "2단작업대",
+          "category": "prep",
+          "count": 15,
+          "ratio": 1.364
+        },
+        {
+          "equipment_name": "작업대",
+          "category": "prep",
+          "count": 5,
+          "ratio": 0.455
+        },
+        {
+          "equipment_name": "가스튀김기",
+          "category": "cooking",
+          "count": 5,
+          "ratio": 0.455
+        },
+        {
+          "equipment_name": "보조 작업대",
+          "category": "prep",
+          "count": 4,
+          "ratio": 0.364
+        },
+        {
+          "equipment_name": "식기세척기",
+          "category": "dishwashing",
+          "count": 4,
+          "ratio": 0.364
+        },
+        {
+          "equipment_name": "45BOX냉동냉장고",
+          "category": "refrigeration",
+          "count": 4,
+          "ratio": 0.364
+        },
+        {
+          "equipment_name": "상부선반",
+          "category": "storage",
+          "count": 4,
+          "ratio": 0.364
+        },
+        {
+          "equipment_name": "1-조세정대",
+          "category": "dishwashing",
+          "count": 3,
+          "ratio": 0.273
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "dishwashing",
+          "count": 3,
+          "ratio": 0.273
+        },
+        {
+          "equipment_name": "테이블냉장고",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.273
+        },
+        {
+          "equipment_name": "음료쇼케이스",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.273
+        },
+        {
+          "equipment_name": "밧드테이블냉장고",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.273
+        },
+        {
+          "equipment_name": "음료쇼케이스",
+          "category": "other",
+          "count": 3,
+          "ratio": 0.273
+        },
+        {
+          "equipment_name": "가스직화볶음기",
+          "category": "cooking",
+          "count": 3,
+          "ratio": 0.273
+        },
+        {
+          "equipment_name": "JB-WORK TABLE",
+          "category": "prep",
+          "count": 3,
+          "ratio": 0.273
+        },
+        {
+          "equipment_name": "냉동, 냉장고",
+          "category": "refrigeration",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "2단 작업대",
+          "category": "prep",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "음료 냉장고",
+          "category": "refrigeration",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "가스그리들",
+          "category": "cooking",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "접시워머",
+          "category": "serving",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "기름정제기",
+          "category": "other",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "낮은서랍식냉장고",
+          "category": "refrigeration",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "까치선반",
+          "category": "storage",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "가스2구렌지",
+          "category": "cooking",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "prep",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "테이블냉동고",
+          "category": "refrigeration",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "가스1구튀김기",
+          "category": "cooking",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "SINK",
+          "category": "dishwashing",
+          "count": 2,
+          "ratio": 0.182
+        },
+        {
+          "equipment_name": "TABLE",
+          "category": "other",
+          "count": 2,
+          "ratio": 0.182
+        }
+      ],
+      "category_distribution": {
+        "refrigeration": 0.209,
+        "prep": 0.198,
+        "cooking": 0.174,
+        "storage": 0.174,
+        "dishwashing": 0.14,
+        "other": 0.087,
+        "serving": 0.017
+      },
+      "common_shapes": {
+        "unknown": 5,
+        "irregular": 4,
+        "L": 1,
+        "rectangle": 1
+      }
+    },
+    "other": {
+      "business_type": "other",
+      "case_count": 107,
+      "avg_kitchen_area_py": 7.0,
+      "avg_equipment_count": 11.4,
+      "equipment_frequencies": [
+        {
+          "equipment_name": "2단작업대",
+          "category": "prep",
+          "count": 88,
+          "ratio": 0.822
+        },
+        {
+          "equipment_name": "벽선반",
+          "category": "storage",
+          "count": 71,
+          "ratio": 0.664
+        },
+        {
+          "equipment_name": "상부선반",
+          "category": "storage",
+          "count": 41,
+          "ratio": 0.383
+        },
+        {
+          "equipment_name": "작업대",
+          "category": "prep",
+          "count": 38,
+          "ratio": 0.355
+        },
+        {
+          "equipment_name": "식기세척기",
+          "category": "dishwashing",
+          "count": 30,
+          "ratio": 0.28
+        },
+        {
+          "equipment_name": "밧드테이블냉장고",
+          "category": "refrigeration",
+          "count": 28,
+          "ratio": 0.262
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "dishwashing",
+          "count": 26,
+          "ratio": 0.243
+        },
+        {
+          "equipment_name": "2단 작업대",
+          "category": "prep",
+          "count": 22,
+          "ratio": 0.206
+        },
+        {
+          "equipment_name": "45BOX냉동냉장고",
+          "category": "refrigeration",
+          "count": 21,
+          "ratio": 0.196
+        },
+        {
+          "equipment_name": "다단식선반",
+          "category": "storage",
+          "count": 21,
+          "ratio": 0.196
+        },
+        {
+          "equipment_name": "가스렌지",
+          "category": "cooking",
+          "count": 20,
+          "ratio": 0.187
+        },
+        {
+          "equipment_name": "선반",
+          "category": "storage",
+          "count": 19,
+          "ratio": 0.178
+        },
+        {
+          "equipment_name": "1조세척기세정대",
+          "category": "dishwashing",
+          "count": 18,
+          "ratio": 0.168
+        },
+        {
+          "equipment_name": "테이블냉장고",
+          "category": "refrigeration",
+          "count": 18,
+          "ratio": 0.168
+        },
+        {
+          "equipment_name": "냉장고",
+          "category": "refrigeration",
+          "count": 18,
+          "ratio": 0.168
+        },
+        {
+          "equipment_name": "가스3구렌지",
+          "category": "cooking",
+          "count": 14,
+          "ratio": 0.131
+        },
+        {
+          "equipment_name": "백선반",
+          "category": "storage",
+          "count": 14,
+          "ratio": 0.131
+        },
+        {
+          "equipment_name": "싱크대",
+          "category": "dishwashing",
+          "count": 13,
+          "ratio": 0.121
+        },
+        {
+          "equipment_name": "JB-REFRIGERATOR",
+          "category": "refrigeration",
+          "count": 12,
+          "ratio": 0.112
+        },
+        {
+          "equipment_name": "캐비닛 벽선반",
+          "category": "storage",
+          "count": 11,
+          "ratio": 0.103
+        },
+        {
+          "equipment_name": "전기밥솥",
+          "category": "cooking",
+          "count": 11,
+          "ratio": 0.103
+        },
+        {
+          "equipment_name": "가스튀김기",
+          "category": "cooking",
+          "count": 11,
+          "ratio": 0.103
+        },
+        {
+          "equipment_name": "제빙기",
+          "category": "other",
+          "count": 10,
+          "ratio": 0.093
+        },
+        {
+          "equipment_name": "테이블냉동고",
+          "category": "refrigeration",
+          "count": 10,
+          "ratio": 0.093
+        },
+        {
+          "equipment_name": "식기 세척기",
+          "category": "dishwashing",
+          "count": 9,
+          "ratio": 0.084
+        },
+        {
+          "equipment_name": "식기건조대",
+          "category": "dishwashing",
+          "count": 9,
+          "ratio": 0.084
+        },
+        {
+          "equipment_name": "테이블 냉장고",
+          "category": "refrigeration",
+          "count": 9,
+          "ratio": 0.084
+        },
+        {
+          "equipment_name": "음료냉장고",
+          "category": "refrigeration",
+          "count": 9,
+          "ratio": 0.084
+        },
+        {
+          "equipment_name": "까치선반",
+          "category": "storage",
+          "count": 9,
+          "ratio": 0.084
+        },
+        {
+          "equipment_name": "JB-GAS RANGE",
+          "category": "cooking",
+          "count": 9,
+          "ratio": 0.084
+        }
+      ],
+      "category_distribution": {
+        "refrigeration": 0.194,
+        "storage": 0.184,
+        "prep": 0.18,
+        "cooking": 0.155,
+        "dishwashing": 0.146,
+        "other": 0.108,
+        "serving": 0.017,
+        "ventilation": 0.014
+      },
+      "common_shapes": {
+        "irregular": 45,
+        "unknown": 32,
+        "rectangle": 24,
+        "L": 4,
+        "square": 2
+      }
+    },
+    "japanese": {
+      "business_type": "japanese",
+      "case_count": 19,
+      "avg_kitchen_area_py": 4.7,
+      "avg_equipment_count": 13.8,
+      "equipment_frequencies": [
+        {
+          "equipment_name": "2단작업대",
+          "category": "prep",
+          "count": 21,
+          "ratio": 1.105
+        },
+        {
+          "equipment_name": "벽선반",
+          "category": "storage",
+          "count": 20,
+          "ratio": 1.053
+        },
+        {
+          "equipment_name": "테이블냉장고",
+          "category": "refrigeration",
+          "count": 13,
+          "ratio": 0.684
+        },
+        {
+          "equipment_name": "상부선반",
+          "category": "storage",
+          "count": 11,
+          "ratio": 0.579
+        },
+        {
+          "equipment_name": "작업대",
+          "category": "prep",
+          "count": 11,
+          "ratio": 0.579
+        },
+        {
+          "equipment_name": "식기세척기",
+          "category": "dishwashing",
+          "count": 9,
+          "ratio": 0.474
+        },
+        {
+          "equipment_name": "2단 작업대",
+          "category": "prep",
+          "count": 8,
+          "ratio": 0.421
+        },
+        {
+          "equipment_name": "1조세척기세정대",
+          "category": "dishwashing",
+          "count": 7,
+          "ratio": 0.368
+        },
+        {
+          "equipment_name": "보조 작업대",
+          "category": "prep",
+          "count": 5,
+          "ratio": 0.263
+        },
+        {
+          "equipment_name": "가스해면기",
+          "category": "cooking",
+          "count": 5,
+          "ratio": 0.263
+        },
+        {
+          "equipment_name": "1조 세정대",
+          "category": "dishwashing",
+          "count": 4,
+          "ratio": 0.211
+        },
+        {
+          "equipment_name": "제빙기",
+          "category": "other",
+          "count": 4,
+          "ratio": 0.211
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "dishwashing",
+          "count": 4,
+          "ratio": 0.211
+        },
+        {
+          "equipment_name": "테이블냉동고",
+          "category": "refrigeration",
+          "count": 4,
+          "ratio": 0.211
+        },
+        {
+          "equipment_name": "가스튀김기",
+          "category": "cooking",
+          "count": 4,
+          "ratio": 0.211
+        },
+        {
+          "equipment_name": "기름정제기",
+          "category": "other",
+          "count": 4,
+          "ratio": 0.211
+        },
+        {
+          "equipment_name": "봉파이프선반",
+          "category": "storage",
+          "count": 4,
+          "ratio": 0.211
+        },
+        {
+          "equipment_name": "토핑테이블냉장고",
+          "category": "refrigeration",
+          "count": 4,
+          "ratio": 0.211
+        },
+        {
+          "equipment_name": "45BOX냉동냉장고",
+          "category": "refrigeration",
+          "count": 4,
+          "ratio": 0.211
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "prep",
+          "count": 4,
+          "ratio": 0.211
+        },
+        {
+          "equipment_name": "식기 세척기",
+          "category": "dishwashing",
+          "count": 3,
+          "ratio": 0.158
+        },
+        {
+          "equipment_name": "테이블 냉장고",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.158
+        },
+        {
+          "equipment_name": "백선반",
+          "category": "storage",
+          "count": 3,
+          "ratio": 0.158
+        },
+        {
+          "equipment_name": "제빙기",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.158
+        },
+        {
+          "equipment_name": "밧드테이블냉장고",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.158
+        },
+        {
+          "equipment_name": "3단 벽선반(양 오픈/천장)",
+          "category": "storage",
+          "count": 3,
+          "ratio": 0.158
+        },
+        {
+          "equipment_name": "식기 건조대",
+          "category": "dishwashing",
+          "count": 2,
+          "ratio": 0.105
+        },
+        {
+          "equipment_name": "가스밥솥",
+          "category": "cooking",
+          "count": 2,
+          "ratio": 0.105
+        },
+        {
+          "equipment_name": "가스 튀김기",
+          "category": "cooking",
+          "count": 2,
+          "ratio": 0.105
+        },
+        {
+          "equipment_name": "45Box 냉동냉장고",
+          "category": "refrigeration",
+          "count": 2,
+          "ratio": 0.105
+        }
+      ],
+      "category_distribution": {
+        "prep": 0.218,
+        "refrigeration": 0.218,
+        "cooking": 0.189,
+        "storage": 0.175,
+        "dishwashing": 0.153,
+        "other": 0.04,
+        "serving": 0.007
+      },
+      "common_shapes": {
+        "irregular": 8,
+        "rectangle": 5,
+        "unknown": 4,
+        "L": 1,
+        "square": 1
+      }
+    },
+    "snack_bar": {
+      "business_type": "snack_bar",
+      "case_count": 15,
+      "avg_kitchen_area_py": 3.6,
+      "avg_equipment_count": 7.6,
+      "equipment_frequencies": [
+        {
+          "equipment_name": "2단작업대",
+          "category": "prep",
+          "count": 14,
+          "ratio": 0.933
+        },
+        {
+          "equipment_name": "역까치선반",
+          "category": "storage",
+          "count": 7,
+          "ratio": 0.467
+        },
+        {
+          "equipment_name": "벽선반",
+          "category": "storage",
+          "count": 5,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "45BOX냉동냉장고",
+          "category": "refrigeration",
+          "count": 5,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "작업대",
+          "category": "prep",
+          "count": 5,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "식기세척기",
+          "category": "dishwashing",
+          "count": 4,
+          "ratio": 0.267
+        },
+        {
+          "equipment_name": "JB-GAS RANGE",
+          "category": "cooking",
+          "count": 4,
+          "ratio": 0.267
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "dishwashing",
+          "count": 3,
+          "ratio": 0.2
+        },
+        {
+          "equipment_name": "가스5구렌지",
+          "category": "cooking",
+          "count": 3,
+          "ratio": 0.2
+        },
+        {
+          "equipment_name": "김밥테이블냉장고",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 0.2
+        },
+        {
+          "equipment_name": "상부선반",
+          "category": "storage",
+          "count": 3,
+          "ratio": 0.2
+        },
+        {
+          "equipment_name": "다단식선반",
+          "category": "storage",
+          "count": 3,
+          "ratio": 0.2
+        },
+        {
+          "equipment_name": "중앙작업대",
+          "category": "prep",
+          "count": 3,
+          "ratio": 0.2
+        },
+        {
+          "equipment_name": "중앙상부선반",
+          "category": "storage",
+          "count": 3,
+          "ratio": 0.2
+        },
+        {
+          "equipment_name": "싱크",
+          "category": "dishwashing",
+          "count": 3,
+          "ratio": 0.2
+        },
+        {
+          "equipment_name": "1조세척기세정대",
+          "category": "dishwashing",
+          "count": 2,
+          "ratio": 0.133
+        },
+        {
+          "equipment_name": "가스5구렌지(2열*3, 1열*2)",
+          "category": "cooking",
+          "count": 2,
+          "ratio": 0.133
+        },
+        {
+          "equipment_name": "튀김기1구(분체)",
+          "category": "cooking",
+          "count": 2,
+          "ratio": 0.133
+        },
+        {
+          "equipment_name": "상부선반(김밥냉장고용)",
+          "category": "storage",
+          "count": 2,
+          "ratio": 0.133
+        },
+        {
+          "equipment_name": "냉장고",
+          "category": "refrigeration",
+          "count": 2,
+          "ratio": 0.133
+        },
+        {
+          "equipment_name": "JB-Wall shelf",
+          "category": "storage",
+          "count": 2,
+          "ratio": 0.133
+        },
+        {
+          "equipment_name": "음료냉장고",
+          "category": "refrigeration",
+          "count": 2,
+          "ratio": 0.133
+        },
+        {
+          "equipment_name": "전기튀김기",
+          "category": "cooking",
+          "count": 1,
+          "ratio": 0.067
+        },
+        {
+          "equipment_name": "이동식작업대",
+          "category": "prep",
+          "count": 1,
+          "ratio": 0.067
+        },
+        {
+          "equipment_name": "빅선반",
+          "category": "storage",
+          "count": 1,
+          "ratio": 0.067
+        },
+        {
+          "equipment_name": "튀김기1구",
+          "category": "cooking",
+          "count": 1,
+          "ratio": 0.067
+        },
+        {
+          "equipment_name": "25BOX냉동냉장고",
+          "category": "refrigeration",
+          "count": 1,
+          "ratio": 0.067
+        },
+        {
+          "equipment_name": "튀김기",
+          "category": "cooking",
+          "count": 1,
+          "ratio": 0.067
+        },
+        {
+          "equipment_name": "테이블냉장고/우기계",
+          "category": "refrigeration",
+          "count": 1,
+          "ratio": 0.067
+        },
+        {
+          "equipment_name": "떡볶이작업대",
+          "category": "prep",
+          "count": 1,
+          "ratio": 0.067
+        }
+      ],
+      "category_distribution": {
+        "storage": 0.222,
+        "prep": 0.214,
+        "refrigeration": 0.205,
+        "cooking": 0.171,
+        "dishwashing": 0.154,
+        "other": 0.026,
+        "serving": 0.009
+      },
+      "common_shapes": {
+        "rectangle": 6,
+        "irregular": 5,
+        "unknown": 3,
+        "L": 1
+      }
+    },
+    "bakery": {
+      "business_type": "bakery",
+      "case_count": 3,
+      "avg_kitchen_area_py": null,
+      "avg_equipment_count": 11.7,
+      "equipment_frequencies": [
+        {
+          "equipment_name": "랙카/4EA",
+          "category": "storage",
+          "count": 4,
+          "ratio": 1.333
+        },
+        {
+          "equipment_name": "JB-Wall shelf",
+          "category": "storage",
+          "count": 3,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "25BOX올냉동고 /3EA",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "상부 벽선반",
+          "category": "storage",
+          "count": 3,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "테이블냉장고 /대리석 상판",
+          "category": "refrigeration",
+          "count": 3,
+          "ratio": 1.0
+        },
+        {
+          "equipment_name": "JB-WORK TABLE",
+          "category": "prep",
+          "count": 2,
+          "ratio": 0.667
+        },
+        {
+          "equipment_name": "재료통",
+          "category": "storage",
+          "count": 2,
+          "ratio": 0.667
+        },
+        {
+          "equipment_name": "45box올냉동고",
+          "category": "refrigeration",
+          "count": 2,
+          "ratio": 0.667
+        },
+        {
+          "equipment_name": "테이블냉장고/하부",
+          "category": "refrigeration",
+          "count": 2,
+          "ratio": 0.667
+        },
+        {
+          "equipment_name": "2단작업대/이동식",
+          "category": "prep",
+          "count": 2,
+          "ratio": 0.667
+        },
+        {
+          "equipment_name": "데크오븐",
+          "category": "cooking",
+          "count": 2,
+          "ratio": 0.667
+        },
+        {
+          "equipment_name": "도우 컨디셔너",
+          "category": "refrigeration",
+          "count": 2,
+          "ratio": 0.667
+        },
+        {
+          "equipment_name": "JB-REFRIGERATOR",
+          "category": "refrigeration",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "컵디스펜서 커피머신",
+          "category": "other",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "RSB-4PRF",
+          "category": "refrigeration",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "JB-2 DISH WASH",
+          "category": "dishwashing",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "반죽기",
+          "category": "other",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "45box올냉장고",
+          "category": "refrigeration",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "온수기",
+          "category": "other",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "하부제빙기",
+          "category": "other",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "그라인더",
+          "category": "other",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "핫워터",
+          "category": "other",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "1조세정대/하부온수기 하판X",
+          "category": "dishwashing",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "2단작업대",
+          "category": "prep",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "제빙기 260KG",
+          "category": "other",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "1조세정대",
+          "category": "dishwashing",
+          "count": 1,
+          "ratio": 0.333
+        },
+        {
+          "equipment_name": "제과쇼케이스",
+          "category": "serving",
+          "count": 1,
+          "ratio": 0.333
+        }
+      ],
+      "category_distribution": {
+        "refrigeration": 0.333,
+        "storage": 0.267,
+        "other": 0.156,
+        "prep": 0.111,
+        "dishwashing": 0.067,
+        "cooking": 0.044,
+        "serving": 0.022
+      },
+      "common_shapes": {
+        "unknown": 2,
+        "irregular": 1
+      }
+    }
+  },
+  "co_occurrence_matrix": [
+    {
+      "equipment_a": "cooking",
+      "equipment_b": "refrigeration",
+      "co_occurrence_count": 290,
+      "co_occurrence_ratio": 0.873
+    },
+    {
+      "equipment_a": "dishwashing",
+      "equipment_b": "refrigeration",
+      "co_occurrence_count": 286,
+      "co_occurrence_ratio": 0.861
+    },
+    {
+      "equipment_a": "cooking",
+      "equipment_b": "dishwashing",
+      "co_occurrence_count": 281,
+      "co_occurrence_ratio": 0.846
+    },
+    {
+      "equipment_a": "prep",
+      "equipment_b": "refrigeration",
+      "co_occurrence_count": 280,
+      "co_occurrence_ratio": 0.843
+    },
+    {
+      "equipment_a": "cooking",
+      "equipment_b": "prep",
+      "co_occurrence_count": 277,
+      "co_occurrence_ratio": 0.834
+    },
+    {
+      "equipment_a": "dishwashing",
+      "equipment_b": "prep",
+      "co_occurrence_count": 277,
+      "co_occurrence_ratio": 0.834
+    },
+    {
+      "equipment_a": "refrigeration",
+      "equipment_b": "storage",
+      "co_occurrence_count": 267,
+      "co_occurrence_ratio": 0.804
+    },
+    {
+      "equipment_a": "cooking",
+      "equipment_b": "storage",
+      "co_occurrence_count": 261,
+      "co_occurrence_ratio": 0.786
+    },
+    {
+      "equipment_a": "dishwashing",
+      "equipment_b": "storage",
+      "co_occurrence_count": 261,
+      "co_occurrence_ratio": 0.786
+    },
+    {
+      "equipment_a": "prep",
+      "equipment_b": "storage",
+      "co_occurrence_count": 257,
+      "co_occurrence_ratio": 0.774
+    },
+    {
+      "equipment_a": "other",
+      "equipment_b": "refrigeration",
+      "co_occurrence_count": 205,
+      "co_occurrence_ratio": 0.617
+    },
+    {
+      "equipment_a": "cooking",
+      "equipment_b": "other",
+      "co_occurrence_count": 204,
+      "co_occurrence_ratio": 0.614
+    },
+    {
+      "equipment_a": "dishwashing",
+      "equipment_b": "other",
+      "co_occurrence_count": 197,
+      "co_occurrence_ratio": 0.593
+    },
+    {
+      "equipment_a": "other",
+      "equipment_b": "prep",
+      "co_occurrence_count": 194,
+      "co_occurrence_ratio": 0.584
+    },
+    {
+      "equipment_a": "other",
+      "equipment_b": "storage",
+      "co_occurrence_count": 187,
+      "co_occurrence_ratio": 0.563
+    },
+    {
+      "equipment_a": "dishwashing",
+      "equipment_b": "serving",
+      "co_occurrence_count": 99,
+      "co_occurrence_ratio": 0.298
+    },
+    {
+      "equipment_a": "refrigeration",
+      "equipment_b": "serving",
+      "co_occurrence_count": 99,
+      "co_occurrence_ratio": 0.298
+    },
+    {
+      "equipment_a": "cooking",
+      "equipment_b": "serving",
+      "co_occurrence_count": 98,
+      "co_occurrence_ratio": 0.295
+    },
+    {
+      "equipment_a": "prep",
+      "equipment_b": "serving",
+      "co_occurrence_count": 96,
+      "co_occurrence_ratio": 0.289
+    },
+    {
+      "equipment_a": "serving",
+      "equipment_b": "storage",
+      "co_occurrence_count": 95,
+      "co_occurrence_ratio": 0.286
+    },
+    {
+      "equipment_a": "other",
+      "equipment_b": "serving",
+      "co_occurrence_count": 82,
+      "co_occurrence_ratio": 0.247
+    },
+    {
+      "equipment_a": "prep",
+      "equipment_b": "ventilation",
+      "co_occurrence_count": 52,
+      "co_occurrence_ratio": 0.157
+    },
+    {
+      "equipment_a": "refrigeration",
+      "equipment_b": "ventilation",
+      "co_occurrence_count": 52,
+      "co_occurrence_ratio": 0.157
+    },
+    {
+      "equipment_a": "dishwashing",
+      "equipment_b": "ventilation",
+      "co_occurrence_count": 51,
+      "co_occurrence_ratio": 0.154
+    },
+    {
+      "equipment_a": "cooking",
+      "equipment_b": "ventilation",
+      "co_occurrence_count": 50,
+      "co_occurrence_ratio": 0.151
+    },
+    {
+      "equipment_a": "storage",
+      "equipment_b": "ventilation",
+      "co_occurrence_count": 49,
+      "co_occurrence_ratio": 0.148
+    },
+    {
+      "equipment_a": "other",
+      "equipment_b": "ventilation",
+      "co_occurrence_count": 45,
+      "co_occurrence_ratio": 0.136
+    },
+    {
+      "equipment_a": "serving",
+      "equipment_b": "ventilation",
+      "co_occurrence_count": 29,
+      "co_occurrence_ratio": 0.087
+    }
+  ],
+  "zone_equipment_mappings": [
+    {
+      "zone_name_normalized": "cooking",
+      "zone_name_variants": [
+        "배식 및 조리라인",
+        "배식-및-조리동선",
+        "배식-및-조리라인",
+        "배식=및=조리공간",
+        "세척 및 조리공간",
+        "작업-및-조리라인",
+        "작업공간 및 조리공간",
+        "저장 및 조리 공간",
+        "저장 및 조리 라인",
+        "저장 및 조리라인",
+        "저장-및-조리공간",
+        "저장-및-조리라인",
+        "제과제빵 작업-및-조리구역",
+        "조리 동선",
+        "조리 라인",
+        "조리 및 배식공간",
+        "조리 및 배식동선",
+        "조리 및 배식라인",
+        "조리 및 작업 동선",
+        "조리 및 작업공간",
+        "조리 및 작업동선",
+        "조리 및 작업라인",
+        "조리 및 저장공간",
+        "조리 및 저장동선",
+        "조리 및 저장라인",
+        "조리-동선",
+        "조리-라인",
+        "조리-및-배식동선",
+        "조리-및-배식라인",
+        "조리-및-작업공간",
+        "조리-및-작업동선",
+        "조리-및-작업라인",
+        "조리-및-저장공간",
+        "조리·라인",
+        "조리공간",
+        "조리구역",
+        "조리동선",
+        "조리라인",
+        "조리및배식동선",
+        "피자조리동선"
+      ],
+      "total_appearances": 182,
+      "equipment_frequencies": {
+        "cooking": 323,
+        "prep": 63,
+        "refrigeration": 40,
+        "storage": 31,
+        "other": 27,
+        "dishwashing": 22,
+        "ventilation": 6,
+        "serving": 2
+      },
+      "avg_equipment_count": 2.8
+    },
+    {
+      "zone_name_normalized": "washing",
+      "zone_name_variants": [
+        "배식&퇴식라인",
+        "배식-및-퇴식공간",
+        "배식-및-퇴식라인",
+        "선판세척라인",
+        "세척 라인",
+        "세척 및 저장·라인",
+        "세척 및 저장라인",
+        "세척-및-저장라인",
+        "세척공간",
+        "세척구역",
+        "세척동선",
+        "세척라인",
+        "세척및소독 라인",
+        "저장-및-세척공간",
+        "전장및세척 라인",
+        "퇴식 동선",
+        "퇴식 및 세척 라인",
+        "퇴식 및 세척공간",
+        "퇴식 및 세척동선",
+        "퇴식 및 세척라인",
+        "퇴식 및 소독공간",
+        "퇴식 및 저장라인",
+        "퇴식,식기세척,최적 라인",
+        "퇴식-라인",
+        "퇴식-및-세척라인",
+        "퇴식-및-세척라인-",
+        "퇴식-및-저장공간",
+        "퇴식공간",
+        "퇴식구",
+        "퇴식구역",
+        "퇴식동선",
+        "퇴식라인",
+        "퇴식및세척라인"
+      ],
+      "total_appearances": 144,
+      "equipment_frequencies": {
+        "dishwashing": 283,
+        "storage": 62,
+        "prep": 40,
+        "refrigeration": 18,
+        "other": 10,
+        "serving": 1,
+        "cooking": 1
+      },
+      "avg_equipment_count": 2.9
+    },
+    {
+      "zone_name_normalized": "preparation",
+      "zone_name_variants": [
+        "배식 및 작업공간",
+        "배식 및 작업동선",
+        "배식 및 작업라인",
+        "배식 및 준비동선",
+        "배식-및-작업라인",
+        "배식준비동선",
+        "세척 및 작업공간",
+        "세척 및 작업라인",
+        "작업 동선",
+        "작업 라인",
+        "작업 및 배식공간",
+        "작업 및 배식라인",
+        "작업&배식동선",
+        "작업, 저장, 퇴식라인",
+        "작업-및-저장공간",
+        "작업공간",
+        "작업동선",
+        "작업라인",
+        "저장 및 작업 공간",
+        "저장 및 작업공간",
+        "저장 및 작업동선",
+        "저장 및 작업라인",
+        "저장-및-배식-작업라인",
+        "저장-및-작업라인",
+        "저장공간 및 작업라인",
+        "저장공간 및 전처리라인",
+        "전처리 공간",
+        "전처리 동선",
+        "전처리공간",
+        "전처리구역",
+        "전처리동선",
+        "전처리라인",
+        "준비 동선",
+        "준비동선",
+        "퇴식, 작업 및 저장동선"
+      ],
+      "total_appearances": 124,
+      "equipment_frequencies": {
+        "prep": 76,
+        "storage": 70,
+        "refrigeration": 67,
+        "dishwashing": 39,
+        "other": 8,
+        "cooking": 8,
+        "serving": 1
+      },
+      "avg_equipment_count": 2.2
+    },
+    {
+      "zone_name_normalized": "storage",
+      "zone_name_variants": [
+        "배식 및 저장공간",
+        "배식-및-저장공간",
+        "배식-및-저장라인",
+        "배식및 저장·라인",
+        "소독 및 저장동선",
+        "식기보관라인",
+        "식품보관",
+        "저장 동선",
+        "저장 및 배식라인",
+        "저장 및 소독라인",
+        "저장-및-배식공간",
+        "저장-및-배식라인",
+        "저장고 동선",
+        "저장고동선",
+        "저장공간",
+        "저장구역",
+        "저장동선",
+        "저장동신",
+        "저장라인"
+      ],
+      "total_appearances": 114,
+      "equipment_frequencies": {
+        "refrigeration": 159,
+        "storage": 26,
+        "other": 18,
+        "prep": 12,
+        "dishwashing": 9,
+        "cooking": 1,
+        "serving": 1
+      },
+      "avg_equipment_count": 2.0
+    },
+    {
+      "zone_name_normalized": "serving",
+      "zone_name_variants": [
+        "배식",
+        "배식 동선",
+        "배식공간",
+        "배식구",
+        "배식구역",
+        "배식동선",
+        "배식라인"
+      ],
+      "total_appearances": 71,
+      "equipment_frequencies": {
+        "refrigeration": 42,
+        "serving": 29,
+        "prep": 27,
+        "storage": 19,
+        "dishwashing": 7,
+        "other": 7,
+        "cooking": 4
+      },
+      "avg_equipment_count": 1.9
+    },
+    {
+      "zone_name_normalized": "other",
+      "zone_name_variants": [
+        "COFFEE&BAR",
+        "베이커리 동선",
+        "보조주방",
+        "보조주방 동선",
+        "보조주방구역",
+        "서비스스테이션",
+        "셀프바동선",
+        "소독기기 라인",
+        "소독기기-동선",
+        "소독라인",
+        "장및소독공간",
+        "정육동선",
+        "정육코너",
+        "제빵동선",
+        "주류제조•동선",
+        "주방",
+        "창고",
+        "창고 동선",
+        "카페 동선",
+        "카페동선",
+        "커피&음료"
+      ],
+      "total_appearances": 35,
+      "equipment_frequencies": {
+        "other": 29,
+        "refrigeration": 28,
+        "prep": 7,
+        "storage": 7,
+        "serving": 4,
+        "dishwashing": 3,
+        "cooking": 1
+      },
+      "avg_equipment_count": 2.3
+    }
+  ],
+  "area_patterns": [
+    {
+      "area_min_py": 0.0,
+      "area_max_py": 3.0,
+      "case_count": 7,
+      "avg_equipment_count": 11.1,
+      "category_distribution": {
+        "dishwashing": 0.231,
+        "refrigeration": 0.218,
+        "storage": 0.167,
+        "cooking": 0.167,
+        "prep": 0.115,
+        "other": 0.064,
+        "serving": 0.038
+      },
+      "common_equipment": [
+        "2단작업대",
+        "1조세정대",
+        "벽선반",
+        "상부선반",
+        "식기세척기",
+        "정수기",
+        "캐비닛 벽선반",
+        "45BOX냉동냉장고",
+        "테이블냉장고",
+        "밥보온고"
+      ]
+    },
+    {
+      "area_min_py": 3.0,
+      "area_max_py": 5.0,
+      "case_count": 72,
+      "avg_equipment_count": 17.2,
+      "category_distribution": {
+        "refrigeration": 0.189,
+        "prep": 0.184,
+        "storage": 0.184,
+        "dishwashing": 0.176,
+        "cooking": 0.157,
+        "other": 0.08,
+        "serving": 0.018,
+        "ventilation": 0.012
+      },
+      "common_equipment": [
+        "벽선반",
+        "2단작업대",
+        "식기세척기",
+        "상부선반",
+        "1조세정대",
+        "2단 작업대",
+        "45BOX냉동냉장고",
+        "1조세척기세정대",
+        "보조 작업대",
+        "제빙기"
+      ]
+    },
+    {
+      "area_min_py": 5.0,
+      "area_max_py": 8.0,
+      "case_count": 53,
+      "avg_equipment_count": 22.2,
+      "category_distribution": {
+        "prep": 0.204,
+        "refrigeration": 0.188,
+        "dishwashing": 0.181,
+        "storage": 0.177,
+        "cooking": 0.139,
+        "other": 0.063,
+        "serving": 0.033,
+        "ventilation": 0.015
+      },
+      "common_equipment": [
+        "2단작업대",
+        "벽선반",
+        "상부선반",
+        "1조세정대",
+        "식기세척기",
+        "밧드테이블냉장고",
+        "2단 작업대",
+        "1조세척기세정대",
+        "백선반",
+        "테이블냉장고"
+      ]
+    },
+    {
+      "area_min_py": 8.0,
+      "area_max_py": 12.0,
+      "case_count": 31,
+      "avg_equipment_count": 24.2,
+      "category_distribution": {
+        "dishwashing": 0.198,
+        "refrigeration": 0.196,
+        "prep": 0.184,
+        "storage": 0.171,
+        "cooking": 0.139,
+        "other": 0.072,
+        "serving": 0.035,
+        "ventilation": 0.005
+      },
+      "common_equipment": [
+        "2단작업대",
+        "벽선반",
+        "상부선반",
+        "1조세정대",
+        "테이블냉장고",
+        "식기세척기",
+        "2단 작업대",
+        "밧드테이블냉장고",
+        "다단식선반",
+        "45BOX냉동냉장고"
+      ]
+    },
+    {
+      "area_min_py": 12.0,
+      "area_max_py": 20.0,
+      "case_count": 26,
+      "avg_equipment_count": 36.1,
+      "category_distribution": {
+        "storage": 0.2,
+        "refrigeration": 0.195,
+        "prep": 0.171,
+        "dishwashing": 0.166,
+        "cooking": 0.118,
+        "other": 0.082,
+        "serving": 0.046,
+        "ventilation": 0.021
+      },
+      "common_equipment": [
+        "2단작업대",
+        "상부선반",
+        "1조세정대",
+        "다단식선반",
+        "백선반",
+        "벽선반",
+        "테이블냉장고",
+        "식기세척기",
+        "밧드테이블냉장고",
+        "식기건조대"
+      ]
+    },
+    {
+      "area_min_py": 20.0,
+      "area_max_py": 50.0,
+      "case_count": 26,
+      "avg_equipment_count": 40.5,
+      "category_distribution": {
+        "prep": 0.176,
+        "dishwashing": 0.175,
+        "storage": 0.169,
+        "cooking": 0.157,
+        "refrigeration": 0.151,
+        "other": 0.085,
+        "serving": 0.062,
+        "ventilation": 0.027
+      },
+      "common_equipment": [
+        "2단작업대",
+        "다단식선반",
+        "상부선반",
+        "백선반",
+        "1조세정대",
+        "테이블냉장고",
+        "식기세척기",
+        "2조세정대",
+        "벽선반",
+        "잔반처리대"
+      ]
+    }
+  ],
+  "global_category_distribution": {
+    "refrigeration": 0.1876,
+    "prep": 0.184,
+    "storage": 0.1726,
+    "dishwashing": 0.1697,
+    "cooking": 0.1432,
+    "other": 0.093,
+    "serving": 0.034,
+    "ventilation": 0.0159
+  },
+  "equipment_name_to_category": {
+    "호떡구이기": "cooking",
+    "가스튀김기": "cooking",
+    "가스1구렌지": "cooking",
+    "1조세정대": "dishwashing",
+    "중앙작업대": "prep",
+    "냉동냉장고": "refrigeration",
+    "냉장테이블": "refrigeration",
+    "커피머신": "other",
+    "커피그라인더": "other",
+    "제과쇼케이스": "serving",
+    "재빙기": "other",
+    "피자오븐기": "cooking",
+    "진열 쇼케이스": "serving",
+    "냉.온정수기": "other",
+    "홀 1-조 세정대": "prep",
+    "제빙기": "other",
+    "음료 냉장고": "refrigeration",
+    "보조 작업대": "prep",
+    "잔반처리대": "dishwashing",
+    "잔반통": "dishwashing",
+    "세척 전처리 1-조세정다": "prep",
+    "벽선반": "storage",
+    "식기 자동 세척기": "dishwashing",
+    "식기 건조대": "dishwashing",
+    "다단식선반": "storage",
+    "45BOX 냉동,냉장고": "refrigeration",
+    "25BOX 냉동, 냉장고": "refrigeration",
+    "1-조세정대/좌날": "prep",
+    "밧드 냉장테이블/뒷줄": "refrigeration",
+    "가스 튀김기": "cooking",
+    "튀김기 작업대": "prep",
+    "가스 6구렌지": "cooking",
+    "버티컬 믹서": "other",
+    "오픈 캐비닛": "serving",
+    "밧드 냉장테이블": "refrigeration",
+    "가스렌지5구연통": "cooking",
+    "웅성밥솥/자동무리": "cooking",
+    "가스보온밥통1구": "cooking",
+    "가스3구렌지": "cooking",
+    "서빙작업대": "prep",
+    "김장냉장고": "refrigeration",
+    "뒤물판": "other",
+    "식기건조대": "dishwashing",
+    "식기세척기": "dishwashing",
+    "세정대": "dishwashing",
+    "찬반찬바대": "prep",
+    "배식작업대": "serving",
+    "배식작업대(2)": "serving",
+    "상부선반": "storage",
+    "수저통대보관선반": "storage",
+    "보온밥솥대": "serving",
+    "국솥대": "cooking",
+    "배기후드": "ventilation",
+    "보온밥솥대선반": "storage",
+    "전열냉장고": "refrigeration",
+    "대형받침대스": "storage",
+    "대은조작업대": "prep",
+    "찌개판": "cooking",
+    "대형가스렌지": "cooking",
+    "물탱크(들통대)": "other",
+    "밑반찬냉장고": "refrigeration",
+    "2조세정대": "dishwashing",
+    "선반뚜껑대": "storage",
+    "솥렌지대": "cooking",
+    "보조냉장고": "refrigeration",
+    "육절기": "other",
+    "소주병": "other",
+    "2단작업대": "prep",
+    "작업대": "prep",
+    "4구렌지대": "cooking",
+    "1구전기탕웃기": "cooking",
+    "수저통대": "other",
+    "소스대": "other",
+    "배식선반대": "serving",
+    "김치냉장고": "refrigeration",
+    "음료냉장고2": "refrigeration",
+    "배식자바대": "serving",
+    "식판거치대": "serving",
+    "양념냉장고": "refrigeration",
+    "찬장": "storage",
+    "고기건조기": "other",
+    "음료쇼케이스": "refrigeration",
+    "음료냉장고": "refrigeration",
+    "잔소독기": "dishwashing",
+    "1조세척기세정대": "dishwashing",
+    "3조세정대": "dishwashing",
+    "45BOX을 냉장고": "refrigeration",
+    "4580X을냉동고": "refrigeration",
+    "2구낮은렌지": "cooking",
+    "중화렌지": "cooking",
+    "다단식취사기": "cooking",
+    "가스그리들": "cooking",
+    "양열간택기렌지": "cooking",
+    "2구가스튀김기": "cooking",
+    "삼부선반": "storage",
+    "45BOX냉동냉장고": "refrigeration",
+    "테이블냉장고": "refrigeration",
+    "45BOX을 냉동고": "refrigeration",
+    "냉장 테이블": "refrigeration",
+    "밧드워머기": "serving",
+    "잔반처리작업대": "dishwashing",
+    "백선반": "storage",
+    "2-조 세척기세정대": "dishwashing",
+    "45Box올냉동고": "refrigeration",
+    "45Box올냉장고": "refrigeration",
+    "반죽기": "other",
+    "제면기": "other",
+    "면렌지": "cooking",
+    "1-조 세정대": "dishwashing",
+    "1구중화렌지": "cooking",
+    "2구중화렌지": "cooking",
+    "밧드냉장고/뒷트": "refrigeration",
+    "1단상부선반": "storage",
+    "디쉬워머": "serving",
+    "1-조 세정 작업(/우날": "dishwashing",
+    "밧드냉장고": "refrigeration",
+    "컵소독기": "other",
+    "1단작업대": "prep",
+    "전기물끓이기": "other",
+    "냉동냉장고(1/2)": "refrigeration",
+    "1구낮은렌지": "cooking",
+    "3구가스렌지": "cooking",
+    "가스밥솥": "cooking",
+    "작업대/하부로라": "prep",
+    "칼도마소독기": "other",
+    "2단 작업대": "prep",
+    "쉬팬랙": "storage",
+    "발효기": "other",
+    "데크 오븐": "cooking",
+    "토핑 테이블 냉장고 (기존)": "refrigeration",
+    "피자오븐 (기존)": "cooking",
+    "3구 가스렌지": "cooking",
+    "낮은 서랍식 냉장고 (기존)": "refrigeration",
+    "가스 그릴러": "cooking",
+    "가스 그리들": "cooking",
+    "다단식 선반": "storage",
+    "45Box 올냉동고": "refrigeration",
+    "1조 세정대": "dishwashing",
+    "밧드 냉장고 (기존사용)": "refrigeration",
+    "테이블 냉장고": "refrigeration",
+    "식기 건조대 (기존사용)": "dishwashing",
+    "식기 세척기 (기존사용)": "dishwashing",
+    "1조 세척기 세정대": "dishwashing",
+    "밥 배식대": "serving",
+    "보온 상온 반찬 배식대": "serving",
+    "국 배식대": "serving",
+    "칼도마 소독기": "other",
+    "냉동.냉장고": "refrigeration",
+    "가스 낮은렌지 1구": "cooking",
+    "가스 3구렌지/하부로라": "cooking",
+    "가스 밥솥": "cooking",
+    "세척 전처리 1-조세정대": "dishwashing",
+    "중앙 작업대": "prep",
+    "중앙 1-조세정대": "prep",
+    "냉온정수기": "other",
+    "포스작업대": "prep",
+    "밧드테이블냉장고/뒷줄": "refrigeration",
+    "육수냉장고": "refrigeration",
+    "밥보온고": "serving",
+    "작업대오픈찬장": "prep",
+    "물세정대": "prep",
+    "세척기후드": "ventilation",
+    "냉면토핑작업대": "prep",
+    "배기후드/유지망": "ventilation",
+    "가스좌열간텍기/하부로라": "cooking",
+    "배기후드/유지망/등": "ventilation",
+    "보조대": "prep",
+    "올냉동고": "refrigeration",
+    "올냉장고": "refrigeration",
+    "청소용 호스릴": "other",
+    "2열3구렌지": "cooking",
+    "밥솥다이": "other",
+    "45BOX올냉장고": "refrigeration",
+    "4580X을 냉장고": "refrigeration",
+    "캐비넷작업대": "prep",
+    "전기밥솥": "cooking",
+    "자율배식대": "serving",
+    "워머기": "serving",
+    "중화 2구렌지": "cooking",
+    "중화 1구렌지": "cooking",
+    "정수기": "other",
+    "밧드 테이블 냉장고": "refrigeration",
+    "1조세정작업대/우날": "prep",
+    "피자도우 작업대": "prep",
+    "토핑테이블냉장고": "refrigeration",
+    "도우 발효기": "other",
+    "오븐 받침대": "other",
+    "피자오븐": "cooking",
+    "가스 4구렌지": "cooking",
+    "접시보온테이블": "serving",
+    "전자레인지": "cooking",
+    "식기 세척기": "dishwashing",
+    "세척기 후드": "ventilation",
+    "1조 세척기세정대": "dishwashing",
+    "퇴식 작업대/하부 잔반품": "dishwashing",
+    "냉동,냉장고": "refrigeration",
+    "을 냉장고": "refrigeration",
+    "을 냉동고": "refrigeration",
+    "커피 그라인더": "other",
+    "닛박스": "other",
+    "핫워터디스펜서": "other",
+    "수저 배분통": "serving",
+    "블렌더 믹서": "other",
+    "제과 쇼케이스/3단": "serving",
+    "45BOX냉동냉장고(1/2)": "refrigeration",
+    "3구테이블렌지": "cooking",
+    "밧드 테이블냉장고/뒷줄": "refrigeration",
+    "소스 워머기/탁상용": "serving",
+    "밧드 테이블냉장고/뒷출": "refrigeration",
+    "밧드 냉장고": "refrigeration",
+    "1조 세정작업대": "prep",
+    "발판소독기": "other",
+    "에어커튼": "other",
+    "올냉장고/양문형": "refrigeration",
+    "생선구이기": "cooking",
+    "가스낮은렌지2구": "cooking",
+    "작업대찬장": "prep",
+    "냉각실": "refrigeration",
+    "작업대/POS": "prep",
+    "완제품보관실": "storage",
+    "반찬쇼케이스": "serving",
+    "1조 세척 세정대": "dishwashing",
+    "45 Box 냉동냉장고": "refrigeration",
+    "배기후드/필터": "ventilation",
+    "덤프 스테이션": "prep",
+    "전기 튀김기": "cooking",
+    "4구 인덕션렌지": "cooking",
+    "작업대/1단": "prep",
+    "전기 그리들": "cooking",
+    "낮은 서랍식 냉장고": "refrigeration",
+    "전기 구이기": "cooking",
+    "까치선반": "storage",
+    "고기 민찌기": "prep",
+    "콤비스티머 오븐": "cooking",
+    "1단 작업대": "prep",
+    "토핑 냉장 테이블": "refrigeration",
+    "냉동 쇼케이스": "refrigeration",
+    "작업대/2단": "prep",
+    "작업대/하부제빙기": "prep",
+    "제과 쇼케이스": "serving",
+    "밧드냉장테이블": "refrigeration",
+    "가스 3구렌지": "cooking",
+    "밧드냉장테이블/뒷줄": "refrigeration",
+    "카레 워머기": "cooking",
+    "1-조세정대": "dishwashing",
+    "밧드냉장테이블/제작": "refrigeration",
+    "냉동, 냉장고": "refrigeration",
+    "1-조 세척기 세정대": "dishwashing",
+    "1구 낮은렌지": "cooking",
+    "양열 간텍기 렌지 (제작)": "cooking",
+    "배기후드 / 필터": "ventilation",
+    "가스 면렌지": "cooking",
+    "가스 3구 중화렌지": "cooking",
+    "작업대 / 2단": "prep",
+    "가스 2구 렌지": "cooking",
+    "45 Box 올냉장고": "refrigeration",
+    "45 Box 올냉동고": "refrigeration",
+    "찬 냉장고 / 제작": "refrigeration",
+    "퇴식보조작업대": "prep",
+    "가스1구낮은렌지": "cooking",
+    "높은서랍식냉장고": "refrigeration",
+    "밧드테이블냉장고": "refrigeration",
+    "제빙기/DAY-100KG": "other",
+    "반찬테이블냉장고": "refrigeration",
+    "2단작업대/하부밥솥": "prep",
+    "피자토핑테이블냉장고": "refrigeration",
+    "컴희수대살균건조소독기": "other",
+    "2조 세척기 세정대": "dishwashing",
+    "가스 구이기 (RSB-926N)": "cooking",
+    "밧드 테이블냉장고/제작": "refrigeration",
+    "공란.": "other",
+    "밥보온고/70인용": "serving",
+    "밧드 테이블냉장고": "refrigeration",
+    "퇴식작업대": "dishwashing",
+    "가스낮은렌지1구": "cooking",
+    "가스우열간텍기/하부레일": "cooking",
+    "25BOX올냉동고": "refrigeration",
+    "45BOX울냉동고": "refrigeration",
+    "작업대/하부밥보온고": "serving",
+    "이중잔반통": "dishwashing",
+    "칼소독기": "other",
+    "정수기 받침대": "other",
+    "컵 소독기": "other",
+    "잔반 처리대": "dishwashing",
+    "참치 냉동고": "refrigeration",
+    "우열 간텍기렌지/하부밥솥": "cooking",
+    "가스 구이기": "cooking",
+    "45Box 냉동냉장고": "refrigeration",
+    "김밥토핑테이블냉장고": "refrigeration",
+    "수저식판배분대": "serving",
+    "국보온운반카/국그릇디스펜서": "serving",
+    "가스 다단식 취사기/150인용": "cooking",
+    "수압세미기/30KG": "dishwashing",
+    "냉장저장고/워크인타입": "refrigeration",
+    "앞치마살균소독기/15벨": "other",
+    "장화건조소독기/16구": "other",
+    "냉동저장고/워크인타입": "refrigeration",
+    "가스 회전식국솥/200인용": "cooking",
+    "가스 회전식 볶음솥/200인용": "cooking",
+    "보조작업대": "prep",
+    "가스4구렌지": "cooking",
+    "칼.도마소독기": "other",
+    "가스 직화렌지1구": "cooking",
+    "전기식 콤비스티머": "cooking",
+    "콤비스티머 받침대": "other",
+    "손세정대/손소독기": "prep",
+    "퇴식컨베이어벨트": "dishwashing",
+    "초음파세척기": "dishwashing",
+    "담금세정대": "dishwashing",
+    "컨베이어 세척기/RACK 1 TANK DRY": "dishwashing",
+    "다단식식기선반": "storage",
+    "45 BOX 냉동.냉장고": "refrigeration",
+    "양문형 온장고": "serving",
+    "캐비닛 벽선반": "storage",
+    "캐비닛 1조 세척세정대/우물": "dishwashing",
+    "캐비닛 식기 건조대": "dishwashing",
+    "캐비닛 보조 작업대": "prep",
+    "캐비닛 3구 가스렌지": "cooking",
+    "밥솥다이 (기존사용)": "other",
+    "일반형 냉장고": "refrigeration",
+    "그릇 건조 소독기": "other",
+    "보존식 냉동고": "refrigeration",
+    "중앙 작업대 (기존사용)": "prep",
+    "해면기/육수워머": "cooking",
+    "낮은테이블냉장고": "refrigeration",
+    "사라만다": "cooking",
+    "탁상용 육절기": "other",
+    "1조세정대/우날": "dishwashing",
+    "수전": "other",
+    "2구 중화렌지": "cooking",
+    "양열 간택기렌지": "cooking",
+    "2구 낮은렌지": "cooking",
+    "삼무선반": "storage",
+    "육수 냉장고": "refrigeration",
+    "3조 세절대": "dishwashing",
+    "45BOX 물냉장고": "refrigeration",
+    "25BOX 숙성고": "refrigeration",
+    "테이블 냉동고": "refrigeration",
+    "1조 세절대": "dishwashing",
+    "백신반": "storage",
+    "정육 쇼케이스": "refrigeration",
+    "전기온수기/REW-TASO": "other",
+    "45BOX 올냉동고": "refrigeration",
+    "슬러시머신": "other",
+    "배선반": "serving",
+    "1조 세척기용 싱크대": "dishwashing",
+    "자동식기세척기": "dishwashing",
+    "1조 세정대(우날)": "dishwashing",
+    "가스간택기렌지": "cooking",
+    "가스2구렌지(제작)": "cooking",
+    "밧드테이블냉장고(윗톱밧드)": "refrigeration",
+    "사리냉각기": "refrigeration",
+    "냉면기기세트": "other",
+    "자동육수 냉각기": "refrigeration",
+    "다단식선반/보류": "storage",
+    "45BOX 올냉장고": "refrigeration",
+    "45BOX 올냉동 냉장고": "refrigeration",
+    "육절기(HS-2N)": "other",
+    "뚝배기 준비작업대": "prep",
+    "가스다단식 튀김기": "cooking",
+    "낮은 렌지 2구": "cooking",
+    "가스 회전식 국솥": "cooking",
+    "1조 세척 작업대": "prep",
+    "업소용 식기세척기": "dishwashing",
+    "접수기": "serving",
+    "밥보온고 발열대": "serving",
+    "업소용 온장고 발열대": "serving",
+    "전기 물 끓이기": "cooking",
+    "홈 세정대": "dishwashing",
+    "잔반홈": "dishwashing",
+    "1조 세척기세정대(우결림)": "dishwashing",
+    "식기 건조대(좌걸림)": "dishwashing",
+    "공관": "other",
+    "면 작업대/2단": "prep",
+    "면 세정대": "dishwashing",
+    "이중 급배기후드/유지망/방습등": "ventilation",
+    "가스 2구 중화렌지": "cooking",
+    "낮은렌지": "cooking",
+    "가스 찜기 오븐식(3단)": "cooking",
+    "2조-세정대": "dishwashing",
+    "제면기 받침대": "prep",
+    "짜장워머기": "cooking",
+    "가스 2구렌지/하부2단선반": "cooking",
+    "파이프 선반": "storage",
+    "냉장실": "refrigeration",
+    "냉동실": "refrigeration",
+    "전기 식기 소독장": "other",
+    "캐비닛 작업대": "prep",
+    "가스 3구 렌지": "cooking",
+    "전기 밥솥": "cooking",
+    "캐비닛 밥솥다이": "prep",
+    "숯불 바베큐구이기": "cooking",
+    "1구 가스 낮은렌지": "cooking",
+    "가스 해면기": "cooking",
+    "가스 2구렌지": "cooking",
+    "컨벡션오븐기": "cooking",
+    "작업대/하부오븐기": "prep",
+    "전기튀김기/탁상용": "cooking",
+    "전기식기소독장": "dishwashing",
+    "올 냉장고": "refrigeration",
+    "중앙1조세정대": "prep",
+    "중앙 상부선반": "storage",
+    "중앙2조세정대": "prep",
+    "국 보온 운반카": "serving",
+    "보온 반찬 배식대": "serving",
+    "상온 반찬 배식대": "serving",
+    "수저 식판 배분대": "serving",
+    "중앙 작업대/2단": "prep",
+    "가스 낮은렌지 2구": "cooking",
+    "가스 다단식 취사기": "cooking",
+    "올 냉동고": "refrigeration",
+    "냉.온 정수기": "other",
+    "컵회수대 살균 건조소독기": "dishwashing",
+    "토핑 테이블 냉장고": "refrigeration",
+    "토핑 상부선반": "storage",
+    "상부선반 / 오른쪽뒷다리안으로60": "storage",
+    "작업대/제작": "prep",
+    "1조세정작업대": "prep",
+    "가스면렌지": "cooking",
+    "가스중화렌지2구": "cooking",
+    "청소용워터릴": "other",
+    "수족관": "other",
+    "양오픈캐비닛": "prep",
+    "테이블냉장고/양문형": "refrigeration",
+    "오픈캐비닛": "prep",
+    "4구 가스렌지": "cooking",
+    "반찬 쇼케이스": "refrigeration",
+    "밧드 냉장고/제작": "refrigeration",
+    "음료 디스펜서": "serving",
+    "1구 가스튀김기": "cooking",
+    "2구 가스튀김기": "cooking",
+    "싱크대": "dishwashing",
+    "가스 간텍기 화구": "cooking",
+    "가스낮은렌지3구": "cooking",
+    "가스냉면렌지": "cooking",
+    "토핑테이블냉장고2": "refrigeration",
+    "음료수 냉장고": "refrigeration",
+    "테이블냉동고": "refrigeration",
+    "냉동슬러시": "refrigeration",
+    "2조 세척기세정대": "dishwashing",
+    "세척기 건조대": "dishwashing",
+    "선반 행거": "storage",
+    "야채냉장고": "refrigeration",
+    "2조 세척작업대/세정": "prep",
+    "밧드테이블 냉장고": "refrigeration",
+    "믹서": "other",
+    "아일랜드장/마늘워킹": "prep",
+    "음료 작업대": "prep",
+    "그리들": "cooking",
+    "1조세정대(좌날)": "dishwashing",
+    "커피머신/2그룹": "other",
+    "원두 그라인더": "other",
+    "테이블냉장.냉동고": "refrigeration",
+    "호프냉각기": "refrigeration",
+    "슬러시기계": "other",
+    "와인셀러(17-23병)": "refrigeration",
+    "전기 인덕션/매립형": "cooking",
+    "위생복살균건조소독기": "other",
+    "25BOX을냉동고": "refrigeration",
+    "낮은렌지1구": "cooking",
+    "가스자동밥솥": "cooking",
+    "전기식기소독기": "dishwashing",
+    "식기건조대(우걸림)": "dishwashing",
+    "1조-세척세정대(좌걸림)": "dishwashing",
+    "잔반처리대/잔반통": "dishwashing",
+    "2조 세정대": "dishwashing",
+    "1조-세정대": "dishwashing",
+    "국보온운반차": "serving",
+    "밥배식대": "serving",
+    "보냉배식대": "serving",
+    "보온배식대": "serving",
+    "컵회수대/살균건조소독기": "dishwashing",
+    "5구 가스렌지": "cooking",
+    "밧드냉장고/뒷줄": "refrigeration",
+    "1-조 세척 세정대": "dishwashing",
+    "밥솥 받침대": "prep",
+    "배식 슬라이드": "serving",
+    "컵회수대 살균건조소독기": "dishwashing",
+    "배식대 오픈찬장": "serving",
+    "밥솥작업대": "prep",
+    "중앙상부선반": "storage",
+    "식기찬장": "storage",
+    "에어커던": "other",
+    "손세정대": "other",
+    "조리도구소독기": "other",
+    "청소용릴호스": "other",
+    "가스국솥": "cooking",
+    "가스 2구낮은렌지": "cooking",
+    "식기선반": "storage",
+    "45BOX 냉동냉장고": "refrigeration",
+    "저울": "other",
+    "배식슬라이드": "serving",
+    "국배식대": "serving",
+    "너크박스": "other",
+    "필수머신": "other",
+    "음료소케이스": "refrigeration",
+    "쇼케이스": "refrigeration",
+    "오븐작업대": "prep",
+    "컨백션오븐": "cooking",
+    "낮은서랍냉장고": "refrigeration",
+    "냉장저장고": "refrigeration",
+    "냉동저장고": "refrigeration",
+    "오븐기받침대": "other",
+    "1조-세척기세절대": "dishwashing",
+    "디쉬워며": "serving",
+    "봉까치선반": "storage",
+    "봉까지선반": "storage",
+    "45BOX올냉동고": "refrigeration",
+    "넥션반": "storage",
+    "가스 중화렌지2구": "cooking",
+    "냉동 테이블": "refrigeration",
+    "상부형 벽선반": "storage",
+    "상부형 백선반": "storage",
+    "찬 냉장고/ 뒷줄밧드": "refrigeration",
+    "밧드 테이블 냉장고/뒷줄": "refrigeration",
+    "25Box 냉동냉장고": "refrigeration",
+    "퇴식 작업대": "dishwashing",
+    "1구 가스 튀김기": "cooking",
+    "1구 중화렌지": "cooking",
+    "작업대/삼면파이프": "prep",
+    "25Box 냉장고": "refrigeration",
+    "공란,": "other",
+    "25Box 올냉장고": "refrigeration",
+    "양열 간택기 렌지": "cooking",
+    "가스 테이블5구렌지": "cooking",
+    "낮은서랍식냉장고": "refrigeration",
+    "전기 피자 오븐": "cooking",
+    "피자롤러기": "prep",
+    "버티컬믹서": "prep",
+    "파니니그릴": "cooking",
+    "밧드테이블냉장고/뒷출": "refrigeration",
+    "블렌더믹서": "prep",
+    "45box 냉동냉장고": "refrigeration",
+    "좌열 간택기렌지": "cooking",
+    "김밥 테이블 냉장고": "refrigeration",
+    "가스 그릴": "cooking",
+    "컨벡션 오븐기": "cooking",
+    "선반": "storage",
+    "구이기": "cooking",
+    "냉면렌지기계셋트": "cooking",
+    "사리냉장고": "refrigeration",
+    "슬러시아받침대": "other",
+    "슬러시아/70L": "other",
+    "접이식상판/경첩": "prep",
+    "2조세척기세정대": "dishwashing",
+    "1조 세정작업대/좌날": "prep",
+    "좌열간텍기렌지": "cooking",
+    "45Box 올 냉장고": "refrigeration",
+    "45Box 을 냉동고": "refrigeration",
+    "상부 선반": "storage",
+    "작업대/하부밤보온고": "prep",
+    "밥보온고 (100인용)": "serving",
+    "컵소독기 (80인용)": "dishwashing",
+    "2구 가스렌지": "cooking",
+    "데크오븐": "cooking",
+    "호프 디스펜서": "other",
+    "서랍식 테이블 냉장고": "refrigeration",
+    "디쉬 워머": "serving",
+    "30Box 고기숙성고": "refrigeration",
+    "밧드 테이블 냉장고/제작": "refrigeration",
+    "우열 간텍기렌지": "cooking",
+    "30Box 냉동냉장고": "refrigeration",
+    "가스 식기 세척기": "dishwashing",
+    "4580X냉동냉장고": "refrigeration",
+    "백상부선반": "storage",
+    "백상무선반": "storage",
+    "가스양열간텍기": "cooking",
+    "수라간 밥들이": "other",
+    "숫볼그딜러": "cooking",
+    "받드테이블냉장고": "refrigeration",
+    "가스 1구 렌지": "cooking",
+    "중화 2구 렌지": "cooking",
+    "중화 1구 렌지": "cooking",
+    "작업대/3면 파이프": "prep",
+    "다단 쇼케이스": "storage",
+    "상부선반/1단": "storage",
+    "밧드 테이블 냉장고/미닫이형": "refrigeration",
+    "토핑 테이블냉장고": "refrigeration",
+    "상무선반": "storage",
+    "전기물끓이기/30L": "other",
+    "순간온수기": "other",
+    "2구 가스 튀김기": "cooking",
+    "2구 가스렌지 / 하부로라": "cooking",
+    "역까치선반": "storage",
+    "청소용 릴호스": "other",
+    "낮은 작업대": "prep",
+    "인덕션 렌지": "cooking",
+    "식판 소독기": "other",
+    "상온 찬배식대": "serving",
+    "보온 찬배식대": "serving",
+    "45Box 올냉장고": "refrigeration",
+    "전기식기 소독장": "dishwashing",
+    "식기 찬장": "storage",
+    "다단식 취사기 / 150인용": "cooking",
+    "반듯 테이블 냉장고 / 맽출반드": "refrigeration",
+    "가스 그릴을": "cooking",
+    "컨백션 오븐": "cooking",
+    "찬반통": "other",
+    "작업대 / 상면파이프": "prep",
+    "1조-세척기세정대": "dishwashing",
+    "해면기/워머기": "other",
+    "공란": "other",
+    "가스 1구 낮은렌지": "cooking",
+    "봉선반": "storage",
+    "좌열 간택기 렌지": "cooking",
+    "25BOX 올냉동고": "refrigeration",
+    "와이어 선반": "storage",
+    "가스좌열간택기(2열*, 링구*12)": "cooking",
+    "가스낮은렌지": "cooking",
+    "배기후드/유지망(BY-OTHER)": "ventilation",
+    "25BOX고기숙성고": "refrigeration",
+    "25BOX 올냉장고": "refrigeration",
+    "45BOX 울냉장고": "refrigeration",
+    "식기건조대(좌걸림)": "dishwashing",
+    "2조-세척기세정대(우걸림)": "dishwashing",
+    "육수냉장고(2말 외동)": "refrigeration",
+    "음료냉장쇼케이스": "refrigeration",
+    "캐비넷찬장": "storage",
+    "가스자동밥솥(150인용)": "cooking",
+    "청소용호스릴": "other",
+    "낮은2구가스렌지": "cooking",
+    "상온배식대": "serving",
+    "밥보온배식대": "serving",
+    "컴회수대살균건조소독기": "other",
+    "가스3구렌지/하부로라": "cooking",
+    "이동식운반카": "serving",
+    "경첩선반": "storage",
+    "가스좌열간텍기렌지/하부로라": "cooking",
+    "작업대/하부삼면파이프": "prep",
+    "식기백건조대": "dishwashing",
+    "청과야채쇼케이스": "serving",
+    "밧드 냉장고/뒷출밧드": "refrigeration",
+    "접시보온 테이블": "serving",
+    "5구 가스렌지/양념다이": "cooking",
+    "오픈 벽선반": "storage",
+    "1조 세정 작업대/우날": "prep",
+    "팬 꽃이 선반": "storage",
+    "냉장 저장고": "refrigeration",
+    "냉동 저장고": "refrigeration",
+    "랙 선반": "storage",
+    "캐비닛 작업대/타공": "prep",
+    "1조 세정작업대/우날": "prep",
+    "제빙기/100Kg": "other",
+    "청소용 워터릴": "other",
+    "다단식 취사기": "cooking",
+    "상부선빈": "storage",
+    "배선카": "serving",
+    "온장고": "refrigeration",
+    "장화 소독기": "other",
+    "위생복 소독기": "other",
+    "앞치마 소독기": "other",
+    "보온 배식대": "serving",
+    "보냉 배식대": "serving",
+    "2580X물냉동고": "refrigeration",
+    "반자동 반죽기계": "other",
+    "냉면기계세트": "cooking",
+    "민서기": "other",
+    "민서기작업대": "prep",
+    "다단식취사기(100인용)": "cooking",
+    "다단식취사기받침대": "other",
+    "2조-세척기세정대": "dishwashing",
+    "가스우열간택기렌지": "cooking",
+    "주류냉장쇼케이스": "refrigeration",
+    "세탁기": "other",
+    "호프 냉장고": "refrigeration",
+    "1조세정작업대/우물": "prep",
+    "넉박스": "other",
+    "씽크볼": "dishwashing",
+    "하이믹서기": "other",
+    "빙삭기": "other",
+    "접시워머": "serving",
+    "햄버거온장고": "serving",
+    "법솔받침대": "other",
+    "가스양열간텍기렌지": "cooking",
+    "백건조대": "dishwashing",
+    "오픈찬장작업대": "serving",
+    "밥보온고/120인용": "serving",
+    "밥보온고작업대": "prep",
+    "컵소독기/250EA": "other",
+    "홀세팅력": "serving",
+    "육수냉장고/상판확장": "refrigeration",
+    "경첩상판": "serving",
+    "기계작업대": "prep",
+    "밧드테이블냉장고/상판확장": "refrigeration",
+    "가스올간텍기(1*9)": "cooking",
+    "가스다단식취사기/150인용": "cooking",
+    "조리실습대": "prep",
+    "강사조리실습대": "prep",
+    "보조실습대": "prep",
+    "가스오븐렌지": "cooking",
+    "퇴식작업대/2단": "dishwashing",
+    "45BOX 냉동.냉장고": "refrigeration",
+    "중앙작업대/2단": "prep",
+    "밥솥받침대": "other",
+    "가스2구렌지": "cooking",
+    "솥밥대통령": "cooking",
+    "가스구이기": "cooking",
+    "가스6구렌지": "cooking",
+    "낮은보냉테이블": "refrigeration",
+    "낮은보조작업대": "prep",
+    "가스직화렌지": "cooking",
+    "렉선반": "storage",
+    "력작업대": "prep",
+    "가스부스타": "cooking",
+    "참치냉동고": "refrigeration",
+    "가스울간텍기렌지": "cooking",
+    "디퍼": "other",
+    "커피머신3구": "cooking",
+    "넛박스": "storage",
+    "블렌더 믹서기": "cooking",
+    "아이스벤": "storage",
+    "도우컨디셔너": "cooking",
+    "야채절단기": "other",
+    "식기백선반": "storage",
+    "육류분쇄기": "other",
+    "골절기": "other",
+    "골절기받침대": "other",
+    "냉동저장창고": "refrigeration",
+    "숙성저장창고": "refrigeration",
+    "냉장저장창고": "refrigeration",
+    "밧드테이블냉장고(뒷줄)": "refrigeration",
+    "가스간텍기렌지": "cooking",
+    "냉면기계": "cooking",
+    "가스회전식국솥": "cooking",
+    "자동반죽기계": "cooking",
+    "받침대": "other",
+    "퇴세정대/하부찬장": "dishwashing",
+    "자외선접시살균소독기": "dishwashing",
+    "서빙카트": "serving",
+    "매주다이": "other",
+    "배식보조작업대": "prep",
+    "양념작업대": "prep",
+    "중화2구렌지": "cooking",
+    "식기객건조대": "dishwashing",
+    "보존식냉동고": "refrigeration",
+    "가스다단식취사기": "cooking",
+    "앞치마소독기": "other",
+    "장화소독기": "other",
+    "고무장갑 행주소독기": "other",
+    "음료스케이스": "other",
+    "덤웨이터작업대": "prep",
+    "컵세정대": "dishwashing",
+    "2조세척기세절대": "dishwashing",
+    "피자토핑테이블": "prep",
+    "전기오븐": "cooking",
+    "오븐받침대": "other",
+    "오픈캐비닛작업대": "prep",
+    "낮은서랍식토핑테이블냉장고": "refrigeration",
+    "파스타렌지": "cooking",
+    "가스그리를": "cooking",
+    "가스그릴러": "cooking",
+    "숯발화기": "cooking",
+    "가스중화렌지": "cooking",
+    "25BOX냉동냉장고": "refrigeration",
+    "1조세정작업대/좌날": "prep",
+    "1조세척기세정대/우걸이": "dishwashing",
+    "식기건조대/좌걸이": "dishwashing",
+    "반죽기/20Kg": "other",
+    "가스중화렌지1구": "cooking",
+    "소스워머기": "serving",
+    "밧드테이블냉장고(앞줄)": "refrigeration",
+    "상부1단선반": "storage",
+    "4580X울냉장고": "refrigeration",
+    "4580X울냉동고": "refrigeration",
+    "전기밥솥(30인용)": "cooking",
+    "밧드테이블냉장고(뒷출)": "refrigeration",
+    "스몰씽크": "dishwashing",
+    "콤비스티머오븐": "cooking",
+    "김밥테이블냉장고": "refrigeration",
+    "세미다단쇼케이스": "serving",
+    "케비넷작업대": "prep",
+    "보존식전용냉동고": "refrigeration",
+    "1조케비넷세정대": "dishwashing",
+    "케비넷빅찬장": "storage",
+    "그릇건조소독기": "other",
+    "케비넷벽찬장": "storage",
+    "케비넷찬장": "storage",
+    "가스올간텍기렌지": "cooking",
+    "가스2구낮은렌지": "cooking",
+    "검소독기": "dishwashing",
+    "음료냉장스케이스": "refrigeration",
+    "엠포장기": "other",
+    "정육쇼케이스": "refrigeration",
+    "고기숙성고": "refrigeration",
+    "가스양열간텍기렌지/하부로라": "cooking",
+    "가스압력밥솥": "cooking",
+    "오픈케비넷작업대": "prep",
+    "스시쇼케이스": "serving",
+    "1조세정작업대(우날)": "prep",
+    "65BOX냉동냉장고": "refrigeration",
+    "숯불구이기": "cooking",
+    "오븐/기존사용": "cooking",
+    "1구튀김기/기존사용": "cooking",
+    "2구튀김기/기존사용": "cooking",
+    "가스그리들/하부레일": "cooking",
+    "밧드테이블냉장고, 뒷줄": "refrigeration",
+    "45BOX ½냉동냉장고": "refrigeration",
+    "2조세정작업대.우날": "dishwashing",
+    "1조세정작업대 좌날": "dishwashing",
+    "칼,도마소독기": "other",
+    "파이프봉선반": "storage",
+    "가스좌열간텍기렌지": "cooking",
+    "수압세미기": "other",
+    "국그릇디스펜서": "serving",
+    "식기소독장": "dishwashing",
+    "트레이슬라이드": "serving",
+    "보냉테이블냉장고": "serving",
+    "수저식판배분카": "serving",
+    "검회수차": "serving",
+    "자외선컵소독기": "other",
+    "육무작업대": "prep",
+    "진공포장기": "other",
+    "숯점화기": "cooking",
+    "수업세미기": "other",
+    "이동식식기건조대": "dishwashing",
+    "작업대/하부레일": "prep",
+    "가스3구렌지/하부레일": "cooking",
+    "보조작업대/2단": "prep",
+    "상부선반/2단": "storage",
+    "컵회수대살균소독기/80EA": "other",
+    "25BOX을 냉장고": "refrigeration",
+    "25BOX온장고": "other",
+    "스팀컨벡션오븐": "cooking",
+    "자외선살균소독기": "other",
+    "½냉동.냉장고": "refrigeration",
+    "캐비닛작업대": "prep",
+    "파이프선반": "storage",
+    "컨벡션오븐": "cooking",
+    "블렌더": "other",
+    "제빙기/55Kg": "other",
+    "에소프레소머신": "other",
+    "그라인더": "other",
+    "가스5구렌지": "cooking",
+    "국솥작업대": "prep",
+    "캐비넷벽찬장": "storage",
+    "가스회전식국솥(400인용)": "cooking",
+    "배기후드/유지망/방습등": "ventilation",
+    "가스다단식취사기(150인용)": "cooking",
+    "가스4구렌지(2열*4)": "cooking",
+    "전자저울": "other",
+    "30BOX고기숙성고": "refrigeration",
+    "행슬라이서": "other",
+    "밥솥온고": "cooking",
+    "밥술작업대": "prep",
+    "4580X올냉동고": "refrigeration",
+    "4580X올냉장고": "refrigeration",
+    "냉반찬배식대": "serving",
+    "온반찬배식대": "serving",
+    "식판배분대": "serving",
+    "손소독기": "other",
+    "30BOX냉동냉장고": "refrigeration",
+    "국보온운반카": "serving",
+    "가스우열간텍기렌지": "cooking",
+    "인덕션밥들이": "cooking",
+    "생선화덕": "other",
+    "배식대": "serving",
+    "청소용호스틸": "other",
+    "반찬배식대": "serving",
+    "전반처리대": "dishwashing",
+    "컨베이어 식기세척기": "dishwashing",
+    "식기보관함": "storage",
+    "전기식기소독고": "dishwashing",
+    "다단선반": "storage",
+    "가스낮은렌지 1구": "cooking",
+    "가스회전국솥": "cooking",
+    "양문형김치냉장고": "refrigeration",
+    "가스3구낮은렌지": "cooking",
+    "45BOX울냉장고": "refrigeration",
+    "중화렌지1구": "cooking",
+    "가스해면기": "cooking",
+    "1조세척기세정대/우걸이,제작": "dishwashing",
+    "낮은서랍식냉장고/간냉": "refrigeration",
+    "밧드테이블냉장고/뒷줄.우기계제작": "refrigeration",
+    "제빙기/day_50kg": "refrigeration",
+    "테이블냉장고/좌기계.간냉": "refrigeration",
+    "테이블냉장고/좌기계 간냉": "refrigeration",
+    "45BOX 상부선반": "storage",
+    "양문형 냉동.냉장고": "refrigeration",
+    "캐비닛 1조세척기세정대": "dishwashing",
+    "2단작업대/하부로라": "prep",
+    "잔반처리대/삼면파이프": "dishwashing",
+    "캐비닛벽선반": "storage",
+    "전기식기소독장/기존사용": "other",
+    "가스회전식볶음솥": "cooking",
+    "45BOX냉동냉장고/기존사용": "refrigeration",
+    "테이블냉장고/좌기계": "refrigeration",
+    "가스튀김기 2구": "cooking",
+    "기름정제기": "other",
+    "봉파이프선반": "storage",
+    "양열간텍기렌지": "cooking",
+    "밧드테이블냉장고(셀프용)": "serving",
+    "중화1구렌지": "cooking",
+    "냉면렌지": "cooking",
+    "직화2구렌지": "cooking",
+    "가스그릴러/숯불바베큐": "cooking",
+    "컵소독기/50개": "other",
+    "1조세정대/건조대": "dishwashing",
+    "가스회전식국솥/500인": "cooking",
+    "가스6구렌지/하부레일": "cooking",
+    "1조세정대/물통깊이 300": "dishwashing",
+    "다단식취사기/150인": "cooking",
+    "2조세정작업대": "dishwashing",
+    "전기오븐기": "cooking",
+    "가스좌일간텍기렌지": "cooking",
+    "45BOX고기숙성고": "refrigeration",
+    "슬러시아": "other",
+    "양오픈캐비닛작업대": "prep",
+    "인덕션15구돌솥기계": "cooking",
+    "밧드테이블냉장고/셀프코너": "refrigeration",
+    "상부선반/셀프코너": "storage",
+    "45BOX냉동냉장고(1/4냉동)": "refrigeration",
+    "저장고": "storage",
+    "2단작업대/구이기선반": "prep",
+    "꼬치구이화덕": "cooking",
+    "1조세척기세정대/좌걸림": "dishwashing",
+    "식기건조대/우걸림": "dishwashing",
+    "밧드테이블냉장고/뒷줄/좌기계": "refrigeration",
+    "어소기": "other",
+    "가스올간텍기렌지/하부로라": "cooking",
+    "생선세정대": "dishwashing",
+    "밥보온고/작업대하부": "serving",
+    "컵소독기/작업대상부": "serving",
+    "냉.온수기": "other",
+    "이동식작업대": "prep",
+    "밥돌이/20구": "cooking",
+    "2단작업대/제작": "prep",
+    "식기건조대/좌걸림": "dishwashing",
+    "1조세척기세정대/우걸림": "dishwashing",
+    "가스2구중화렌지": "cooking",
+    "가스2구튀김기": "cooking",
+    "홀세정대": "other",
+    "밥보온고/100인용": "serving",
+    "전기밥솥/35인용": "cooking",
+    "전기밥솥/50인용": "cooking",
+    "45BOX을냉장고": "refrigeration",
+    "가스1구튀김기": "cooking",
+    "식기보관찬장": "storage",
+    "콤비스팀오븐/5단": "cooking",
+    "복합소독고": "other",
+    "전기구이기": "cooking",
+    "1조세정대/좌날": "dishwashing",
+    "2-조 세정대": "dishwashing",
+    "45 Box 냉동 냉장고": "refrigeration",
+    "찬 냉장고": "refrigeration",
+    "전기 튀김기 (탁상용)": "cooking",
+    "쌀통": "storage",
+    "2단벽선반": "storage",
+    "가스렌지": "cooking",
+    "2단상부선반": "storage",
+    "치킨파우더작업대": "prep",
+    "국 보온통": "serving",
+    "국 보온통 받침대": "serving",
+    "자율 배식대": "serving",
+    "수저식판 배식대": "serving",
+    "가스열왕간택기렌지": "cooking",
+    "30BOX올냉장고": "refrigeration",
+    "슬러시아 작업대": "prep",
+    "누들누보": "cooking",
+    "밥돌이": "cooking",
+    "밧드 워머기": "serving",
+    "찬 냉장고 (제작)": "refrigeration",
+    "1-조 세정대/좌물": "dishwashing",
+    "가스중화2구렌지": "cooking",
+    "3단작업대": "prep",
+    "가스양열간택기렌지": "cooking",
+    "전기튀김기": "cooking",
+    "전기반솥": "cooking",
+    "25BOX올냉장고": "refrigeration",
+    "민찌기": "other",
+    "중앙2단작업대": "prep",
+    "중앙테이블냉장고": "refrigeration",
+    "슬러시아작업대": "prep",
+    "1조세척기세정작업대": "dishwashing",
+    "가스2구 낮은렌지": "cooking",
+    "도우반죽기": "other",
+    "오븐/하부선반포함": "cooking",
+    "배식대/양오픈케비넷": "serving",
+    "빅선반": "storage",
+    "튀김기1구": "cooking",
+    "블랜딩믹스볼2구": "other",
+    "꼬치구이기": "cooking",
+    "포장선반": "storage",
+    "배식 오픈 캐비닛": "serving",
+    "찬밧드 냉장고": "refrigeration",
+    "45BOX 2냉동,냉장": "refrigeration",
+    "가스 낮은렌지/1구": "cooking",
+    "가스 테이블렌지/2구": "cooking",
+    "밥솥 작업대": "prep",
+    "세척 전처리 2-조 세정대": "dishwashing",
+    "퇴식 작업대/1단": "dishwashing",
+    "2단 벽선반": "storage",
+    "퇴식대": "dishwashing",
+    "25Box올냉동고": "refrigeration",
+    "작업대/하부 칼도마소독기설치": "prep",
+    "자동호스걸이": "other",
+    "가스우열다화구렌지": "cooking",
+    "배식대/하부2단선반": "serving",
+    "족발보온기": "serving",
+    "써 펜 럭": "other",
+    "청소용 월 호스": "other",
+    "와이어다단식선반": "storage",
+    "인덕션그리들": "cooking",
+    "가스우열간텍기렌지/하부로라": "cooking",
+    "테이블냉장고/우기계": "refrigeration",
+    "튀김기": "cooking",
+    "1조세척기세정대/좌걸이": "dishwashing",
+    "밧드테이블냉장고/좌기계": "refrigeration",
+    "세척 전처리 2-조세정대": "dishwashing",
+    "맥주 디스펜서": "other",
+    "작업대 / 삼면파이프": "prep",
+    "25BOX냉동고": "refrigeration",
+    "가스직화볶음기": "cooking",
+    "낮은작업대": "prep",
+    "떡볶이작업대": "prep",
+    "냉장쇼케이스/뒷문형": "refrigeration",
+    "파절기": "other",
+    "진공포장기/대형": "other",
+    "가스5구렌지(2열*3, 1열*2)": "cooking",
+    "튀김기1구(분체)": "cooking",
+    "45 ½수직냉동냉장고": "refrigeration",
+    "김밥테이블냉장고(좌기계)": "refrigeration",
+    "상부선반(김밥냉장고용)": "storage",
+    "김밥테이블냉장고/좌기계": "refrigeration",
+    "FRS-505RWE": "refrigeration",
+    "FRS-806RWE": "refrigeration",
+    "B-T/FREEZER": "refrigeration",
+    "JB-Wall Shelf": "storage",
+    "JB-REFRIGERATOR": "refrigeration",
+    "RIFA-30": "cooking",
+    "JB-2 DISH WASH": "dishwashing",
+    "JB-GAS RANGE": "cooking",
+    "RFA-328G": "refrigeration",
+    "숯불 바베큐기": "cooking",
+    "생맥주 디스팬서": "other",
+    "(unknown)": "other",
+    "LOW RANGE": "cooking",
+    "SINK": "dishwashing",
+    "RFA-227": "other",
+    "JR-TT/REFRIGERATOR": "refrigeration",
+    "싱크": "dishwashing",
+    "냉장고": "refrigeration",
+    "오픈 수납장": "storage",
+    "하부 작업대": "prep",
+    "반찬냉장고": "refrigeration",
+    "카운터": "serving",
+    "데스크형 키오스크": "serving",
+    "가스튀김": "cooking",
+    "전자레인지 (상부선반배치)": "cooking",
+    "unknown": "other",
+    "JB-Wall shelf": "storage",
+    "JB-T/REFRIGERATOR": "refrigeration",
+    "접이식작업대": "prep",
+    "배식카트": "serving",
+    "화덕": "cooking",
+    "JB-GT/REFRIGERATOR": "refrigeration",
+    "JB-1 DW/SINK": "dishwashing",
+    "JB-FREEZER": "refrigeration",
+    "JB-LOW RANGE": "cooking",
+    "JB-2 DISH MASH": "dishwashing",
+    "RIFA-227": "refrigeration",
+    "FRS-505RME": "refrigeration",
+    "JB-Shelf": "storage",
+    "개수대": "dishwashing",
+    "35NV SYG-SR": "cooking",
+    "JB-1/FREE": "refrigeration",
+    "JB-2SINK W/ TABLE(R)": "dishwashing",
+    "배전함": "other",
+    "JB-GI/REFRIGERATOR": "refrigeration",
+    "계단": "other",
+    "면렌지 (누들누보)": "cooking",
+    "선반하부(생반꽃이 12ea)": "storage",
+    "냉동고/문반대": "refrigeration",
+    "올냉동고/운반대": "refrigeration",
+    "파우더작업대": "prep",
+    "JB-2SINK": "dishwashing",
+    "가스1구렌지 가스튀김기": "cooking",
+    "전기온수기": "other",
+    "JB-SINK": "prep",
+    "렌지": "cooking",
+    "가정용냉장고": "refrigeration",
+    "45BOX물냉장고": "refrigeration",
+    "45BOX물냉동고": "refrigeration",
+    "작업대/하부잔반통": "prep",
+    "4구가스렌지": "cooking",
+    "1조싱크작업대": "prep",
+    "서랍식냉력": "refrigeration",
+    "버티컬믹서기(16)": "other",
+    "1조세정대(좌몰)": "dishwashing",
+    "FRS-400RWE": "refrigeration",
+    "JB-2SINK W/TABLE(L)": "dishwashing",
+    "INISI-B": "other",
+    "JB-1SINK": "other",
+    "JB-BT/REFRIGERATOR": "refrigeration",
+    "A01": "other",
+    "A16": "cooking",
+    "A12": "dishwashing",
+    "A14": "refrigeration",
+    "A11": "storage",
+    "18-GAS RANGE": "cooking",
+    "가스레인지": "cooking",
+    "에어컨": "other",
+    "NISL-B": "other",
+    "JB-Work table": "prep",
+    "JB-GRIDDLE": "cooking",
+    "RFA-3280": "other",
+    "낮은 렌지": "cooking",
+    "가스 렌지": "cooking",
+    "3구중화렌지": "cooking",
+    "소독기다이": "other",
+    "탕렌지": "cooking",
+    "컵소독기/정수기": "other",
+    "30BOX냉장고": "refrigeration",
+    "가스튀김기기": "cooking",
+    "JB-1DW/SINK": "dishwashing",
+    "HS1-SF": "dishwashing",
+    "HSYM HSIO 2-r": "storage",
+    "J-T/REFRIGERATOR": "refrigeration",
+    "배선대": "serving",
+    "01": "other",
+    "02": "other",
+    "03": "other",
+    "04": "other",
+    "05": "other",
+    "06": "other",
+    "07": "other",
+    "08": "other",
+    "09": "other",
+    "10": "other",
+    "11": "other",
+    "12": "other",
+    "13": "other",
+    "14": "other",
+    "15": "other",
+    "16": "other",
+    "17": "other",
+    "18": "other",
+    "19": "other",
+    "20": "other",
+    "21": "other",
+    "22": "prep",
+    "23": "storage",
+    "24": "storage",
+    "25": "storage",
+    "26": "storage",
+    "27": "ventilation",
+    "콤비스팀오븐": "cooking",
+    "하부(쟁반꽃어1ea)": "other",
+    "1조-세척기 세정대": "dishwashing",
+    "칼 도마 소독기": "other",
+    "히타 건조 소독기": "other",
+    "김치 냉장고": "refrigeration",
+    "1구 낮은 렌지": "cooking",
+    "밥솥 다이": "other",
+    "세척대": "prep",
+    "BT/REFRIGERATOR": "refrigeration",
+    "JB-SOILED DISH TABLE": "prep",
+    "30NY SVO-8F": "cooking",
+    "후드": "ventilation",
+    "컨베이어 오븐기": "cooking",
+    "밧드냉장고(제작)": "refrigeration",
+    "4구테이블렌지": "cooking",
+    "서랍식낮은냉장고": "refrigeration",
+    "하부장": "storage",
+    "다찌": "prep",
+    "사각테이블": "other",
+    "냉동고": "refrigeration",
+    "수비드머신": "cooking",
+    "오븐": "cooking",
+    "45박스 냉장고": "refrigeration",
+    "육수통(2말쌍통)": "other",
+    "화구": "cooking",
+    "1조 싱크대": "dishwashing",
+    "테이블 냉장고 (배식)": "refrigeration",
+    "누들로보": "cooking",
+    "사리 냉각기": "refrigeration",
+    "밧드 냉장고 (뒷줄밧드)": "refrigeration",
+    "운반카 (3단)": "serving",
+    "우성 참치냉동고": "refrigeration",
+    "3단 벽선반(양 오픈/천장)": "storage",
+    "6구렌지": "cooking",
+    "콤비오븐": "cooking",
+    "작업대 3면파이프": "prep",
+    "조세정대": "dishwashing",
+    "연탄불구이기": "cooking",
+    "45Box½냉동냉장고": "refrigeration",
+    "가스다화구렌지": "cooking",
+    "육수렌지": "cooking",
+    "음료쇼케이스음료쇼케이스": "refrigeration",
+    "건조대벽선반": "storage",
+    "이중잔반운반차": "other",
+    "국산주류 적재공간": "storage",
+    "주류선반": "storage",
+    "캐비닛": "storage",
+    "공병적재": "storage",
+    "COUNTER": "prep",
+    "제빙기/100K": "refrigeration",
+    "35BOX 냉장고": "refrigeration",
+    "테이블냉장냉동고/우기계": "refrigeration",
+    "토핑냉장고/위기계": "refrigeration",
+    "잔반처리 작업대": "prep",
+    "기스1구튀김기": "cooking",
+    "45BOX 냉장냉동고": "refrigeration",
+    "4구렌지 LNG": "cooking",
+    "45BQX냉장고": "refrigeration",
+    "음료 쇼케이스": "refrigeration",
+    "제빙기 50KG": "other",
+    "벽선반(2단)": "storage",
+    "벽선반(1단)": "storage",
+    "테아블냉장고": "refrigeration",
+    "양열간텍기": "cooking",
+    "건조대": "other",
+    "세척기세정대": "dishwashing",
+    "5구렌지": "cooking",
+    "가스렌지 5구": "cooking",
+    "식기세척기/도어타입": "dishwashing",
+    "건조대/우걸이": "dishwashing",
+    "45Box냉동냉장고": "refrigeration",
+    "제빙기 50kg/Day": "other",
+    "참지냉동고": "refrigeration",
+    "대게찜기": "cooking",
+    "맥주냉장고": "refrigeration",
+    "정제기": "other",
+    "JB-C/DISH TABLE": "dishwashing",
+    "JB-WORK TABLE": "prep",
+    "가스3구렌지/신규": "cooking",
+    "1조기형세정대": "dishwashing",
+    "상부가스5구렌지/신규": "cooking",
+    "하부서랍식냉장고/신규": "refrigeration",
+    "낮은1구렌지/신규": "cooking",
+    "해면기/신규": "other",
+    "가스2튀김기": "cooking",
+    "2조세척기세정대/좌날": "dishwashing",
+    "45BOX": "other",
+    "기존 작업대": "prep",
+    "작화기": "cooking",
+    "벽장": "storage",
+    "온수기": "other",
+    "가스렌지3구": "cooking",
+    "구이기받침대": "other",
+    "1조세정작업대/우날개": "prep",
+    "가스낮은렌지1구 배기후드/유지망": "cooking",
+    "2단작업대/기형": "prep",
+    "JB-Shell": "storage",
+    "캐비넷": "storage",
+    "PROVER/OVEN": "cooking",
+    "RANGE SYG-SP": "cooking",
+    "FREEZER": "refrigeration",
+    "TABLE": "other",
+    "JB-17 REFRIGERATOR": "refrigeration",
+    "SHELVES": "storage",
+    "서랍장": "storage",
+    "해면기": "other",
+    "직화렌지": "cooking",
+    "2구 중화테이블렌지": "cooking",
+    "소스워머": "other",
+    "우열간택기": "cooking",
+    "-45bOX올냉동고": "refrigeration",
+    "육기제작기/도버타입": "other",
+    "1조세척기 세정대/우걸이": "dishwashing",
+    "3구렌지": "cooking",
+    "중앙밧드냉장고": "refrigeration",
+    "25BOX김치냉장고": "refrigeration",
+    "JB-2 DISH WAG": "dishwashing",
+    "POS": "other",
+    "주류냉장고": "refrigeration",
+    "퇴식구": "dishwashing",
+    "상부스텐선반": "storage",
+    "워크인 냉장고": "refrigeration",
+    "워크인 냉동고": "refrigeration",
+    "온수기, 제빙기": "other",
+    "생맥주 기계": "other",
+    "미니싱크": "dishwashing",
+    "사각 싱크볼": "dishwashing",
+    "픽업대/ 픽업대 하단 쇼케이스": "serving",
+    "JB-Wall sink": "dishwashing",
+    "SYM HSJO Z-Br": "dishwashing",
+    "JB-Work Table": "prep",
+    "JB-Low Range": "cooking",
+    "JB-Gas Range": "cooking",
+    "JG-Work Table": "prep",
+    "JB-Refrigerator": "refrigeration",
+    "JB-BT/Refrigerator": "refrigeration",
+    "FT-470R": "other",
+    "그라인더 박스": "other",
+    "하부 제빙기": "refrigeration",
+    "픽업대&회수대": "serving",
+    "예비 제빙기": "refrigeration",
+    "경량렉": "storage",
+    "뒷줄밧드 냉장고": "refrigeration",
+    "제빙기 45box": "other",
+    "45box": "refrigeration",
+    "음료/주류냉장고": "refrigeration",
+    "구이기작업대": "prep",
+    "가스구이기 린나이923": "cooking",
+    "구이기선반 /상부1단각다리": "storage",
+    "1조세정대/캐비닛 /미닫이/우민200": "prep",
+    "1조 세척세정대": "prep",
+    "테이블냉장고 (좌측 기계실)": "refrigeration",
+    "반찬테이블냉장고 (좌측 기계실)": "refrigeration",
+    "상부선반/2EA": "storage",
+    "35BOX냉장냉동고": "refrigeration",
+    "45BOX냉장냉동고": "refrigeration",
+    "튀김기 /하부정제기": "cooking",
+    "컵디스펜서 커피머신": "other",
+    "RSB-4PRF": "refrigeration",
+    "JB-2SINK WYTABLE(L)": "dishwashing",
+    "WORK TABLE": "prep",
+    "냉장/냉동고": "refrigeration",
+    "1조 싱크": "dishwashing",
+    "냉동/냉장고": "refrigeration",
+    "2조 싱크": "dishwashing",
+    "잔반톰": "dishwashing",
+    "랙컨베어세척기": "dishwashing",
+    "JB-C/SH TABLE": "prep",
+    "DIS WAGH": "dishwashing",
+    "하부/테이블냉장고": "refrigeration",
+    "컵디스펜서": "serving",
+    "제빙기 200K": "refrigeration",
+    "스텐작업대": "prep",
+    "씽크대 W:900": "dishwashing",
+    "냉장/냉동고 25BOX": "refrigeration",
+    "2단 스텐선반": "storage",
+    "인덕션": "cooking",
+    "변서바": "other",
+    "45box냉장고": "refrigeration",
+    "수조": "dishwashing",
+    "스팀기": "cooking",
+    "2구찜기": "cooking",
+    "볶음기계다이": "other",
+    "자동볶음기계": "cooking",
+    "냉각기": "refrigeration",
+    "보일러": "other",
+    "45박스(올냉장)": "refrigeration",
+    "45박스(올냉동)": "refrigeration",
+    "토핑냉장고": "refrigeration",
+    "제분통": "other",
+    "튀김기2": "cooking",
+    "45박스(냉동냉장)": "refrigeration",
+    "간택기": "cooking",
+    "2구튀김기": "cooking",
+    "JB-15INK": "other",
+    "WORK TALE": "prep",
+    "JB-C/DISH": "dishwashing",
+    "-GAS RANGE": "cooking",
+    "OW RANGE": "cooking",
+    "가스렌지 3구": "cooking",
+    "45box 올냉동고": "refrigeration",
+    "JB-2 DW/SINK": "dishwashing",
+    "JB-Wall shelt": "storage",
+    "솥밥기계": "cooking",
+    "공냉식 제빙기": "refrigeration",
+    "아이스빈": "refrigeration",
+    "풋워터 디스펜서": "serving",
+    "피처린서디퍼월": "other",
+    "반자동 머신 (3GR)": "other",
+    "넷박스 하부휴지통": "other",
+    "도넛후라이어": "cooking",
+    "데크오븐3대3단": "cooking",
+    "컨벡션오븐6매6단": "cooking",
+    "발효기20매": "cooking",
+    "계량작업대": "prep",
+    "스탠드": "prep",
+    "평대쇼케이스": "storage",
+    "음료진열장": "storage",
+    "케익진열장": "storage",
+    "1조세절대": "prep",
+    "컵회수대살균소독기": "dishwashing",
+    "국그릇회수대": "dishwashing",
+    "잔반처리대/수저식판회수대": "dishwashing",
+    "그룻배식대": "serving",
+    "자율배식대(뷔폐식)": "serving",
+    "도우냉장고": "refrigeration",
+    "45box 내동냉장고": "refrigeration",
+    "가스렌지받침대": "cooking",
+    "운반지": "other",
+    "김밥": "other",
+    "전기렌지": "cooking",
+    "전지렌지": "cooking",
+    "실싱기": "other",
+    "이채절단기": "other",
+    "500x600 TABLE": "other",
+    "재료통": "storage",
+    "25BOX올냉동고 /3EA": "refrigeration",
+    "45box올냉동고": "refrigeration",
+    "45box올냉장고": "refrigeration",
+    "테이블냉장고/하부": "refrigeration",
+    "하부제빙기": "other",
+    "핫워터": "other",
+    "1조세정대/하부온수기 하판X": "dishwashing",
+    "상부 벽선반": "storage",
+    "제빙기 260KG": "other",
+    "테이블냉장고 /대리석 상판": "refrigeration",
+    "랙카/4EA": "storage",
+    "2단작업대/이동식": "prep",
+    "도우 컨디셔너": "refrigeration",
+    "B-WORK TABLE": "prep",
+    "UB-HOF REFRIGERATOR": "refrigeration",
+    "JB-2SINK-BR": "dishwashing",
+    "RFA-228": "other",
+    "JS-SINK": "other",
+    "JS-REFRIGERATOR": "refrigeration",
+    "JS-WALL SHELF": "storage",
+    "J-2 DISH WASH": "dishwashing",
+    "JS-WORK TABLE": "prep",
+    "RFA-427 JEWORK TABLE": "prep",
+    "JS-150K": "other",
+    "자동 볶음기": "cooking",
+    "제빙기 100KG": "other",
+    "닷지 테이블": "serving",
+    "좌식 테이블": "other",
+    "퇴식구 선반": "storage",
+    "키오스크": "other",
+    "밥솥(30인용)": "cooking",
+    "출력 전산기": "other",
+    "45BOX올냉장": "refrigeration",
+    "45BOX올냉동": "refrigeration"
+  }
+}

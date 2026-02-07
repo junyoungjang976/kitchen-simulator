@@ -15,6 +15,15 @@ class RestaurantType(Enum):
     FINE_DINING = "fine_dining"
     CAFETERIA = "cafeteria"
     GHOST_KITCHEN = "ghost_kitchen"
+    KOREAN = "korean"
+    CAFE = "cafe"
+    WESTERN = "western"
+    CHINESE = "chinese"
+    JAPANESE = "japanese"
+    FRANCHISE = "franchise"
+    SNACK_BAR = "snack_bar"
+    BAKERY = "bakery"
+    OTHER = "other"
 
 @dataclass
 class Kitchen:

@@ -35,7 +35,8 @@ class Optimizer:
         kitchen: Kitchen,
         equipment_list: Optional[List[EquipmentSpec]] = None,
         iterations: int = 100,
-        early_stop_threshold: float = 95.0
+        early_stop_threshold: float = 95.0,
+        fixed_elements: Optional[List] = None
     ) -> OptimizationResult:
         """최적 배치 탐색
 
@@ -55,20 +56,25 @@ class Optimizer:
         best_score = None
         all_scores = []
 
+        # 패턴 기반 기본 장비 (equipment_list가 없을 때)
+        if not equipment_list:
+            equipment_list = self._get_default_equipment(kitchen)
+
         for i in range(iterations):
             # 각 반복마다 약간 다른 비율로 구역 분할
             zone_engine = ZoneEngine()
             zones = zone_engine.divide_kitchen(
                 kitchen,
-                custom_ratios=self._randomize_ratios()
+                custom_ratios=self._randomize_ratios(kitchen.restaurant_type.value)
             )
 
             # 장비 배치
             placement_engine = PlacementEngine(seed=self.seed + i if self.seed else None)
             placements = placement_engine.place_equipment(
                 zones,
-                equipment_list or [],
-                kitchen.restaurant_type.value
+                equipment_list,
+                kitchen.restaurant_type.value,
+                fixed_elements=fixed_elements
             )
 
             # 폴리곤 준비
@@ -78,7 +84,8 @@ class Optimizer:
             # 검증
             validation_engine = ValidationEngine()
             passed, violations = validation_engine.validate_all(
-                zones, placements.placements, zone_polys, placement_polys
+                zones, placements.placements, zone_polys, placement_polys,
+                fixed_elements=fixed_elements
             )
 
             # 점수 계산
@@ -111,16 +118,24 @@ class Optimizer:
             all_scores=all_scores
         )
 
-    def _randomize_ratios(self):
-        """구역 비율 약간 변경"""
-        from ..domain.zone import ZoneType
+    def _get_default_equipment(self, kitchen: Kitchen):
+        """패턴 기반 기본 장비 목록 (fallback: 하드코딩)"""
+        try:
+            from ..data.equipment_catalog import get_equipment_from_patterns
+            area_py = kitchen.area / 3.306  # m² → 평 변환
+            return get_equipment_from_patterns(
+                kitchen.restaurant_type.value, area_py
+            )
+        except Exception:
+            from ..data.equipment_catalog import get_equipment_for_restaurant
+            return get_equipment_for_restaurant(kitchen.restaurant_type.value)
 
-        base = {
-            ZoneType.STORAGE: 0.20,
-            ZoneType.PREPARATION: 0.25,
-            ZoneType.COOKING: 0.35,
-            ZoneType.WASHING: 0.20,
-        }
+    def _randomize_ratios(self, restaurant_type: str = "casual"):
+        """패턴 기반 구역 비율 + ±5% 변동"""
+        from ..domain.zone import ZoneType
+        from ..geometry.partitioner import adjust_zone_ratios_from_patterns
+
+        base = adjust_zone_ratios_from_patterns(restaurant_type)
 
         # ±5% 변동
         ratios = {}

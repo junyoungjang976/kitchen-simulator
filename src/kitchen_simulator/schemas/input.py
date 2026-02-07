@@ -15,6 +15,15 @@ class RestaurantTypeInput(str, Enum):
     FINE_DINING = "fine_dining"
     CAFETERIA = "cafeteria"
     GHOST_KITCHEN = "ghost_kitchen"
+    KOREAN = "korean"
+    CAFE = "cafe"
+    WESTERN = "western"
+    CHINESE = "chinese"
+    JAPANESE = "japanese"
+    FRANCHISE = "franchise"
+    SNACK_BAR = "snack_bar"
+    BAKERY = "bakery"
+    OTHER = "other"
 
 class FixedElement(BaseModel):
     """고정 요소 (출입구, 배관 등)"""

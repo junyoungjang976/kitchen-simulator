@@ -1,5 +1,5 @@
 """제약 조건 검증 엔진"""
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, Optional
 from shapely.geometry import Polygon
 
 from ..domain.zone import Zone, ZoneType, ADJACENCY_RULES
@@ -20,7 +20,8 @@ class ValidationEngine:
         zones: List[Zone],
         placements: List[EquipmentPlacement],
         zone_polys: Dict[ZoneType, Polygon],
-        placement_polys: Dict[ZoneType, List[Polygon]]
+        placement_polys: Dict[ZoneType, List[Polygon]],
+        fixed_elements: Optional[List] = None
     ) -> Tuple[bool, List[ConstraintViolation]]:
         """모든 제약 조건 검증
 
@@ -40,6 +41,10 @@ class ValidationEngine:
 
         # 4. 벽 이격 거리 검증
         self._validate_wall_clearance(zone_polys, placement_polys)
+
+        # 5. 인프라 근접성 검증
+        if fixed_elements:
+            self._validate_infrastructure_proximity(zones, zone_polys, fixed_elements)
 
         # 에러만 있으면 실패
         has_errors = any(v.severity == "error" for v in self.violations)
@@ -155,6 +160,76 @@ class ValidationEngine:
                             location=(center.x, center.y),
                             severity="warning"
                         ))
+
+    def _validate_infrastructure_proximity(
+        self,
+        zones: List[Zone],
+        zone_polys: Dict[ZoneType, Polygon],
+        fixed_elements: List
+    ):
+        """인프라 설비(환기/급수/배수) 근접성 검증"""
+        from shapely.geometry import Point
+
+        # 고정 요소를 유형별로 분류
+        vents = [fe for fe in fixed_elements if fe.type == "vent"]
+        waters = [fe for fe in fixed_elements if fe.type == "water"]
+        drains = [fe for fe in fixed_elements if fe.type == "drain"]
+
+        zone_by_type = {z.zone_type: z for z in zones}
+
+        # 환기구 - 조리구역 근접성
+        if vents and ZoneType.COOKING in zone_by_type:
+            cooking_poly = zone_polys[ZoneType.COOKING]
+            cooking_center = cooking_poly.centroid
+
+            min_dist = min(
+                Point(v.x, v.y).distance(cooking_center) for v in vents
+            )
+            max_allowed = CONSTRAINTS["max_vent_distance"]
+            if min_dist > max_allowed:
+                self.violations.append(ConstraintViolation(
+                    constraint_type=ConstraintType.VENTILATION,
+                    message=f"환기구가 조리구역에서 너무 멉니다 "
+                           f"(거리: {min_dist:.1f}m, 기준: {max_allowed:.1f}m)",
+                    location=(cooking_center.x, cooking_center.y),
+                    severity="warning"
+                ))
+
+        # 급수 - 세척구역 근접성
+        if waters and ZoneType.WASHING in zone_by_type:
+            washing_poly = zone_polys[ZoneType.WASHING]
+            washing_center = washing_poly.centroid
+
+            min_dist = min(
+                Point(w.x, w.y).distance(washing_center) for w in waters
+            )
+            max_allowed = CONSTRAINTS["max_water_distance"]
+            if min_dist > max_allowed:
+                self.violations.append(ConstraintViolation(
+                    constraint_type=ConstraintType.WATER_ACCESS,
+                    message=f"급수 시설이 세척구역에서 너무 멉니다 "
+                           f"(거리: {min_dist:.1f}m, 기준: {max_allowed:.1f}m)",
+                    location=(washing_center.x, washing_center.y),
+                    severity="warning"
+                ))
+
+        # 배수 - 세척구역 근접성
+        if drains and ZoneType.WASHING in zone_by_type:
+            washing_poly = zone_polys[ZoneType.WASHING]
+            washing_center = washing_poly.centroid
+
+            min_dist = min(
+                Point(d.x, d.y).distance(washing_center) for d in drains
+            )
+            max_allowed = CONSTRAINTS["max_drain_distance"]
+            if min_dist > max_allowed:
+                self.violations.append(ConstraintViolation(
+                    constraint_type=ConstraintType.DRAIN_ACCESS,
+                    message=f"배수구가 세척구역에서 너무 멉니다 "
+                           f"(거리: {min_dist:.1f}m, 기준: {max_allowed:.1f}m)",
+                    location=(washing_center.x, washing_center.y),
+                    severity="warning"
+                ))
 
     def get_summary(self) -> Dict:
         """검증 결과 요약"""

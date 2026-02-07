@@ -9,6 +9,7 @@ class ConstraintType(Enum):
     ZONE_ADJACENCY = "zone_adjacency"
     VENTILATION = "ventilation"
     WATER_ACCESS = "water_access"
+    DRAIN_ACCESS = "drain_access"
 
 # 표준 제약 조건 값 (미터)
 CONSTRAINTS = {
@@ -18,6 +19,9 @@ CONSTRAINTS = {
     "equipment_spacing": 0.30,   # 장비 간격
     "range_spacing": 0.46,       # 레인지 인접
     "work_clearance": 0.91,      # 작업 공간
+    "max_vent_distance": 2.0,    # 환기구-조리구역 최대 거리(m)
+    "max_water_distance": 3.0,   # 급수-세척구역 최대 거리(m)
+    "max_drain_distance": 2.0,   # 배수-세척구역 최대 거리(m)
 }
 
 @dataclass

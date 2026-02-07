@@ -300,6 +300,108 @@ DEFAULT_EQUIPMENT_SETS = {
         "three_compartment_sink",
         "hand_wash_sink",
     ],
+    "korean": [
+        "reach_in_refrigerator_2door",
+        "reach_in_freezer_1door",
+        "dry_storage_shelf",
+        "work_table_large",
+        "prep_sink",
+        "gas_range_6burner",
+        "deep_fryer_single",
+        "griddle",
+        "three_compartment_sink",
+        "hand_wash_sink",
+    ],
+    "cafe": [
+        "reach_in_refrigerator_1door",
+        "undercounter_refrigerator",
+        "work_table_small",
+        "work_table_medium",
+        "prep_sink",
+        "convection_oven",
+        "three_compartment_sink",
+        "hand_wash_sink",
+    ],
+    "western": [
+        "reach_in_refrigerator_2door",
+        "reach_in_freezer_1door",
+        "dry_storage_shelf",
+        "work_table_large",
+        "prep_sink",
+        "gas_range_6burner",
+        "deep_fryer_single",
+        "convection_oven",
+        "griddle",
+        "three_compartment_sink",
+        "dishwasher_undercounter",
+        "hand_wash_sink",
+    ],
+    "chinese": [
+        "reach_in_refrigerator_2door",
+        "reach_in_freezer_1door",
+        "work_table_large",
+        "work_table_medium",
+        "prep_sink",
+        "gas_range_6burner",
+        "gas_range_4burner",
+        "deep_fryer_double",
+        "three_compartment_sink",
+        "hand_wash_sink",
+    ],
+    "japanese": [
+        "reach_in_refrigerator_2door",
+        "reach_in_refrigerator_1door",
+        "reach_in_freezer_1door",
+        "work_table_large",
+        "work_table_medium",
+        "prep_sink",
+        "gas_range_4burner",
+        "deep_fryer_single",
+        "three_compartment_sink",
+        "dishwasher_undercounter",
+        "hand_wash_sink",
+    ],
+    "franchise": [
+        "reach_in_refrigerator_2door",
+        "reach_in_freezer_1door",
+        "work_table_medium",
+        "gas_range_4burner",
+        "deep_fryer_double",
+        "griddle",
+        "convection_oven",
+        "three_compartment_sink",
+        "hand_wash_sink",
+    ],
+    "snack_bar": [
+        "reach_in_refrigerator_1door",
+        "reach_in_freezer_1door",
+        "work_table_small",
+        "gas_range_4burner",
+        "deep_fryer_single",
+        "griddle",
+        "three_compartment_sink",
+        "hand_wash_sink",
+    ],
+    "bakery": [
+        "reach_in_refrigerator_1door",
+        "dry_storage_shelf",
+        "dry_storage_shelf",
+        "work_table_large",
+        "work_table_medium",
+        "convection_oven",
+        "convection_oven",
+        "three_compartment_sink",
+        "hand_wash_sink",
+    ],
+    "other": [
+        "reach_in_refrigerator_2door",
+        "reach_in_freezer_1door",
+        "work_table_medium",
+        "prep_sink",
+        "gas_range_4burner",
+        "three_compartment_sink",
+        "hand_wash_sink",
+    ],
 }
 
 def get_equipment_for_restaurant(restaurant_type: str) -> List[EquipmentSpec]:
@@ -310,3 +412,118 @@ def get_equipment_for_restaurant(restaurant_type: str) -> List[EquipmentSpec]:
 def get_equipment_by_category(category: EquipmentCategory) -> List[EquipmentSpec]:
     """카테고리별 장비 목록 반환"""
     return [eq for eq in EQUIPMENT_CATALOG.values() if eq.category == category]
+
+
+# 패턴 카테고리 → EquipmentCategory 매핑
+_PATTERN_CAT_TO_ENUM = {
+    "cooking": EquipmentCategory.COOKING,
+    "prep": EquipmentCategory.PREPARATION,
+    "preparation": EquipmentCategory.PREPARATION,
+    "refrigeration": EquipmentCategory.STORAGE,
+    "storage": EquipmentCategory.STORAGE,
+    "dishwashing": EquipmentCategory.WASHING,
+    "washing": EquipmentCategory.WASHING,
+    "serving": EquipmentCategory.COOKING,
+    "ventilation": EquipmentCategory.COOKING,
+}
+
+# 카테고리별 기본 장비 선택 우선순위
+_CATEGORY_DEFAULTS = {
+    EquipmentCategory.STORAGE: [
+        "reach_in_refrigerator_2door",
+        "reach_in_freezer_1door",
+        "dry_storage_shelf",
+        "reach_in_refrigerator_1door",
+        "undercounter_refrigerator",
+    ],
+    EquipmentCategory.PREPARATION: [
+        "work_table_large",
+        "work_table_medium",
+        "prep_sink",
+        "work_table_small",
+        "food_processor_station",
+    ],
+    EquipmentCategory.COOKING: [
+        "gas_range_6burner",
+        "gas_range_4burner",
+        "deep_fryer_single",
+        "convection_oven",
+        "griddle",
+        "deep_fryer_double",
+        "salamander",
+    ],
+    EquipmentCategory.WASHING: [
+        "three_compartment_sink",
+        "hand_wash_sink",
+        "dishwasher_undercounter",
+        "drying_rack",
+        "dishwasher_door_type",
+    ],
+}
+
+
+def get_equipment_from_patterns(
+    restaurant_type: str,
+    kitchen_area_py: float = 8.0,
+) -> List[EquipmentSpec]:
+    """패턴 DB 기반 장비 목록 추천
+
+    업종별 카테고리 분포 + 면적 기반 장비 수로 최적 장비 선택.
+    PatternProvider 사용 불가 시 기존 하드코딩 세트로 fallback.
+
+    Args:
+        restaurant_type: 업종 코드 (korean, cafe, cafeteria 등)
+        kitchen_area_py: 주방 면적 (평)
+
+    Returns:
+        추천 장비 목록
+    """
+    try:
+        from ..patterns.provider import PatternProvider
+        provider = PatternProvider()
+    except Exception:
+        return get_equipment_for_restaurant(restaurant_type)
+
+    # 1. 예상 장비 수 산정
+    target_count = provider.get_equipment_count_estimate(
+        restaurant_type, kitchen_area_py
+    )
+    # 카탈로그 크기 내로 제한
+    target_count = min(target_count, len(EQUIPMENT_CATALOG))
+
+    # 2. 카테고리 분포 가져오기
+    cat_dist = provider.get_category_distribution(restaurant_type)
+    if not cat_dist:
+        return get_equipment_for_restaurant(restaurant_type)
+
+    # 3. 4구역 EquipmentCategory별 장비 수 계산
+    zone_counts: Dict[EquipmentCategory, int] = {
+        EquipmentCategory.STORAGE: 0,
+        EquipmentCategory.PREPARATION: 0,
+        EquipmentCategory.COOKING: 0,
+        EquipmentCategory.WASHING: 0,
+    }
+
+    for cat_name, ratio in cat_dist.items():
+        eq_cat = _PATTERN_CAT_TO_ENUM.get(cat_name)
+        if eq_cat:
+            zone_counts[eq_cat] += ratio
+
+    # 비율 정규화 후 장비 수 할당
+    total_ratio = sum(zone_counts.values())
+    if total_ratio == 0:
+        return get_equipment_for_restaurant(restaurant_type)
+
+    equipment_list: List[EquipmentSpec] = []
+
+    for eq_cat, ratio in zone_counts.items():
+        count = max(1, round(target_count * ratio / total_ratio))
+        defaults = _CATEGORY_DEFAULTS.get(eq_cat, [])
+
+        for i, eq_id in enumerate(defaults):
+            if len([e for e in equipment_list if e.category == eq_cat]) >= count:
+                break
+            if eq_id in EQUIPMENT_CATALOG:
+                equipment_list.append(EQUIPMENT_CATALOG[eq_id])
+
+    return equipment_list

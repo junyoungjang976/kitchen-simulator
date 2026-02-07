@@ -9,6 +9,7 @@ from ..geometry.partitioner import (
     partition_rectangle_for_zones,
     partition_l_shape_for_zones,
     adjust_zone_ratios_for_restaurant_type,
+    adjust_zone_ratios_from_patterns,
 )
 
 class ZoneEngine:
@@ -35,7 +36,7 @@ class ZoneEngine:
         if custom_ratios:
             self.zone_ratios = custom_ratios
         else:
-            self.zone_ratios = adjust_zone_ratios_for_restaurant_type(
+            self.zone_ratios = adjust_zone_ratios_from_patterns(
                 kitchen.restaurant_type.value
             )
 

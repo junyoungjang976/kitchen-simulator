@@ -93,6 +93,7 @@ def simulate(
         result = optimizer.optimize(
             kitchen,
             iterations=iterations,
+            fixed_elements=kitchen_input.fixed_elements,
         )
 
     # 결과 출력

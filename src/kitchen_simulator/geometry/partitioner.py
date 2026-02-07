@@ -193,3 +193,41 @@ def adjust_zone_ratios_for_restaurant_type(
     # 정규화 (합이 1이 되도록)
     total = sum(base_ratios.values())
     return {k: v / total for k, v in base_ratios.items()}
+
+
+# str→ZoneType 매핑
+_STR_TO_ZONE = {
+    "storage": ZoneType.STORAGE,
+    "preparation": ZoneType.PREPARATION,
+    "cooking": ZoneType.COOKING,
+    "washing": ZoneType.WASHING,
+}
+
+
+def adjust_zone_ratios_from_patterns(
+    restaurant_type: str,
+) -> Dict[ZoneType, float]:
+    """패턴 DB 기반 구역 비율 반환 (396건 실데이터)
+
+    PatternProvider가 사용 불가하면 기존 하드코딩 함수로 fallback.
+    """
+    try:
+        from ..patterns.provider import PatternProvider
+        provider = PatternProvider()
+        str_ratios = provider.get_zone_ratios(restaurant_type)
+
+        # str key → ZoneType enum 변환
+        ratios = {}
+        for key, value in str_ratios.items():
+            zone_type = _STR_TO_ZONE.get(key)
+            if zone_type:
+                ratios[zone_type] = value
+
+        # 4구역 모두 있는지 확인
+        if len(ratios) == 4:
+            return ratios
+    except Exception:
+        pass
+
+    # fallback: 기존 하드코딩
+    return adjust_zone_ratios_for_restaurant_type(restaurant_type)

@@ -13,6 +13,7 @@ from ..geometry.collision import (
     find_placement_candidates, get_distance
 )
 from ..data.equipment_catalog import get_equipment_for_restaurant, EQUIPMENT_CATALOG
+from ..schemas.input import FixedElement
 
 # 장비 카테고리와 구역 매핑
 CATEGORY_TO_ZONE = {
@@ -40,7 +41,8 @@ class PlacementEngine:
         self,
         zones: List[Zone],
         equipment_list: List[EquipmentSpec],
-        restaurant_type: str = "casual"
+        restaurant_type: str = "casual",
+        fixed_elements: Optional[List[FixedElement]] = None
     ) -> PlacementResult:
         """장비를 구역에 배치
 
@@ -61,6 +63,13 @@ class PlacementEngine:
         for zone in zones:
             zone_polys[zone.zone_type] = create_polygon(zone.polygon)
             self.placed_polys[zone.zone_type] = []
+
+        # 고정 요소를 모든 구역에 장애물로 추가
+        if fixed_elements:
+            for fe in fixed_elements:
+                fixed_poly = create_rectangle(fe.x, fe.y, fe.width, fe.width)
+                for zone_type in self.placed_polys:
+                    self.placed_polys[zone_type].append(fixed_poly)
 
         placements = []
         unplaced = []
