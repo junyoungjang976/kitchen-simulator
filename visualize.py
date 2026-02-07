@@ -210,8 +210,74 @@ def draw_layout(data, ax, title=None):
     return equipment_list
 
 
+def _draw_equipment_table(equipment_list, title_text, output_path):
+    """설비 목록 테이블을 별도 이미지로 저장"""
+    if not equipment_list:
+        return
+
+    # 구역별로 그룹핑
+    zone_order = ["storage", "preparation", "cooking", "washing"]
+    grouped = {}
+    for eq in equipment_list:
+        zt = eq["zone_type"]
+        if zt not in grouped:
+            grouped[zt] = []
+        grouped[zt].append(eq)
+
+    # 테이블 데이터 구성
+    col_labels = ["No.", "설비명", "구역", "크기(m)", "위치(x,y)"]
+    table_data = []
+    cell_colors = []
+
+    for zt in zone_order:
+        if zt not in grouped:
+            continue
+        zone_color = ZONE_COLORS.get(zt, "#FFFFFF")
+        for eq in grouped[zt]:
+            table_data.append([
+                str(eq["num"]),
+                eq["name"],
+                eq["zone"],
+                eq["size"],
+                eq["pos"],
+            ])
+            cell_colors.append([zone_color] * 5)
+
+    n_rows = len(table_data)
+    fig_height = max(3, 1.0 + n_rows * 0.35)
+    fig, ax = plt.subplots(figsize=(10, fig_height))
+    ax.axis('off')
+    ax.set_title(title_text, fontsize=11, fontweight='bold', pad=12)
+
+    table = ax.table(
+        cellText=table_data,
+        colLabels=col_labels,
+        cellColours=cell_colors,
+        colColours=["#E0E0E0"] * 5,
+        cellLoc='center',
+        loc='center',
+    )
+    table.auto_set_font_size(False)
+    table.set_fontsize(8)
+    table.scale(1.0, 1.4)
+
+    # 헤더 스타일
+    for j in range(len(col_labels)):
+        table[0, j].set_text_props(fontweight='bold', fontsize=9)
+
+    # 열 너비 조정
+    col_widths = [0.06, 0.30, 0.10, 0.16, 0.16]
+    for j, w in enumerate(col_widths):
+        for i in range(n_rows + 1):
+            table[i, j].set_width(w)
+
+    plt.savefig(output_path, dpi=150, bbox_inches='tight', facecolor='white')
+    print(f"저장됨: {output_path}")
+    plt.close()
+
+
 def visualize_single(json_path, output_path=None):
-    """단일 시뮬레이션 시각화 (도면 + 설비 리스트)"""
+    """단일 시뮬레이션 시각화 (도면 + 설비 리스트 별도 파일)"""
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
@@ -223,22 +289,12 @@ def visualize_single(json_path, output_path=None):
     seats = input_info.get("seat_count", 0)
     area = data.get("total_area_sqm", 0)
 
-    # 설비 개수에 따라 레이아웃 비율 조정
-    n_equip = len(data.get("placements", []))
-    list_rows = (n_equip + 1) // 2  # 2열 기준 행 수
-    fig_height = max(10, 8 + list_rows * 0.28)
-
-    fig = plt.figure(figsize=(12, fig_height))
-
-    # 상단: 도면 (70%), 하단: 설비 리스트 (30%)
-    gs = fig.add_gridspec(2, 1, height_ratios=[7, 3], hspace=0.25)
-
-    # --- 도면 ---
-    ax_layout = fig.add_subplot(gs[0])
+    # --- 도면 (별도 파일) ---
+    fig, ax_layout = plt.subplots(figsize=(12, 9))
     title = f"주방 레이아웃 도면  |  {r_type} {seats}석  |  {area:.0f}㎡  |  종합 {overall:.0f}점"
     equipment_list = draw_layout(data, ax_layout, title=title)
 
-    # --- 점수 바 ---
+    # 점수 바
     score_text = (
         f"동선 {scores.get('workflow_efficiency', 0)*100:.0f}%  |  "
         f"공간 {scores.get('space_utilization', 0)*100:.0f}%  |  "
@@ -249,66 +305,16 @@ def visualize_single(json_path, output_path=None):
                    ha='center', va='top', fontsize=8, color='#666666',
                    transform=ax_layout.transAxes)
 
-    # --- 설비 리스트 ---
-    ax_list = fig.add_subplot(gs[1])
-    ax_list.axis('off')
-
-    if equipment_list:
-        # 구역별로 그룹핑
-        zone_order = ["storage", "preparation", "cooking", "washing"]
-        grouped = {}
-        for eq in equipment_list:
-            zt = eq["zone_type"]
-            if zt not in grouped:
-                grouped[zt] = []
-            grouped[zt].append(eq)
-
-        # 테이블 데이터 구성
-        col_labels = ["No.", "설비명", "구역", "크기(m)", "위치(x,y)"]
-        table_data = []
-        cell_colors = []
-
-        for zt in zone_order:
-            if zt not in grouped:
-                continue
-            zone_color = ZONE_COLORS.get(zt, "#FFFFFF")
-            for eq in grouped[zt]:
-                table_data.append([
-                    str(eq["num"]),
-                    eq["name"],
-                    eq["zone"],
-                    eq["size"],
-                    eq["pos"],
-                ])
-                cell_colors.append([zone_color] * 5)
-
-        table = ax_list.table(
-            cellText=table_data,
-            colLabels=col_labels,
-            cellColours=cell_colors,
-            colColours=["#E0E0E0"] * 5,
-            cellLoc='center',
-            loc='center',
-        )
-        table.auto_set_font_size(False)
-        table.set_fontsize(7.5)
-        table.scale(1.0, 1.3)
-
-        # 헤더 스타일
-        for j in range(len(col_labels)):
-            table[0, j].set_text_props(fontweight='bold', fontsize=8)
-
-        # 열 너비 조정
-        col_widths = [0.06, 0.28, 0.10, 0.16, 0.16]
-        for j, w in enumerate(col_widths):
-            for i in range(len(table_data) + 1):
-                table[i, j].set_width(w)
-
-        # 제목은 테이블 헤더로 대체 (겹침 방지)
-
-    plt.savefig(output_path or "layout.png", dpi=150, bbox_inches='tight', facecolor='white')
-    print(f"저장됨: {output_path or 'layout.png'}")
+    layout_path = output_path or "layout.png"
+    plt.savefig(layout_path, dpi=150, bbox_inches='tight', facecolor='white')
+    print(f"저장됨: {layout_path}")
     plt.close()
+
+    # --- 설비 목록 (별도 파일) ---
+    base = Path(layout_path)
+    list_path = str(base.with_name(base.stem + "_list" + base.suffix))
+    list_title = f"설비 목록  |  {r_type} {seats}석  |  총 {len(equipment_list)}종"
+    _draw_equipment_table(equipment_list, list_title, list_path)
 
 
 def visualize_grid(json_dir, output_path=None, cols=4):
