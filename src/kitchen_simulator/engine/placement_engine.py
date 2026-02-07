@@ -23,6 +23,54 @@ CATEGORY_TO_ZONE = {
     EquipmentCategory.WASHING: ZoneType.WASHING,
 }
 
+# 장비 친밀도 규칙 (주방장의 작업 동선 기반)
+# key: frozenset({equip_id_base_a, equip_id_base_b}), value: bonus score
+EQUIPMENT_AFFINITY = {
+    # 세척 흐름: 잔반→전처리싱크→세척기→건조대
+    frozenset({"scrap_table", "dishwasher_pre_sink"}): 15,
+    frozenset({"scrap_table", "one_comp_sink"}): 12,
+    frozenset({"scrap_table", "two_comp_sink"}): 12,
+    frozenset({"dishwasher_pre_sink", "dishwasher_undercounter"}): 15,
+    frozenset({"dishwasher_pre_sink", "dishwasher_door_type"}): 15,
+    frozenset({"one_comp_sink", "dishwasher_undercounter"}): 12,
+    frozenset({"two_comp_sink", "dishwasher_undercounter"}): 12,
+    frozenset({"dishwasher_undercounter", "dish_drying_rack"}): 15,
+    frozenset({"dishwasher_undercounter", "drying_rack"}): 12,
+    frozenset({"dishwasher_door_type", "dish_drying_rack"}): 15,
+    frozenset({"dishwasher_door_type", "drying_rack"}): 12,
+    frozenset({"one_comp_sink", "dish_drying_rack"}): 10,
+    frozenset({"two_comp_sink", "dish_drying_rack"}): 10,
+    # 조리 핫라인: 그리들-레인지-튀김기 한 줄
+    frozenset({"gas_range_3burner", "gas_range_4burner"}): 12,
+    frozenset({"gas_range_3burner", "deep_fryer_single"}): 10,
+    frozenset({"gas_range_3burner", "deep_fryer_double"}): 10,
+    frozenset({"gas_range_3burner", "griddle"}): 10,
+    frozenset({"gas_range_4burner", "deep_fryer_single"}): 10,
+    frozenset({"gas_range_4burner", "deep_fryer_double"}): 10,
+    frozenset({"gas_range_4burner", "griddle"}): 10,
+    frozenset({"deep_fryer_single", "griddle"}): 8,
+    frozenset({"deep_fryer_double", "griddle"}): 8,
+    frozenset({"convection_oven", "gas_range_3burner"}): 8,
+    frozenset({"convection_oven", "gas_range_4burner"}): 8,
+    # 전처리 흐름: 작업대-싱크대-가공기
+    frozenset({"work_table_medium", "prep_sink"}): 10,
+    frozenset({"work_table_small", "prep_sink"}): 10,
+    frozenset({"work_table_medium", "food_processor_station"}): 8,
+    frozenset({"work_table_small", "food_processor_station"}): 8,
+    frozenset({"prep_sink", "food_processor_station"}): 8,
+    # 저장: 테이블냉장고는 작업대와 가까이 (구역 경계)
+    frozenset({"table_refrigerator", "batt_table_refrigerator"}): 8,
+}
+
+# 구역 간 동선 방향: {현재구역: 인접해야 할 다음 구역}
+# 장비의 workflow_order가 높을수록 다음 구역 경계 가까이 배치
+ZONE_FLOW_NEXT = {
+    ZoneType.STORAGE: ZoneType.PREPARATION,
+    ZoneType.PREPARATION: ZoneType.COOKING,
+    ZoneType.COOKING: ZoneType.WASHING,
+    ZoneType.WASHING: None,
+}
+
 @dataclass
 class PlacementResult:
     """배치 결과"""
@@ -36,6 +84,8 @@ class PlacementEngine:
     def __init__(self, seed: Optional[int] = None):
         self.rng = random.Random(seed)
         self.placed_polys: Dict[ZoneType, List[Polygon]] = {}
+        # 배치된 장비 ID→폴리곤 매핑 (친밀도 점수 계산용)
+        self._placed_equip_map: Dict[str, Polygon] = {}
 
     def place_equipment(
         self,
@@ -75,11 +125,23 @@ class PlacementEngine:
         unplaced = []
         warnings = []
 
-        # 장비 크기 순으로 정렬 (큰 것부터)
+        # 주방장 동선 기반 정렬:
+        # 1차: 구역별 그룹 (WORKFLOW_ORDER 순)
+        # 2차: 구역 내 작업 순서 (workflow_order)
+        # 3차: 같은 순서 내에서 큰 것부터 (bin packing)
+        zone_order = {
+            ZoneType.STORAGE: 0,
+            ZoneType.PREPARATION: 1,
+            ZoneType.COOKING: 2,
+            ZoneType.WASHING: 3,
+        }
         sorted_equipment = sorted(
             equipment_list,
-            key=lambda e: e.width * e.depth,
-            reverse=True
+            key=lambda e: (
+                zone_order.get(CATEGORY_TO_ZONE.get(e.category, ZoneType.STORAGE), 99),
+                e.workflow_order,
+                -(e.width * e.depth),  # 같은 순서 내에서 큰 것 우선
+            )
         )
 
         for i, equip in enumerate(sorted_equipment):
@@ -130,9 +192,9 @@ class PlacementEngine:
                 unplaced.append(equip.id)
                 continue
 
-            # 최적 위치 선택 (벽 가까이, 통로 확보)
+            # 최적 위치 선택 (주방장 동선 기반)
             best_pos = self._select_best_position(
-                candidates, zone_poly, equip, rotation
+                candidates, zone_poly, equip, rotation, zone_polys
             )
 
             if best_pos:
@@ -152,6 +214,7 @@ class PlacementEngine:
                 # 배치된 폴리곤 기록
                 placed_poly = create_rectangle(x, y, w, h)
                 self.placed_polys[target_zone].append(placed_poly)
+                self._placed_equip_map[equip.id] = placed_poly
             else:
                 unplaced.append(equip.id)
 
@@ -161,37 +224,64 @@ class PlacementEngine:
             warnings=warnings
         )
 
+    @staticmethod
+    def _base_id(equipment_id: str) -> str:
+        """장비 ID에서 인덱스 제거 (work_table_medium_0 → work_table_medium)"""
+        parts = equipment_id.rsplit("_", 1)
+        return parts[0] if len(parts) > 1 and parts[-1].isdigit() else equipment_id
+
     def _select_best_position(
         self,
         candidates: List[Tuple[float, float]],
         zone_poly: Polygon,
         equip: EquipmentSpec,
-        rotation: int
+        rotation: int,
+        all_zone_polys: Dict[ZoneType, Polygon] = None,
     ) -> Optional[Tuple[float, float]]:
-        """최적 배치 위치 선택
+        """주방장 동선 기반 최적 배치 위치 선택
 
         우선순위:
-        1. 벽면 장비는 벽 가까이
-        2. 기존 장비 근처 (밀집 배치로 공간 효율 향상)
-        3. 중앙 접근성 확보
+        1. 벽면 밀착 (기존)
+        2. 행(row) 정렬 (기존)
+        3. ★ 장비 친밀도 (동선상 연결 장비 인접)
+        4. ★ 구역 경계 동선 (workflow 후반 장비 → 다음 구역 경계 가까이)
+        5. ★ 핫라인/세척라인 형성 (같은 축 정렬)
+        6. 통로 보존 (기존)
         """
         if not candidates:
             return None
 
         minx, miny, maxx, maxy = zone_poly.bounds
-        zone_center = ((minx + maxx) / 2, (miny + maxy) / 2)
         w = equip.depth if rotation == 90 else equip.width
         h = equip.width if rotation == 90 else equip.depth
 
-        # 현재 구역에 배치된 장비들
         target_zone = CATEGORY_TO_ZONE.get(equip.category)
         existing = self.placed_polys.get(target_zone, [])
+
+        # 다음 구역 경계 계산 (동선 흐름)
+        next_zone_boundary = None
+        if all_zone_polys:
+            next_zone_type = ZONE_FLOW_NEXT.get(target_zone)
+            if next_zone_type and next_zone_type in all_zone_polys:
+                next_poly = all_zone_polys[next_zone_type]
+                # 공유 경계 찾기: 현재 구역과 다음 구역의 가장 가까운 변
+                npb = next_poly.bounds
+                # 4가지 경계 중 가장 가까운 것 사용
+                # (현재 구역의 어느 변이 다음 구역에 가장 가까운지)
+                distances = [
+                    ("right", abs(maxx - npb[0])),   # 현재 우변 ↔ 다음 좌변
+                    ("left", abs(minx - npb[2])),     # 현재 좌변 ↔ 다음 우변
+                    ("top", abs(maxy - npb[1])),      # 현재 상변 ↔ 다음 하변
+                    ("bottom", abs(miny - npb[3])),   # 현재 하변 ↔ 다음 상변
+                ]
+                closest_side, _ = min(distances, key=lambda d: d[1])
+                next_zone_boundary = closest_side
 
         def score_position(pos: Tuple[float, float]) -> float:
             x, y = pos
             score = 0.0
 
-            # 벽 가까이 배치 선호 (모든 장비)
+            # ── 1. 벽면 밀착 (기존 로직 유지) ──
             dist_to_wall = min(
                 abs(x - minx), abs(x + w - maxx),
                 abs(y - miny), abs(y + h - maxy)
@@ -199,15 +289,102 @@ class PlacementEngine:
             if equip.requires_wall:
                 score -= dist_to_wall * 15
             else:
-                score -= dist_to_wall * 3
+                score -= dist_to_wall * 5
 
-            # 기존 장비 근처 배치 (밀집도 향상)
+            if dist_to_wall < 0.2:
+                score += 10
+                if equip.requires_wall:
+                    score += 5
+
+            # ── 2. 행 정렬 (기존 로직 유지) ──
+            ALIGN_TOL = 0.05
+            for ep in existing:
+                epb = ep.bounds
+                if (abs(x - epb[0]) < ALIGN_TOL or abs(x - epb[2]) < ALIGN_TOL or
+                    abs(x + w - epb[0]) < ALIGN_TOL or abs(x + w - epb[2]) < ALIGN_TOL):
+                    score += 4
+                if (abs(y - epb[1]) < ALIGN_TOL or abs(y - epb[3]) < ALIGN_TOL or
+                    abs(y + h - epb[1]) < ALIGN_TOL or abs(y + h - epb[3]) < ALIGN_TOL):
+                    score += 4
+
+            # ── 3. ★ 장비 친밀도 점수 (주방장 동선) ──
+            item_poly = create_rectangle(x, y, w, h) if existing else None
+            for placed_id, placed_poly in self._placed_equip_map.items():
+                placed_base = self._base_id(placed_id)
+                pair = frozenset({equip.id, placed_base})
+                affinity = EQUIPMENT_AFFINITY.get(pair, 0)
+                if affinity > 0 and item_poly:
+                    dist = item_poly.distance(placed_poly)
+                    if dist < 0.5:
+                        score += affinity  # 가까우면 풀 보너스
+                    elif dist < 1.5:
+                        score += affinity * 0.5  # 적당히 가까우면 반 보너스
+                    # 멀면 보너스 없음
+
+            # ── 4. ★ 구역 경계 동선 점수 ──
+            # workflow_order가 높은 장비(후공정)는 다음 구역 경계 쪽에 배치
+            if next_zone_boundary and equip.workflow_order > 0:
+                max_wf = 5  # workflow_order 최대값
+                boundary_weight = equip.workflow_order / max_wf  # 0~1
+
+                if next_zone_boundary == "right":
+                    # 우측 경계가 다음 구역: x가 클수록 좋음
+                    score += boundary_weight * 8 * ((x + w - minx) / (maxx - minx))
+                elif next_zone_boundary == "left":
+                    score += boundary_weight * 8 * ((maxx - x) / (maxx - minx))
+                elif next_zone_boundary == "top":
+                    score += boundary_weight * 8 * ((y + h - miny) / (maxy - miny))
+                elif next_zone_boundary == "bottom":
+                    score += boundary_weight * 8 * ((maxy - y) / (maxy - miny))
+
+                # 반대로 workflow_order가 낮은(초공정) 장비는 반대편 선호
+                if equip.workflow_order <= 1:
+                    if next_zone_boundary == "right":
+                        score += 5 * ((maxx - x - w) / (maxx - minx))
+                    elif next_zone_boundary == "left":
+                        score += 5 * ((x - minx) / (maxx - minx))
+                    elif next_zone_boundary == "top":
+                        score += 5 * ((maxy - y - h) / (maxy - miny))
+                    elif next_zone_boundary == "bottom":
+                        score += 5 * ((y - miny) / (maxy - miny))
+
+            # ── 5. ★ 핫라인/세척라인 형성 ──
+            # 조리/세척 장비는 같은 축(Y 또는 X)에 정렬되면 보너스
+            if target_zone in (ZoneType.COOKING, ZoneType.WASHING) and existing:
+                for ep in existing:
+                    epb = ep.bounds
+                    # Y축 정렬 (같은 행 = 같은 Y 시작)
+                    if abs(y - epb[1]) < 0.1:
+                        score += 10  # 강한 라인 형성 보너스
+                        break
+                    # X축 정렬 (같은 열 = 같은 X 시작)
+                    if abs(x - epb[0]) < 0.1:
+                        score += 10
+                        break
+
+            # ── 6. 인접 밀착 및 통로 보존 (기존 로직 유지) ──
             if existing:
-                item_poly = create_rectangle(x, y, w, h)
-                nearest = min(item_poly.distance(ep) for ep in existing)
-                score -= nearest * 5  # 가까울수록 높은 점수
+                if item_poly is None:
+                    item_poly = create_rectangle(x, y, w, h)
+                min_dist = min(item_poly.distance(ep) for ep in existing)
+                score -= min_dist * 2
 
-            # 약간의 랜덤성
+                for ep in existing:
+                    dist = item_poly.distance(ep)
+                    if dist < 0.35:
+                        score += 6
+                        break
+
+                for ep in existing:
+                    dist = item_poly.distance(ep) if item_poly else 999
+                    if 0.3 < dist < 0.8:
+                        epb = ep.bounds
+                        same_row = (abs(y - epb[1]) < 0.1 or abs(y + h - epb[3]) < 0.1 or
+                                   abs(x - epb[0]) < 0.1 or abs(x + w - epb[2]) < 0.1)
+                        if not same_row:
+                            score -= 8
+
+            # ── 7. 약간의 랜덤성 ──
             score += self.rng.random() * 0.3
 
             return score

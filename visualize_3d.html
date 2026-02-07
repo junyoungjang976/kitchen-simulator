@@ -1,0 +1,1368 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D 주방 레이아웃 시각화</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --storage: #1976D2; --storage-fill: #E3F2FD;
+    --preparation: #388E3C; --preparation-fill: #E8F5E9;
+    --cooking: #F57C00; --cooking-fill: #FFF3E0;
+    --washing: #7B1FA2; --washing-fill: #F3E5F5;
+    --panel-bg: #ffffff; --panel-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    --radius: 10px; --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  }
+  html, body { width: 100%; height: 100%; overflow: hidden; font-family: var(--font); background: #e8e4de; color: #222; }
+
+  /* ---------- Upload Screen ---------- */
+  #upload-screen {
+    position: fixed; inset: 0; z-index: 1000; background: #e8e4de;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
+  }
+  #upload-screen h1 { font-size: 28px; font-weight: 700; color: #333; }
+  #upload-screen p.sub { font-size: 15px; color: #777; margin-top: -12px; }
+  .drop-zone {
+    width: 480px; max-width: 90vw; height: 200px;
+    border: 3px dashed #bbb; border-radius: var(--radius);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+    cursor: pointer; transition: border-color .2s, background .2s; background: #fafafa;
+  }
+  .drop-zone:hover, .drop-zone.drag-over { border-color: var(--storage); background: var(--storage-fill); }
+  .drop-zone svg { width: 48px; height: 48px; fill: #999; }
+  .drop-zone span { font-size: 15px; color: #666; }
+  .drop-zone input { display: none; }
+
+  /* ---------- App Layout ---------- */
+  #app { display: none; width: 100%; height: 100%; position: relative; }
+  #app.visible { display: flex; flex-direction: column; }
+
+  /* Top bar */
+  #top-bar {
+    height: 56px; background: var(--panel-bg); box-shadow: var(--panel-shadow);
+    display: flex; align-items: center; padding: 0 20px; gap: 16px; z-index: 10; flex-shrink: 0;
+  }
+  #top-bar .title { font-size: 16px; font-weight: 700; white-space: nowrap; }
+  #top-bar .meta { font-size: 13px; color: #888; white-space: nowrap; }
+  .scores { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-left: auto; }
+  .score-item { display: flex; align-items: center; gap: 6px; font-size: 12px; white-space: nowrap; }
+  .score-item .label { color: #666; }
+  .score-bar-bg { width: 60px; height: 7px; background: #e0e0e0; border-radius: 4px; overflow: hidden; }
+  .score-bar { height: 100%; border-radius: 4px; transition: width .5s ease; }
+  .score-overall { font-size: 22px; font-weight: 800; margin-right: 8px; }
+  .btn-reopen {
+    margin-left: 12px; padding: 6px 14px; font-size: 13px; font-weight: 600;
+    border: 1px solid #ccc; border-radius: 6px; background: #fff; cursor: pointer;
+    white-space: nowrap; transition: background .15s;
+  }
+  .btn-reopen:hover { background: #f0f0f0; }
+
+  /* Main area */
+  #main { display: flex; flex: 1; overflow: hidden; }
+
+  /* Left panel */
+  #left-panel {
+    width: 280px; min-width: 280px; background: var(--panel-bg); box-shadow: var(--panel-shadow);
+    overflow-y: auto; z-index: 5; flex-shrink: 0;
+  }
+  .zone-group { margin-bottom: 4px; }
+  .zone-header {
+    position: sticky; top: 0; z-index: 2;
+    padding: 10px 14px; font-size: 13px; font-weight: 700; color: #fff;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .zone-header .area { font-weight: 400; font-size: 12px; opacity: .85; }
+  .equip-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 14px; cursor: pointer; transition: background .12s; border-bottom: 1px solid #f0f0f0;
+  }
+  .equip-item:hover { background: #f5f5f5; }
+  .equip-item.active { background: #e8e8e8; }
+  .equip-badge {
+    width: 26px; height: 26px; border-radius: 50%; color: #fff; font-size: 12px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .equip-info { flex: 1; min-width: 0; }
+  .equip-name { font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .equip-size { font-size: 11px; color: #999; }
+
+  /* 3D canvas area */
+  #canvas-wrap { flex: 1; position: relative; overflow: hidden; }
+  #canvas-wrap canvas { display: block; }
+
+  /* Legend */
+  #legend {
+    position: absolute; bottom: 16px; right: 16px; background: rgba(255,255,255,.92);
+    border-radius: var(--radius); padding: 12px 16px; box-shadow: var(--panel-shadow);
+    font-size: 12px; z-index: 5; pointer-events: none;
+  }
+  #legend .legend-title { font-weight: 700; margin-bottom: 6px; font-size: 13px; }
+  .legend-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .legend-swatch { width: 14px; height: 14px; border-radius: 3px; }
+
+  /* Tooltip */
+  #tooltip {
+    position: fixed; pointer-events: none; z-index: 100;
+    background: rgba(30,30,30,.9); color: #fff; padding: 6px 12px; border-radius: 6px;
+    font-size: 13px; white-space: nowrap; display: none; transform: translate(12px, -50%);
+  }
+
+  /* CSS2D labels - smaller, subtler */
+  .label-3d {
+    background: rgba(0,0,0,.55); color: #fff; padding: 1px 6px; border-radius: 8px;
+    font-size: 10px; font-weight: 700; pointer-events: none; white-space: nowrap;
+    font-family: var(--font); display: flex; align-items: center; gap: 3px;
+  }
+  .label-3d .zone-dot {
+    width: 6px; height: 6px; border-radius: 50%; display: inline-block; flex-shrink: 0;
+  }
+
+  /* Responsive */
+  @media (max-width: 800px) {
+    #left-panel { display: none; }
+    .scores .score-item { display: none; }
+    .scores .score-overall { display: block; }
+    #top-bar .meta { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Upload Screen -->
+<div id="upload-screen">
+  <h1>3D 주방 레이아웃 시각화</h1>
+  <p class="sub">kitchen-simulator 결과 JSON 파일을 불러오세요</p>
+  <div class="drop-zone" id="drop-zone">
+    <svg viewBox="0 0 24 24"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+    <span>JSON 파일을 드래그하거나 클릭하여 선택</span>
+    <input type="file" id="file-input" accept=".json">
+  </div>
+</div>
+
+<!-- App -->
+<div id="app">
+  <div id="top-bar">
+    <div class="title">3D 주방 레이아웃</div>
+    <div class="meta" id="meta-info"></div>
+    <div class="scores" id="scores-container"></div>
+    <button class="btn-reopen" id="btn-reopen">새 파일 열기</button>
+  </div>
+  <div id="main">
+    <div id="left-panel"></div>
+    <div id="canvas-wrap">
+      <div id="legend">
+        <div class="legend-title">구역 범례</div>
+        <div class="legend-row"><div class="legend-swatch" style="background:var(--storage)"></div><span>저장</span></div>
+        <div class="legend-row"><div class="legend-swatch" style="background:var(--preparation)"></div><span>전처리</span></div>
+        <div class="legend-row"><div class="legend-swatch" style="background:var(--cooking)"></div><span>조리</span></div>
+        <div class="legend-row"><div class="legend-swatch" style="background:var(--washing)"></div><span>세척</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tooltip"></div>
+
+<!-- Import Map -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+
+/* ------------------------------------------------------------------ */
+/*  Constants                                                          */
+/* ------------------------------------------------------------------ */
+const ZONE_ORDER = ['storage', 'preparation', 'cooking', 'washing'];
+const ZONE_COLORS = {
+  storage:     { main: 0x1976D2, fill: 0xE3F2FD, css: '#1976D2', cssFill: '#E3F2FD' },
+  preparation: { main: 0x388E3C, fill: 0xE8F5E9, css: '#388E3C', cssFill: '#E8F5E9' },
+  cooking:     { main: 0xF57C00, fill: 0xFFF3E0, css: '#F57C00', cssFill: '#FFF3E0' },
+  washing:     { main: 0x7B1FA2, fill: 0xF3E5F5, css: '#7B1FA2', cssFill: '#F3E5F5' },
+};
+const ZONE_NAMES_KR = { storage: '저장', preparation: '전처리', cooking: '조리', washing: '세척' };
+const SCORE_NAMES = {
+  overall: '종합', workflow_efficiency: '동선', space_utilization: '공간',
+  safety_compliance: '안전', accessibility: '접근성',
+};
+const SCORE_COLORS = {
+  overall: '#333', workflow_efficiency: '#1976D2', space_utilization: '#388E3C',
+  safety_compliance: '#F57C00', accessibility: '#7B1FA2',
+};
+
+const EQUIPMENT_HEIGHTS = {
+  wall_shelf: 0.30, overhead_shelf: 0.30, multi_tier_shelf: 1.80, back_shelf: 0.30,
+  dry_storage_shelf: 1.80, table_refrigerator: 0.85, batt_table_refrigerator: 0.85,
+  table_freezer: 0.85, box45_refrigerator_freezer: 1.95, box45_refrigerator: 1.95,
+  beverage_showcase: 1.90, broth_refrigerator: 0.85, ice_maker: 0.80,
+  reach_in_refrigerator_2door: 1.90, reach_in_refrigerator_1door: 1.90,
+  reach_in_freezer_1door: 1.90, undercounter_refrigerator: 0.85,
+  work_table_small: 0.85, work_table_medium: 0.85, prep_sink: 0.85,
+  food_processor_station: 0.90, gas_range_3burner: 0.85, gas_range_4burner: 0.85,
+  deep_fryer_single: 0.85, deep_fryer_double: 0.85, convection_oven: 1.50,
+  griddle: 0.85, salamander: 0.60, one_comp_sink: 0.85, dishwasher_pre_sink: 0.85,
+  dish_drying_rack: 0.85, scrap_table: 0.85, two_comp_sink: 0.85,
+  dishwasher_undercounter: 0.85, dishwasher_door_type: 1.40, drying_rack: 0.85,
+  hand_wash_sink: 0.85,
+};
+
+function getEquipHeight(eqId) {
+  const base = eqId.replace(/_\d+$/, '');
+  return EQUIPMENT_HEIGHTS[base] ?? 0.85;
+}
+
+/* ------------------------------------------------------------------ */
+/*  Equipment Material System                                          */
+/* ------------------------------------------------------------------ */
+const EQUIP_MATERIAL_TYPES = {
+  stainless:    { color: 0xC0C0C0, metalness: 0.7, roughness: 0.3 },
+  refrigerator: { color: 0xEEEEEE, metalness: 0.3, roughness: 0.4 },
+  cooking:      { color: 0x3A3A3A, metalness: 0.5, roughness: 0.5 },
+  shelf:        { color: 0xB0B0B0, metalness: 0.6, roughness: 0.35 },
+};
+
+function getEquipMaterialType(equipId) {
+  const base = equipId.replace(/_\d+$/, '');
+  if (base.includes('refrigerator') || base.includes('freezer') || base.includes('showcase')) return 'refrigerator';
+  if (base.includes('gas_range') || base.includes('fryer') || base.includes('oven') || base.includes('griddle') || base.includes('salamander')) return 'cooking';
+  if (base.includes('shelf') || base.includes('rack')) return 'shelf';
+  return 'stainless';
+}
+
+function getEquipDetailType(equipId) {
+  const base = equipId.replace(/_\d+$/, '');
+  if (base.includes('refrigerator') || base.includes('freezer') || base.includes('showcase')) return 'fridge';
+  if (base.includes('gas_range')) return 'range';
+  if (base.includes('fryer')) return 'fryer';
+  if (base.includes('oven')) return 'oven';
+  if (base.includes('griddle')) return 'griddle';
+  if (base.includes('salamander')) return 'salamander';
+  if (base.includes('sink')) return 'sink';
+  if (base.includes('work_table') || base.includes('scrap_table') || base.includes('prep_sink')) return 'table';
+  if (base.includes('shelf') || base.includes('rack')) return 'shelf';
+  if (base.includes('dishwasher')) return 'dishwasher';
+  return 'generic';
+}
+
+/* ------------------------------------------------------------------ */
+/*  Embedded Data (result_cad.json)                                    */
+/* ------------------------------------------------------------------ */
+const EMBEDDED_DATA = {
+  "success": true,
+  "simulation_id": "4259aa0c",
+  "timestamp": "2026-02-08T00:39:02.728464",
+  "input_summary": {
+    "restaurant_type": "korean",
+    "seat_count": 50,
+    "shape": "rectangle"
+  },
+  "total_area_sqm": 80.0,
+  "zones": [
+    {
+      "type": "storage",
+      "polygon": [
+        [
+          6.230824276120801,
+          5.139384504442358
+        ],
+        [
+          6.230824276120801,
+          8.0
+        ],
+        [
+          0.0,
+          8.0
+        ],
+        [
+          0.0,
+          5.139384504442358
+        ]
+      ],
+      "area_sqm": 17.82,
+      "ratio": 0.223,
+      "equipment_ids": [
+        "multi_tier_shelf_0",
+        "dry_storage_shelf_1",
+        "overhead_shelf_2",
+        "back_shelf_3",
+        "wall_shelf_4",
+        "table_refrigerator_5",
+        "batt_table_refrigerator_6",
+        "box45_refrigerator_freezer_7",
+        "box45_refrigerator_8",
+        "reach_in_freezer_1door_10"
+      ]
+    },
+    {
+      "type": "preparation",
+      "polygon": [
+        [
+          6.230824276120801,
+          0.0
+        ],
+        [
+          6.230824276120801,
+          5.139384504442358
+        ],
+        [
+          0.0,
+          5.139384504442358
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "area_sqm": 32.02,
+      "ratio": 0.4,
+      "equipment_ids": [
+        "work_table_medium_14",
+        "work_table_small_15",
+        "prep_sink_16",
+        "food_processor_station_17"
+      ]
+    },
+    {
+      "type": "cooking",
+      "polygon": [
+        [
+          10.0,
+          0.0
+        ],
+        [
+          10.0,
+          4.494252204520421
+        ],
+        [
+          6.230824276120801,
+          4.494252204520421
+        ],
+        [
+          6.230824276120801,
+          0.0
+        ]
+      ],
+      "area_sqm": 16.94,
+      "ratio": 0.212,
+      "equipment_ids": [
+        "griddle_18",
+        "gas_range_3burner_19",
+        "gas_range_4burner_20",
+        "deep_fryer_double_21",
+        "deep_fryer_single_22",
+        "convection_oven_23"
+      ]
+    },
+    {
+      "type": "washing",
+      "polygon": [
+        [
+          10.0,
+          4.494252204520421
+        ],
+        [
+          10.0,
+          8.0
+        ],
+        [
+          6.230824276120801,
+          8.0
+        ],
+        [
+          6.230824276120801,
+          4.494252204520421
+        ]
+      ],
+      "area_sqm": 13.21,
+      "ratio": 0.165,
+      "equipment_ids": [
+        "two_comp_sink_24",
+        "dishwasher_pre_sink_25",
+        "one_comp_sink_26",
+        "dishwasher_undercounter_27",
+        "hand_wash_sink_28"
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "equipment_id": "multi_tier_shelf_0",
+      "equipment_name": "다단식선반",
+      "zone": "storage",
+      "x": 0.15,
+      "y": 7.09,
+      "width": 1.17,
+      "depth": 0.6,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "dry_storage_shelf_1",
+      "equipment_name": "건조 저장 선반",
+      "zone": "storage",
+      "x": 0.15,
+      "y": 6.29,
+      "width": 1.2,
+      "depth": 0.45,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "overhead_shelf_2",
+      "equipment_name": "상부선반",
+      "zone": "storage",
+      "x": 0.15,
+      "y": 5.49,
+      "width": 1.31,
+      "depth": 0.37,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "back_shelf_3",
+      "equipment_name": "백선반",
+      "zone": "storage",
+      "x": 2.15,
+      "y": 7.49,
+      "width": 1.24,
+      "depth": 0.35,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "wall_shelf_4",
+      "equipment_name": "벽선반",
+      "zone": "storage",
+      "x": 3.75,
+      "y": 7.49,
+      "width": 1.19,
+      "depth": 0.35,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "table_refrigerator_5",
+      "equipment_name": "테이블냉장고",
+      "zone": "storage",
+      "x": 2.35,
+      "y": 5.29,
+      "width": 1.37,
+      "depth": 0.7,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "batt_table_refrigerator_6",
+      "equipment_name": "밧드테이블냉장고",
+      "zone": "storage",
+      "x": 4.15,
+      "y": 5.29,
+      "width": 1.23,
+      "depth": 0.68,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "box45_refrigerator_freezer_7",
+      "equipment_name": "45BOX냉동냉장고",
+      "zone": "storage",
+      "x": 4.75,
+      "y": 6.29,
+      "width": 1.26,
+      "depth": 0.8,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "box45_refrigerator_8",
+      "equipment_name": "45BOX올냉장고",
+      "zone": "storage",
+      "x": 2.15,
+      "y": 6.29,
+      "width": 1.26,
+      "depth": 0.8,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "reach_in_freezer_1door_10",
+      "equipment_name": "업소용 냉동고 1도어",
+      "zone": "storage",
+      "x": 3.75,
+      "y": 6.29,
+      "width": 0.66,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "work_table_medium_14",
+      "equipment_name": "작업대",
+      "zone": "preparation",
+      "x": 0.15,
+      "y": 3.95,
+      "width": 1.01,
+      "depth": 0.65,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "work_table_small_15",
+      "equipment_name": "작업대 소형",
+      "zone": "preparation",
+      "x": 0.15,
+      "y": 2.95,
+      "width": 0.9,
+      "depth": 0.6,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "prep_sink_16",
+      "equipment_name": "전처리 싱크대",
+      "zone": "preparation",
+      "x": 0.15,
+      "y": 1.95,
+      "width": 0.6,
+      "depth": 0.55,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "food_processor_station_17",
+      "equipment_name": "식품 가공기 스테이션",
+      "zone": "preparation",
+      "x": 0.15,
+      "y": 0.95,
+      "width": 0.6,
+      "depth": 0.5,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "griddle_18",
+      "equipment_name": "그리들",
+      "zone": "cooking",
+      "x": 8.58,
+      "y": 0.15,
+      "width": 0.9,
+      "depth": 0.6,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "gas_range_3burner_19",
+      "equipment_name": "가스3구렌지",
+      "zone": "cooking",
+      "x": 8.58,
+      "y": 1.35,
+      "width": 1.24,
+      "depth": 0.61,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "gas_range_4burner_20",
+      "equipment_name": "가스레인지 4구",
+      "zone": "cooking",
+      "x": 7.18,
+      "y": 0.15,
+      "width": 0.6,
+      "depth": 0.7,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "deep_fryer_double_21",
+      "equipment_name": "튀김기 더블",
+      "zone": "cooking",
+      "x": 6.38,
+      "y": 1.35,
+      "width": 0.8,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "deep_fryer_single_22",
+      "equipment_name": "튀김기 단일",
+      "zone": "cooking",
+      "x": 6.38,
+      "y": 0.15,
+      "width": 0.4,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "convection_oven_23",
+      "equipment_name": "컨벡션 오븐",
+      "zone": "cooking",
+      "x": 6.38,
+      "y": 2.55,
+      "width": 0.9,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "two_comp_sink_24",
+      "equipment_name": "2조세정대",
+      "zone": "washing",
+      "x": 7.78,
+      "y": 4.64,
+      "width": 1.4,
+      "depth": 0.68,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "dishwasher_pre_sink_25",
+      "equipment_name": "1조세척기세정대",
+      "zone": "washing",
+      "x": 7.78,
+      "y": 5.64,
+      "width": 1.17,
+      "depth": 0.7,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "one_comp_sink_26",
+      "equipment_name": "1조세정대",
+      "zone": "washing",
+      "x": 7.78,
+      "y": 6.64,
+      "width": 0.76,
+      "depth": 0.64,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "dishwasher_undercounter_27",
+      "equipment_name": "식기세척기",
+      "zone": "washing",
+      "x": 6.58,
+      "y": 4.64,
+      "width": 0.89,
+      "depth": 0.68,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "hand_wash_sink_28",
+      "equipment_name": "손세정대",
+      "zone": "washing",
+      "x": 6.38,
+      "y": 6.64,
+      "width": 0.4,
+      "depth": 0.35,
+      "rotation": 0
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "errors": [],
+    "warnings": [
+      "가스레인지 4구↔튀김기 단일 인접 간격이 기준(46cm)보다 좁습니다 (실제: 40cm)",
+      "구역 간 통로 폭이 양방향 기준(122cm)보다 좁습니다 (실제: 89cm)",
+      "업소용 냉장고 2도어: 배치 가능한 위치가 없습니다",
+      "음료쇼케이스: 배치 가능한 위치가 없습니다",
+      "제빙기: 배치 가능한 위치가 없습니다",
+      "육수냉장고: 배치 가능한 위치가 없습니다"
+    ],
+    "infos": [
+      "장비 간 통로 폭 35cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 83cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 83cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 43cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 104cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 80cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 89cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 81cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 36cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 40cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 57cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 40cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 52cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 44cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 43cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 30cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 30cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 32cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 81cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 32cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 34cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 34cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 40cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 45cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 50cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 60cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 80cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 94cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 50cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 40cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 44cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 44cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 32cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 31cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 30cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 45cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 104cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 100cm (권장: 107cm 이상)",
+      "환기 시설 필요 장비: 가스3구렌지, 가스레인지 4구, 그리들, 컨벡션 오븐, 튀김기 단일, 튀김기 더블 (고정 요소 미지정)",
+      "급수 시설 필요 장비: 1조세정대, 1조세척기세정대, 2조세정대, 손세정대, 식기세척기, 전처리 싱크대 (고정 요소 미지정)",
+      "배수 시설 필요 장비: 1조세정대, 1조세척기세정대, 2조세정대, 손세정대, 식기세척기, 전처리 싱크대 (고정 요소 미지정)"
+    ]
+  },
+  "scores": {
+    "workflow_efficiency": 1.0,
+    "space_utilization": 1.0,
+    "safety_compliance": 0.9,
+    "accessibility": 1.0,
+    "overall": 98.0
+  },
+  "iterations_run": 1,
+  "computation_time_ms": 1488.9
+};
+
+/* ------------------------------------------------------------------ */
+/*  File Upload                                                        */
+/* ------------------------------------------------------------------ */
+const uploadScreen = document.getElementById('upload-screen');
+const appEl = document.getElementById('app');
+const dropZone = document.getElementById('drop-zone');
+const fileInput = document.getElementById('file-input');
+const btnReopen = document.getElementById('btn-reopen');
+
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => { e.preventDefault(); dropZone.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', () => { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+btnReopen.addEventListener('click', () => { cleanup(); uploadScreen.style.display = ''; appEl.classList.remove('visible'); fileInput.value = ''; });
+
+function handleFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.zones || !data.placements) { alert('유효한 kitchen-simulator JSON 파일이 아닙니다.'); return; }
+      uploadScreen.style.display = 'none';
+      appEl.classList.add('visible');
+      initScene(data);
+    } catch { alert('JSON 파싱 오류'); }
+  };
+  reader.readAsText(file);
+}
+
+function loadData(data) {
+  uploadScreen.style.display = 'none';
+  appEl.classList.add('visible');
+  initScene(data);
+}
+
+/* ------------------------------------------------------------------ */
+/*  Cleanup previous scene                                             */
+/* ------------------------------------------------------------------ */
+let _cleanup = null;
+function cleanup() { if (_cleanup) { _cleanup(); _cleanup = null; } }
+
+/* ------------------------------------------------------------------ */
+/*  Build Scene                                                        */
+/* ------------------------------------------------------------------ */
+function initScene(data) {
+  cleanup();
+
+  /* ---- Numbering: sort by zone order, then x, then y ---- */
+  const zoneRank = Object.fromEntries(ZONE_ORDER.map((z, i) => [z, i]));
+  const sorted = [...data.placements].sort((a, b) => {
+    const zd = (zoneRank[a.zone] ?? 99) - (zoneRank[b.zone] ?? 99);
+    if (zd !== 0) return zd;
+    if (Math.abs(a.x - b.x) > 0.001) return a.x - b.x;
+    return a.y - b.y;
+  });
+  const numberMap = new Map();
+  sorted.forEach((p, i) => numberMap.set(p.equipment_id, i + 1));
+
+  /* ---- Scores ---- */
+  const scoresEl = document.getElementById('scores-container');
+  scoresEl.innerHTML = '';
+  if (data.scores) {
+    const ov = data.scores.overall ?? 0;
+    const ovEl = document.createElement('span');
+    ovEl.className = 'score-overall';
+    ovEl.textContent = Math.round(ov) + '점';
+    ovEl.style.color = ov >= 80 ? '#2e7d32' : ov >= 60 ? '#f57c00' : '#c62828';
+    scoresEl.appendChild(ovEl);
+    for (const [key, label] of Object.entries(SCORE_NAMES)) {
+      if (key === 'overall') continue;
+      const val = data.scores[key];
+      if (val == null) continue;
+      const pct = Math.round(val * 100);
+      const item = document.createElement('div');
+      item.className = 'score-item';
+      item.innerHTML = `<span class="label">${label}</span>
+        <div class="score-bar-bg"><div class="score-bar" style="width:${pct}%;background:${SCORE_COLORS[key]}"></div></div>
+        <span>${pct}%</span>`;
+      scoresEl.appendChild(item);
+    }
+  }
+
+  /* ---- Meta ---- */
+  const metaEl = document.getElementById('meta-info');
+  const inp = data.input_summary || {};
+  const typeMap = { korean: '한식', japanese: '일식', chinese: '중식', western: '양식', cafe: '카페', buffet: '뷔페' };
+  metaEl.textContent = `${typeMap[inp.restaurant_type] || inp.restaurant_type || ''} ${inp.seat_count || ''}석 | ${data.total_area_sqm || ''}m\u00B2`;
+
+  /* ---- Left panel ---- */
+  const leftPanel = document.getElementById('left-panel');
+  leftPanel.innerHTML = '';
+  const zoneAreaMap = {};
+  data.zones.forEach(z => { zoneAreaMap[z.type] = z.area_sqm; });
+  const groupedByZone = {};
+  ZONE_ORDER.forEach(z => { groupedByZone[z] = []; });
+  sorted.forEach(p => {
+    if (!groupedByZone[p.zone]) groupedByZone[p.zone] = [];
+    groupedByZone[p.zone].push(p);
+  });
+
+  const panelItems = [];
+  for (const zone of ZONE_ORDER) {
+    const items = groupedByZone[zone];
+    if (!items || items.length === 0) continue;
+    const grp = document.createElement('div');
+    grp.className = 'zone-group';
+    const hdr = document.createElement('div');
+    hdr.className = 'zone-header';
+    hdr.style.background = ZONE_COLORS[zone].css;
+    hdr.innerHTML = `<span>${ZONE_NAMES_KR[zone]} (${items.length})</span><span class="area">${zoneAreaMap[zone] ?? ''}m\u00B2</span>`;
+    grp.appendChild(hdr);
+    items.forEach(p => {
+      const num = numberMap.get(p.equipment_id);
+      const el = document.createElement('div');
+      el.className = 'equip-item';
+      el.dataset.equipId = p.equipment_id;
+      el.innerHTML = `
+        <div class="equip-badge" style="background:${ZONE_COLORS[zone].css}">${num}</div>
+        <div class="equip-info">
+          <div class="equip-name">${p.equipment_name}</div>
+          <div class="equip-size">${Math.round(p.width*1000)}x${Math.round(p.depth*1000)}mm</div>
+        </div>`;
+      grp.appendChild(el);
+      panelItems.push({ el, equipId: p.equipment_id });
+    });
+    leftPanel.appendChild(grp);
+  }
+
+  /* ---- Three.js Setup ---- */
+  const wrap = document.getElementById('canvas-wrap');
+  const W = wrap.clientWidth;
+  const H = wrap.clientHeight;
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0xe8e4de);
+
+  const camera = new THREE.PerspectiveCamera(45, W / H, 0.1, 200);
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(W, H);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 1.0;
+  wrap.appendChild(renderer.domElement);
+
+  const labelRenderer = new CSS2DRenderer();
+  labelRenderer.setSize(W, H);
+  labelRenderer.domElement.style.position = 'absolute';
+  labelRenderer.domElement.style.top = '0';
+  labelRenderer.domElement.style.left = '0';
+  labelRenderer.domElement.style.pointerEvents = 'none';
+  wrap.appendChild(labelRenderer.domElement);
+
+  /* ---- Controls ---- */
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.maxPolarAngle = Math.PI / 2 - 0.05;
+  controls.minDistance = 1;
+  controls.maxDistance = 40;
+
+  /* ---- Compute bounding box from all zone polygons ---- */
+  let minX = Infinity, maxX = -Infinity, minZ = Infinity, maxZ = -Infinity;
+  data.zones.forEach(z => z.polygon.forEach(([px, py]) => {
+    if (px < minX) minX = px; if (px > maxX) maxX = px;
+    if (py < minZ) minZ = py; if (py > maxZ) maxZ = py;
+  }));
+  const kitchenW = maxX - minX;
+  const kitchenD = maxZ - minZ;
+  const centerX = (minX + maxX) / 2;
+  const centerZ = (minZ + maxZ) / 2;
+  const WALL_H = 2.5;
+  const WALL_THICK = 0.12;
+  const BASEBOARD_H = 0.1;
+  const WALL_PAD = 0.05; // small padding outside zone boundary
+
+  /* ---- Lighting (realistic kitchen) ---- */
+  // Hemisphere light: warm white-blue sky, warm brown-orange ground
+  const hemiLight = new THREE.HemisphereLight(0xb1e1ff, 0xb97a20, 0.5);
+  scene.add(hemiLight);
+
+  // Main directional light - slightly warm
+  const dirLight = new THREE.DirectionalLight(0xfff5e6, 0.9);
+  dirLight.position.set(centerX + 4, 10, centerZ + 3);
+  dirLight.castShadow = true;
+  dirLight.shadow.mapSize.set(2048, 2048);
+  dirLight.shadow.camera.left = minX - 2;
+  dirLight.shadow.camera.right = maxX + 2;
+  dirLight.shadow.camera.top = maxZ + 2;
+  dirLight.shadow.camera.bottom = minZ - 2;
+  dirLight.shadow.camera.near = 0.5;
+  dirLight.shadow.camera.far = 30;
+  dirLight.shadow.bias = -0.001;
+  dirLight.shadow.radius = 4; // softer shadows
+  scene.add(dirLight);
+
+  // Secondary fill light from opposite side - slightly blue
+  const fillLight = new THREE.DirectionalLight(0xe6f0ff, 0.3);
+  fillLight.position.set(centerX - 5, 8, centerZ - 4);
+  scene.add(fillLight);
+
+  /* ---- Ground plane (shadow receiver) ---- */
+  const groundGeo = new THREE.PlaneGeometry(kitchenW + 6, kitchenD + 6);
+  const groundMat = new THREE.MeshStandardMaterial({ color: 0xd4cfc6, roughness: 0.95 });
+  const ground = new THREE.Mesh(groundGeo, groundMat);
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.set(centerX, -0.001, centerZ);
+  ground.receiveShadow = true;
+  scene.add(ground);
+
+  /* ---- Kitchen Walls ---- */
+  const wallColor = 0xF5F0E8;
+  const baseboardColor = 0xC8BFA8;
+
+  function makeWall(width, height, depth, px, py, pz) {
+    const geo = new THREE.BoxGeometry(width, height, depth);
+    const mat = new THREE.MeshStandardMaterial({ color: wallColor, roughness: 0.85, metalness: 0.02 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(px, py, pz);
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    scene.add(mesh);
+    return mesh;
+  }
+
+  function makeBaseboard(width, height, depth, px, py, pz) {
+    const geo = new THREE.BoxGeometry(width, height, depth);
+    const mat = new THREE.MeshStandardMaterial({ color: baseboardColor, roughness: 0.7, metalness: 0.05 });
+    const mesh = new THREE.Mesh(geo, mat);
+    mesh.position.set(px, py, pz);
+    scene.add(mesh);
+  }
+
+  // Back wall (Z = minZ side)
+  const bwX = centerX;
+  const bwZ = minZ - WALL_PAD - WALL_THICK / 2;
+  makeWall(kitchenW + WALL_THICK * 2 + WALL_PAD * 2, WALL_H, WALL_THICK, bwX, WALL_H / 2, bwZ);
+  makeBaseboard(kitchenW + WALL_THICK * 2 + WALL_PAD * 2, BASEBOARD_H, WALL_THICK + 0.02, bwX, BASEBOARD_H / 2, bwZ + 0.01);
+
+  // Front wall (Z = maxZ side)
+  const fwZ = maxZ + WALL_PAD + WALL_THICK / 2;
+  makeWall(kitchenW + WALL_THICK * 2 + WALL_PAD * 2, WALL_H, WALL_THICK, bwX, WALL_H / 2, fwZ);
+  makeBaseboard(kitchenW + WALL_THICK * 2 + WALL_PAD * 2, BASEBOARD_H, WALL_THICK + 0.02, bwX, BASEBOARD_H / 2, fwZ - 0.01);
+
+  // Left wall (X = minX side)
+  const lwX = minX - WALL_PAD - WALL_THICK / 2;
+  makeWall(WALL_THICK, WALL_H, kitchenD + WALL_PAD * 2, lwX, WALL_H / 2, centerZ);
+  makeBaseboard(WALL_THICK + 0.02, BASEBOARD_H, kitchenD + WALL_PAD * 2, lwX + 0.01, BASEBOARD_H / 2, centerZ);
+
+  // Right wall (X = maxX side)
+  const rwX = maxX + WALL_PAD + WALL_THICK / 2;
+  makeWall(WALL_THICK, WALL_H, kitchenD + WALL_PAD * 2, rwX, WALL_H / 2, centerZ);
+  makeBaseboard(WALL_THICK + 0.02, BASEBOARD_H, kitchenD + WALL_PAD * 2, rwX - 0.01, BASEBOARD_H / 2, centerZ);
+
+  /* ---- Ceiling (visible from below only) ---- */
+  const ceilGeo = new THREE.PlaneGeometry(kitchenW + WALL_THICK * 2 + WALL_PAD * 2, kitchenD + WALL_PAD * 2);
+  const ceilMat = new THREE.MeshStandardMaterial({
+    color: 0xffffff, roughness: 0.9, metalness: 0,
+    side: THREE.BackSide, transparent: true, opacity: 0.35,
+  });
+  const ceiling = new THREE.Mesh(ceilGeo, ceilMat);
+  ceiling.rotation.x = -Math.PI / 2;
+  ceiling.position.set(centerX, WALL_H, centerZ);
+  scene.add(ceiling);
+
+  /* ---- Zone Floors ---- */
+  data.zones.forEach(zone => {
+    const zc = ZONE_COLORS[zone.type] || ZONE_COLORS.storage;
+    const shape = new THREE.Shape();
+    zone.polygon.forEach(([px, py], i) => {
+      if (i === 0) shape.moveTo(px, py);
+      else shape.lineTo(px, py);
+    });
+    shape.closePath();
+    const extGeo = new THREE.ExtrudeGeometry(shape, { depth: 0.02, bevelEnabled: false });
+    const mat = new THREE.MeshStandardMaterial({ color: zc.fill, transparent: true, opacity: 0.5, roughness: 0.9 });
+    const mesh = new THREE.Mesh(extGeo, mat);
+    mesh.rotation.x = -Math.PI / 2;
+    mesh.position.y = 0;
+    mesh.receiveShadow = true;
+    scene.add(mesh);
+
+    // Zone border outline
+    const pts3d = zone.polygon.map(([px, py]) => new THREE.Vector3(px, 0.025, py));
+    pts3d.push(pts3d[0].clone());
+    const lineGeo = new THREE.BufferGeometry().setFromPoints(pts3d);
+    const lineMat = new THREE.LineBasicMaterial({ color: zc.main, linewidth: 2, transparent: true, opacity: 0.5 });
+    scene.add(new THREE.Line(lineGeo, lineMat));
+  });
+
+  /* ---- Floor Tile Grid ---- */
+  const tileSpacing = 0.3;
+  const floorGrid = new THREE.GridHelper(
+    Math.max(kitchenW, kitchenD) + 1,
+    Math.round((Math.max(kitchenW, kitchenD) + 1) / tileSpacing),
+    0xb0b0b0,
+    0xc8c8c8
+  );
+  floorGrid.position.set(centerX, 0.021, centerZ);
+  // GridHelper may have an array of materials or a single material
+  const gridMats = Array.isArray(floorGrid.material) ? floorGrid.material : [floorGrid.material];
+  gridMats.forEach(m => { m.transparent = true; m.opacity = 0.25; });
+  scene.add(floorGrid);
+
+  /* ---- Equipment Meshes ---- */
+  const equipMeshMap = new Map();
+  const FLOOR_Y = 0.02;
+
+  // Cache materials per type to share
+  const matCache = {};
+  function getEquipMat(matType) {
+    if (matCache[matType]) return matCache[matType].clone();
+    const def = EQUIP_MATERIAL_TYPES[matType] || EQUIP_MATERIAL_TYPES.stainless;
+    const mat = new THREE.MeshStandardMaterial({
+      color: def.color,
+      metalness: def.metalness,
+      roughness: def.roughness,
+      opacity: 1.0,
+      transparent: false,
+    });
+    matCache[matType] = mat;
+    return mat.clone();
+  }
+
+  data.placements.forEach(p => {
+    const h = getEquipHeight(p.equipment_id);
+    const zc = ZONE_COLORS[p.zone] || ZONE_COLORS.storage;
+    const num = numberMap.get(p.equipment_id);
+    const matType = getEquipMaterialType(p.equipment_id);
+    const detailType = getEquipDetailType(p.equipment_id);
+
+    // Equipment group (holds box + details)
+    const equipGroup = new THREE.Group();
+
+    // Main box
+    const geo = new THREE.BoxGeometry(p.width, h, p.depth);
+    const mat = getEquipMat(matType);
+
+    // For cooking equipment, add subtle warm emissive
+    if (matType === 'cooking') {
+      mat.emissive = new THREE.Color(0xff6600);
+      mat.emissiveIntensity = 0.02;
+    }
+
+    const box = new THREE.Mesh(geo, mat);
+    box.castShadow = true;
+    box.receiveShadow = true;
+    box.userData = { equipId: p.equipment_id, name: p.equipment_name, num, zone: p.zone };
+    equipGroup.add(box);
+
+    // --- Brighter top face for tables (stainless countertop effect) ---
+    if (detailType === 'table' || detailType === 'generic') {
+      const topGeo = new THREE.PlaneGeometry(p.width - 0.005, p.depth - 0.005);
+      const topMat = new THREE.MeshStandardMaterial({
+        color: 0xD8D8D8, metalness: 0.8, roughness: 0.2,
+      });
+      const topPlane = new THREE.Mesh(topGeo, topMat);
+      topPlane.rotation.x = -Math.PI / 2;
+      topPlane.position.y = h / 2 + 0.001;
+      equipGroup.add(topPlane);
+    }
+
+    // --- Zone-colored stripe at top edge (0.02m tall band) ---
+    const stripeH = 0.02;
+    const stripeGeo = new THREE.BoxGeometry(p.width + 0.002, stripeH, p.depth + 0.002);
+    const stripeMat = new THREE.MeshStandardMaterial({ color: zc.main, metalness: 0.3, roughness: 0.5 });
+    const stripe = new THREE.Mesh(stripeGeo, stripeMat);
+    stripe.position.y = h / 2 + stripeH / 2;
+    equipGroup.add(stripe);
+
+    // --- Wireframe edges (zone-colored, thin accent) ---
+    const edgesGeo = new THREE.EdgesGeometry(geo);
+    const edgesMat = new THREE.LineBasicMaterial({ color: zc.main, transparent: true, opacity: 0.45 });
+    const edges = new THREE.LineSegments(edgesGeo, edgesMat);
+    equipGroup.add(edges);
+
+    // --- Equipment nameplate (small dark patch on one side) ---
+    const npW = Math.min(p.width * 0.4, 0.12);
+    const npH = 0.03;
+    const npGeo = new THREE.PlaneGeometry(npW, npH);
+    const npMat = new THREE.MeshStandardMaterial({ color: 0x444444, metalness: 0.3, roughness: 0.6 });
+    const nameplate = new THREE.Mesh(npGeo, npMat);
+    nameplate.position.set(0, h * 0.3 - h / 2, p.depth / 2 + 0.001);
+    equipGroup.add(nameplate);
+
+    // --- Detail visuals by equipment type ---
+
+    if (detailType === 'fridge') {
+      // Door split line (vertical dark line at center of front face)
+      const lineH = h * 0.8;
+      const lineGeo = new THREE.PlaneGeometry(0.005, lineH);
+      const lineMat = new THREE.MeshStandardMaterial({ color: 0x555555, metalness: 0.4, roughness: 0.5 });
+      const doorLine = new THREE.Mesh(lineGeo, lineMat);
+      doorLine.position.set(0, 0, p.depth / 2 + 0.001);
+      equipGroup.add(doorLine);
+
+      // Handle rectangles (left and right of center)
+      const handleW = 0.008;
+      const handleH = h * 0.15;
+      const handleGeo = new THREE.BoxGeometry(handleW, handleH, 0.015);
+      const handleMat = new THREE.MeshStandardMaterial({ color: 0x888888, metalness: 0.8, roughness: 0.2 });
+      const handleL = new THREE.Mesh(handleGeo, handleMat);
+      handleL.position.set(-0.04, h * 0.1, p.depth / 2 + 0.008);
+      equipGroup.add(handleL);
+      const handleR = new THREE.Mesh(handleGeo, handleMat);
+      handleR.position.set(0.04, h * 0.1, p.depth / 2 + 0.008);
+      equipGroup.add(handleR);
+    }
+
+    if (detailType === 'sink') {
+      // Darker recessed rectangle on top face (basin)
+      const basinW = p.width * 0.65;
+      const basinD = p.depth * 0.55;
+      const basinGeo = new THREE.PlaneGeometry(basinW, basinD);
+      const basinMat = new THREE.MeshStandardMaterial({ color: 0x808890, metalness: 0.5, roughness: 0.4 });
+      const basin = new THREE.Mesh(basinGeo, basinMat);
+      basin.rotation.x = -Math.PI / 2;
+      basin.position.y = h / 2 + 0.002;
+      equipGroup.add(basin);
+    }
+
+    if (detailType === 'range') {
+      // Burner circles on top face
+      const burnerCount = p.equipment_id.includes('4burner') ? 4 : 3;
+      const burnerR = Math.min(p.width, p.depth) * 0.11;
+      const cols = burnerCount <= 3 ? burnerCount : 2;
+      const rows = burnerCount <= 3 ? 1 : 2;
+      for (let r = 0; r < rows; r++) {
+        for (let c = 0; c < cols; c++) {
+          if (r * cols + c >= burnerCount) break;
+          const bGeo = new THREE.RingGeometry(burnerR * 0.5, burnerR, 24);
+          const bMat = new THREE.MeshStandardMaterial({
+            color: 0x222222, metalness: 0.6, roughness: 0.4, side: THREE.DoubleSide,
+          });
+          const burner = new THREE.Mesh(bGeo, bMat);
+          burner.rotation.x = -Math.PI / 2;
+          const xOff = (c - (cols - 1) / 2) * (p.width * 0.35);
+          const zOff = (r - (rows - 1) / 2) * (p.depth * 0.35);
+          burner.position.set(xOff, h / 2 + 0.003, zOff);
+          equipGroup.add(burner);
+        }
+      }
+    }
+
+    if (detailType === 'fryer') {
+      // Dark rectangles on top (oil wells)
+      const wellCount = p.equipment_id.includes('double') ? 2 : 1;
+      const wellW = (p.width * 0.7) / wellCount - 0.02;
+      const wellD = p.depth * 0.6;
+      for (let i = 0; i < wellCount; i++) {
+        const wGeo = new THREE.PlaneGeometry(wellW, wellD);
+        const wMat = new THREE.MeshStandardMaterial({ color: 0x3B2F00, metalness: 0.2, roughness: 0.6 });
+        const well = new THREE.Mesh(wGeo, wMat);
+        well.rotation.x = -Math.PI / 2;
+        const xOff = (i - (wellCount - 1) / 2) * (wellW + 0.02);
+        well.position.set(xOff, h / 2 + 0.002, 0);
+        equipGroup.add(well);
+      }
+    }
+
+    if (detailType === 'griddle') {
+      // Flat dark surface on top
+      const gGeo = new THREE.PlaneGeometry(p.width * 0.85, p.depth * 0.75);
+      const gMat = new THREE.MeshStandardMaterial({ color: 0x2A2A2A, metalness: 0.6, roughness: 0.35 });
+      const gridSurf = new THREE.Mesh(gGeo, gMat);
+      gridSurf.rotation.x = -Math.PI / 2;
+      gridSurf.position.y = h / 2 + 0.002;
+      equipGroup.add(gridSurf);
+    }
+
+    if (detailType === 'dishwasher') {
+      // Door handle on front
+      const dhW = p.width * 0.6;
+      const dhH = 0.01;
+      const dhGeo = new THREE.BoxGeometry(dhW, dhH, 0.015);
+      const dhMat = new THREE.MeshStandardMaterial({ color: 0x999999, metalness: 0.7, roughness: 0.3 });
+      const dhHandle = new THREE.Mesh(dhGeo, dhMat);
+      dhHandle.position.set(0, h * 0.15, p.depth / 2 + 0.008);
+      equipGroup.add(dhHandle);
+    }
+
+    // Position the entire group
+    const cx = p.x + p.width / 2;
+    const cy = FLOOR_Y + h / 2;
+    const cz = p.y + p.depth / 2;
+    equipGroup.position.set(cx, cy, cz);
+
+    if (p.rotation) {
+      equipGroup.rotation.y = -p.rotation * Math.PI / 180;
+    }
+
+    scene.add(equipGroup);
+
+    // CSS2D Label with zone-colored dot
+    const labelDiv = document.createElement('div');
+    labelDiv.className = 'label-3d';
+    labelDiv.innerHTML = `<span class="zone-dot" style="background:${zc.css}"></span>${num}`;
+    const labelObj = new CSS2DObject(labelDiv);
+    labelObj.position.set(cx, FLOOR_Y + h + 0.12, cz);
+    scene.add(labelObj);
+
+    equipMeshMap.set(p.equipment_id, { box, edges, mat, labelObj, height: h, group: equipGroup, stripe, stripeMat });
+  });
+
+  /* ---- Camera Position ---- */
+  const span = Math.max(kitchenW, kitchenD);
+  const camDist = span * 1.1;
+  camera.position.set(centerX + camDist * 0.6, camDist * 0.7, centerZ + camDist * 0.6);
+  controls.target.set(centerX, 0.4, centerZ);
+  controls.update();
+
+  /* ---- Raycaster (hover) ---- */
+  const raycaster = new THREE.Raycaster();
+  const pointer = new THREE.Vector2();
+  const tooltip = document.getElementById('tooltip');
+  let hoveredEquipId = null;
+  // Collect all box meshes for raycasting
+  const allBoxes = [...equipMeshMap.values()].map(v => v.box);
+
+  function onPointerMove(ev) {
+    const rect = renderer.domElement.getBoundingClientRect();
+    pointer.x = ((ev.clientX - rect.left) / rect.width) * 2 - 1;
+    pointer.y = -((ev.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(pointer, camera);
+    const hits = raycaster.intersectObjects(allBoxes, false);
+    if (hits.length > 0) {
+      const ud = hits[0].object.userData;
+      tooltip.style.display = '';
+      tooltip.style.left = ev.clientX + 'px';
+      tooltip.style.top = ev.clientY + 'px';
+      tooltip.textContent = `#${ud.num} ${ud.name}`;
+      highlightEquip(ud.equipId);
+    } else {
+      tooltip.style.display = 'none';
+      highlightEquip(null);
+    }
+  }
+  renderer.domElement.addEventListener('pointermove', onPointerMove);
+
+  /* ---- Highlight helpers ---- */
+  function highlightEquip(eqId) {
+    if (eqId === hoveredEquipId) return;
+    // restore previous
+    if (hoveredEquipId) {
+      const prev = equipMeshMap.get(hoveredEquipId);
+      if (prev) {
+        prev.mat.emissiveIntensity = getEquipMaterialType(hoveredEquipId) === 'cooking' ? 0.02 : 0;
+        prev.mat.emissive.setHex(getEquipMaterialType(hoveredEquipId) === 'cooking' ? 0xff6600 : 0x000000);
+      }
+      panelItems.forEach(pi => { if (pi.equipId === hoveredEquipId) pi.el.classList.remove('active'); });
+    }
+    hoveredEquipId = eqId;
+    if (eqId) {
+      const cur = equipMeshMap.get(eqId);
+      if (cur) {
+        cur.mat.emissive.setHex(0xffffff);
+        cur.mat.emissiveIntensity = 0.15;
+      }
+      panelItems.forEach(pi => { if (pi.equipId === eqId) pi.el.classList.add('active'); });
+    }
+  }
+
+  /* ---- Panel interactions ---- */
+  panelItems.forEach(({ el, equipId }) => {
+    el.addEventListener('mouseenter', () => highlightEquip(equipId));
+    el.addEventListener('mouseleave', () => highlightEquip(null));
+    el.addEventListener('click', () => flyToEquip(equipId));
+  });
+
+  /* ---- Fly-to camera ---- */
+  let flyAnim = null;
+  function flyToEquip(eqId) {
+    const entry = equipMeshMap.get(eqId);
+    if (!entry) return;
+    const target = entry.group.position.clone();
+    const h = entry.height;
+    const dest = new THREE.Vector3(target.x + 1.5, h + 1.5, target.z + 1.5);
+    const startPos = camera.position.clone();
+    const startTarget = controls.target.clone();
+    const lookTarget = new THREE.Vector3(target.x, h * 0.5 + FLOOR_Y, target.z);
+    const duration = 800;
+    let startTime = null;
+    if (flyAnim) cancelAnimationFrame(flyAnim);
+
+    function animStep(ts) {
+      if (!startTime) startTime = ts;
+      let t = Math.min((ts - startTime) / duration, 1);
+      t = t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      camera.position.lerpVectors(startPos, dest, t);
+      controls.target.lerpVectors(startTarget, lookTarget, t);
+      controls.update();
+      if (t < 1) flyAnim = requestAnimationFrame(animStep);
+      else flyAnim = null;
+    }
+    flyAnim = requestAnimationFrame(animStep);
+    highlightEquip(eqId);
+  }
+
+  /* ---- Axes helper (small, at origin) ---- */
+  const axes = new THREE.AxesHelper(0.5);
+  axes.position.set(minX - 0.3, 0.01, minZ - 0.3);
+  scene.add(axes);
+
+  /* ---- Resize ---- */
+  function onResize() {
+    const w = wrap.clientWidth;
+    const h = wrap.clientHeight;
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w, h);
+    labelRenderer.setSize(w, h);
+  }
+  window.addEventListener('resize', onResize);
+
+  /* ---- Animate ---- */
+  let animId;
+  function animate() {
+    animId = requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+    labelRenderer.render(scene, camera);
+  }
+  animate();
+
+  /* ---- Cleanup function ---- */
+  _cleanup = () => {
+    cancelAnimationFrame(animId);
+    if (flyAnim) cancelAnimationFrame(flyAnim);
+    window.removeEventListener('resize', onResize);
+    renderer.domElement.removeEventListener('pointermove', onPointerMove);
+    controls.dispose();
+    renderer.dispose();
+    const legend = document.getElementById('legend');
+    const legendParent = legend ? legend.parentNode : null;
+    if (legend && legendParent === wrap) legend.remove();
+    wrap.innerHTML = '';
+    if (legend) wrap.appendChild(legend);
+    tooltip.style.display = 'none';
+    leftPanel.innerHTML = '';
+    scoresEl.innerHTML = '';
+    metaEl.textContent = '';
+    scene.clear();
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/*  Auto-load embedded data on start                                   */
+/* ------------------------------------------------------------------ */
+loadData(EMBEDDED_DATA);
+</script>
+</body>
+</html>

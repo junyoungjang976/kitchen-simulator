@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>주방 배치도면 - 2D CAD Floor Plan</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+    background: #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  #toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  #toolbar button, #toolbar select {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 6px 14px;
+    border: 1px solid #999;
+    background: #fff;
+    cursor: pointer;
+    border-radius: 3px;
+  }
+  #toolbar button:hover { background: #eee; }
+  #toolbar select { min-width: 90px; }
+  #toolbar .title {
+    font-weight: 700;
+    font-size: 14px;
+    color: #333;
+    margin-right: 16px;
+  }
+  #toolbar .sep {
+    width: 1px;
+    height: 24px;
+    background: #ccc;
+  }
+  #drawing-area {
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+  }
+  #cad-canvas {
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  }
+  @media print {
+    body { background: #fff; }
+    #toolbar { display: none; }
+    #drawing-area { padding: 0; }
+    #cad-canvas { box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div id="toolbar">
+  <span class="title">주방 배치도면 (Kitchen Floor Plan)</span>
+  <div class="sep"></div>
+  <label for="scaleSelect">배율:</label>
+  <select id="scaleSelect">
+    <option value="25">1:25</option>
+    <option value="50" selected>1:50</option>
+    <option value="100">1:100</option>
+  </select>
+  <div class="sep"></div>
+  <button id="btnDownload">PNG 다운로드</button>
+  <button id="btnPrint">인쇄</button>
+</div>
+
+<div id="drawing-area">
+  <canvas id="cad-canvas"></canvas>
+</div>
+
+<script>
+// ============================================================
+// EMBEDDED DATA (from result_cad.json)
+// ============================================================
+const DATA = {
+  "success": true,
+  "simulation_id": "4259aa0c",
+  "timestamp": "2026-02-08T00:39:02.728464",
+  "input_summary": {
+    "restaurant_type": "korean",
+    "seat_count": 50,
+    "shape": "rectangle"
+  },
+  "total_area_sqm": 80.0,
+  "zones": [
+    {
+      "type": "storage",
+      "polygon": [
+        [
+          6.230824276120801,
+          5.139384504442358
+        ],
+        [
+          6.230824276120801,
+          8.0
+        ],
+        [
+          0.0,
+          8.0
+        ],
+        [
+          0.0,
+          5.139384504442358
+        ]
+      ],
+      "area_sqm": 17.82,
+      "ratio": 0.223,
+      "equipment_ids": [
+        "multi_tier_shelf_0",
+        "dry_storage_shelf_1",
+        "overhead_shelf_2",
+        "back_shelf_3",
+        "wall_shelf_4",
+        "table_refrigerator_5",
+        "batt_table_refrigerator_6",
+        "box45_refrigerator_freezer_7",
+        "box45_refrigerator_8",
+        "reach_in_freezer_1door_10"
+      ]
+    },
+    {
+      "type": "preparation",
+      "polygon": [
+        [
+          6.230824276120801,
+          0.0
+        ],
+        [
+          6.230824276120801,
+          5.139384504442358
+        ],
+        [
+          0.0,
+          5.139384504442358
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "area_sqm": 32.02,
+      "ratio": 0.4,
+      "equipment_ids": [
+        "work_table_medium_14",
+        "work_table_small_15",
+        "prep_sink_16",
+        "food_processor_station_17"
+      ]
+    },
+    {
+      "type": "cooking",
+      "polygon": [
+        [
+          10.0,
+          0.0
+        ],
+        [
+          10.0,
+          4.494252204520421
+        ],
+        [
+          6.230824276120801,
+          4.494252204520421
+        ],
+        [
+          6.230824276120801,
+          0.0
+        ]
+      ],
+      "area_sqm": 16.94,
+      "ratio": 0.212,
+      "equipment_ids": [
+        "griddle_18",
+        "gas_range_3burner_19",
+        "gas_range_4burner_20",
+        "deep_fryer_double_21",
+        "deep_fryer_single_22",
+        "convection_oven_23"
+      ]
+    },
+    {
+      "type": "washing",
+      "polygon": [
+        [
+          10.0,
+          4.494252204520421
+        ],
+        [
+          10.0,
+          8.0
+        ],
+        [
+          6.230824276120801,
+          8.0
+        ],
+        [
+          6.230824276120801,
+          4.494252204520421
+        ]
+      ],
+      "area_sqm": 13.21,
+      "ratio": 0.165,
+      "equipment_ids": [
+        "two_comp_sink_24",
+        "dishwasher_pre_sink_25",
+        "one_comp_sink_26",
+        "dishwasher_undercounter_27",
+        "hand_wash_sink_28"
+      ]
+    }
+  ],
+  "placements": [
+    {
+      "equipment_id": "multi_tier_shelf_0",
+      "equipment_name": "다단식선반",
+      "zone": "storage",
+      "x": 0.15,
+      "y": 7.09,
+      "width": 1.17,
+      "depth": 0.6,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "dry_storage_shelf_1",
+      "equipment_name": "건조 저장 선반",
+      "zone": "storage",
+      "x": 0.15,
+      "y": 6.29,
+      "width": 1.2,
+      "depth": 0.45,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "overhead_shelf_2",
+      "equipment_name": "상부선반",
+      "zone": "storage",
+      "x": 0.15,
+      "y": 5.49,
+      "width": 1.31,
+      "depth": 0.37,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "back_shelf_3",
+      "equipment_name": "백선반",
+      "zone": "storage",
+      "x": 2.15,
+      "y": 7.49,
+      "width": 1.24,
+      "depth": 0.35,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "wall_shelf_4",
+      "equipment_name": "벽선반",
+      "zone": "storage",
+      "x": 3.75,
+      "y": 7.49,
+      "width": 1.19,
+      "depth": 0.35,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "table_refrigerator_5",
+      "equipment_name": "테이블냉장고",
+      "zone": "storage",
+      "x": 2.35,
+      "y": 5.29,
+      "width": 1.37,
+      "depth": 0.7,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "batt_table_refrigerator_6",
+      "equipment_name": "밧드테이블냉장고",
+      "zone": "storage",
+      "x": 4.15,
+      "y": 5.29,
+      "width": 1.23,
+      "depth": 0.68,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "box45_refrigerator_freezer_7",
+      "equipment_name": "45BOX냉동냉장고",
+      "zone": "storage",
+      "x": 4.75,
+      "y": 6.29,
+      "width": 1.26,
+      "depth": 0.8,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "box45_refrigerator_8",
+      "equipment_name": "45BOX올냉장고",
+      "zone": "storage",
+      "x": 2.15,
+      "y": 6.29,
+      "width": 1.26,
+      "depth": 0.8,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "reach_in_freezer_1door_10",
+      "equipment_name": "업소용 냉동고 1도어",
+      "zone": "storage",
+      "x": 3.75,
+      "y": 6.29,
+      "width": 0.66,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "work_table_medium_14",
+      "equipment_name": "작업대",
+      "zone": "preparation",
+      "x": 0.15,
+      "y": 3.95,
+      "width": 1.01,
+      "depth": 0.65,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "work_table_small_15",
+      "equipment_name": "작업대 소형",
+      "zone": "preparation",
+      "x": 0.15,
+      "y": 2.95,
+      "width": 0.9,
+      "depth": 0.6,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "prep_sink_16",
+      "equipment_name": "전처리 싱크대",
+      "zone": "preparation",
+      "x": 0.15,
+      "y": 1.95,
+      "width": 0.6,
+      "depth": 0.55,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "food_processor_station_17",
+      "equipment_name": "식품 가공기 스테이션",
+      "zone": "preparation",
+      "x": 0.15,
+      "y": 0.95,
+      "width": 0.6,
+      "depth": 0.5,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "griddle_18",
+      "equipment_name": "그리들",
+      "zone": "cooking",
+      "x": 8.58,
+      "y": 0.15,
+      "width": 0.9,
+      "depth": 0.6,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "gas_range_3burner_19",
+      "equipment_name": "가스3구렌지",
+      "zone": "cooking",
+      "x": 8.58,
+      "y": 1.35,
+      "width": 1.24,
+      "depth": 0.61,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "gas_range_4burner_20",
+      "equipment_name": "가스레인지 4구",
+      "zone": "cooking",
+      "x": 7.18,
+      "y": 0.15,
+      "width": 0.6,
+      "depth": 0.7,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "deep_fryer_double_21",
+      "equipment_name": "튀김기 더블",
+      "zone": "cooking",
+      "x": 6.38,
+      "y": 1.35,
+      "width": 0.8,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "deep_fryer_single_22",
+      "equipment_name": "튀김기 단일",
+      "zone": "cooking",
+      "x": 6.38,
+      "y": 0.15,
+      "width": 0.4,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "convection_oven_23",
+      "equipment_name": "컨벡션 오븐",
+      "zone": "cooking",
+      "x": 6.38,
+      "y": 2.55,
+      "width": 0.9,
+      "depth": 0.76,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "two_comp_sink_24",
+      "equipment_name": "2조세정대",
+      "zone": "washing",
+      "x": 7.78,
+      "y": 4.64,
+      "width": 1.4,
+      "depth": 0.68,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "dishwasher_pre_sink_25",
+      "equipment_name": "1조세척기세정대",
+      "zone": "washing",
+      "x": 7.78,
+      "y": 5.64,
+      "width": 1.17,
+      "depth": 0.7,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "one_comp_sink_26",
+      "equipment_name": "1조세정대",
+      "zone": "washing",
+      "x": 7.78,
+      "y": 6.64,
+      "width": 0.76,
+      "depth": 0.64,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "dishwasher_undercounter_27",
+      "equipment_name": "식기세척기",
+      "zone": "washing",
+      "x": 6.58,
+      "y": 4.64,
+      "width": 0.89,
+      "depth": 0.68,
+      "rotation": 0
+    },
+    {
+      "equipment_id": "hand_wash_sink_28",
+      "equipment_name": "손세정대",
+      "zone": "washing",
+      "x": 6.38,
+      "y": 6.64,
+      "width": 0.4,
+      "depth": 0.35,
+      "rotation": 0
+    }
+  ],
+  "validation": {
+    "passed": true,
+    "errors": [],
+    "warnings": [
+      "가스레인지 4구↔튀김기 단일 인접 간격이 기준(46cm)보다 좁습니다 (실제: 40cm)",
+      "구역 간 통로 폭이 양방향 기준(122cm)보다 좁습니다 (실제: 89cm)",
+      "업소용 냉장고 2도어: 배치 가능한 위치가 없습니다",
+      "음료쇼케이스: 배치 가능한 위치가 없습니다",
+      "제빙기: 배치 가능한 위치가 없습니다",
+      "육수냉장고: 배치 가능한 위치가 없습니다"
+    ],
+    "infos": [
+      "장비 간 통로 폭 35cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 83cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 83cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 43cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 104cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 80cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 89cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 81cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 36cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 40cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 57cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 40cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 52cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 44cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 43cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 30cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 30cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 32cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 81cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 32cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 34cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 34cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 40cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 45cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 50cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 60cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 80cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 94cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 50cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 40cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 44cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 44cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 32cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 31cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 30cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 45cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 104cm (권장: 107cm 이상)",
+      "장비 간 통로 폭 100cm (권장: 107cm 이상)",
+      "환기 시설 필요 장비: 가스3구렌지, 가스레인지 4구, 그리들, 컨벡션 오븐, 튀김기 단일, 튀김기 더블 (고정 요소 미지정)",
+      "급수 시설 필요 장비: 1조세정대, 1조세척기세정대, 2조세정대, 손세정대, 식기세척기, 전처리 싱크대 (고정 요소 미지정)",
+      "배수 시설 필요 장비: 1조세정대, 1조세척기세정대, 2조세정대, 손세정대, 식기세척기, 전처리 싱크대 (고정 요소 미지정)"
+    ]
+  },
+  "scores": {
+    "workflow_efficiency": 1.0,
+    "space_utilization": 1.0,
+    "safety_compliance": 0.9,
+    "accessibility": 1.0,
+    "overall": 98.0
+  },
+  "iterations_run": 1,
+  "computation_time_ms": 1488.9
+};
+
+const EQUIPMENT_HEIGHTS_MM = {
+  wall_shelf: 300, overhead_shelf: 300, multi_tier_shelf: 1800, back_shelf: 300,
+  dry_storage_shelf: 1800, table_refrigerator: 850, batt_table_refrigerator: 850,
+  box45_refrigerator_freezer: 1950, box45_refrigerator: 1950,
+  beverage_showcase: 1900, broth_refrigerator: 850, ice_maker: 800,
+  reach_in_refrigerator_2door: 1900, reach_in_freezer_1door: 1900,
+  work_table_small: 850, work_table_medium: 850, prep_sink: 850,
+  food_processor_station: 900, gas_range_3burner: 850, gas_range_4burner: 850,
+  deep_fryer_single: 850, deep_fryer_double: 850, convection_oven: 1500,
+  griddle: 850, one_comp_sink: 850, dishwasher_pre_sink: 850,
+  two_comp_sink: 850, dishwasher_undercounter: 850, hand_wash_sink: 850,
+};
+
+const ZONE_LABELS = { storage: '저장', preparation: '전처리', cooking: '조리', washing: '세척' };
+const ZONE_ORDER = ['storage', 'preparation', 'cooking', 'washing'];
+
+// ============================================================
+// UTILITY FUNCTIONS
+// ============================================================
+
+function getEquipmentHeight(equipId) {
+  const base = equipId.replace(/_\d+$/, '');
+  return EQUIPMENT_HEIGHTS_MM[base] || 850;
+}
+
+function mToMM(m) {
+  return Math.round(m * 1000);
+}
+
+function computeBounds(data) {
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const zone of data.zones) {
+    for (const [px, py] of zone.polygon) {
+      minX = Math.min(minX, px);
+      minY = Math.min(minY, py);
+      maxX = Math.max(maxX, px);
+      maxY = Math.max(maxY, py);
+    }
+  }
+  return { minX, minY, maxX, maxY, width: maxX - minX, height: maxY - minY };
+}
+
+// Sort equipment by zone order, then x, then y for numbering
+function sortedPlacements(data) {
+  const arr = data.placements.slice();
+  arr.sort((a, b) => {
+    const za = ZONE_ORDER.indexOf(a.zone);
+    const zb = ZONE_ORDER.indexOf(b.zone);
+    if (za !== zb) return za - zb;
+    if (Math.abs(a.x - b.x) > 0.01) return a.x - b.x;
+    return a.y - b.y;
+  });
+  return arr;
+}
+
+// ============================================================
+// MAIN DRAWING CLASS
+// ============================================================
+
+class CADRenderer {
+  constructor(canvas, data, scaleDenom) {
+    this.canvas = canvas;
+    this.ctx = canvas.getContext('2d');
+    this.data = data;
+    this.scaleDenom = scaleDenom;
+    this.dpr = Math.max(window.devicePixelRatio || 1, 2);
+
+    this.bounds = computeBounds(data);
+    this.pxPerMeter = (100 * 50) / this.scaleDenom;
+
+    this.margin = { top: 60, right: 80, bottom: 180, left: 80 };
+    this.wallThick = 0.15;
+    this.doorWidth = 0.9;
+    this.doorPos = { wall: 'bottom', offset: 0.5 };
+
+    // Pre-compute sorted placements and number map
+    this.sortedEquip = sortedPlacements(data);
+    this.equipNumMap = {};
+    this.sortedEquip.forEach((p, i) => {
+      this.equipNumMap[p.equipment_id] = i + 1;
+    });
+
+    // Track leader line endpoints to avoid overlap
+    this.leaderEndpoints = [];
+
+    this.setupCanvas();
+  }
+
+  setupCanvas() {
+    const drawW = this.bounds.width * this.pxPerMeter;
+    const drawH = this.bounds.height * this.pxPerMeter;
+    const totalW = drawW + this.margin.left + this.margin.right;
+    const totalH = drawH + this.margin.top + this.margin.bottom;
+
+    this.canvasW = totalW;
+    this.canvasH = totalH;
+
+    this.canvas.width = totalW * this.dpr;
+    this.canvas.height = totalH * this.dpr;
+    this.canvas.style.width = totalW + 'px';
+    this.canvas.style.height = totalH + 'px';
+
+    this.ctx.setTransform(this.dpr, 0, 0, this.dpr, 0, 0);
+  }
+
+  toCanvasX(xm) {
+    return this.margin.left + (xm - this.bounds.minX) * this.pxPerMeter;
+  }
+  toCanvasY(ym) {
+    return this.margin.top + (this.bounds.maxY - ym) * this.pxPerMeter;
+  }
+  mToPx(m) {
+    return m * this.pxPerMeter;
+  }
+
+  // -------------------------------------------------------
+  // DRAW ALL
+  // -------------------------------------------------------
+  draw() {
+    const ctx = this.ctx;
+    ctx.clearRect(0, 0, this.canvasW, this.canvasH);
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, this.canvasW, this.canvasH);
+
+    this.drawGrid();
+    this.drawZoneBoundaries();
+    this.drawZoneLabels();
+    this.drawWalls();
+    this.drawEquipment();
+    this.drawDimensionLines();
+    this.drawScaleBar();
+    this.drawTitleBlock();
+    this.drawEquipmentLegend();
+  }
+
+  // -------------------------------------------------------
+  // 1. GRID - subtle dot grid
+  // -------------------------------------------------------
+  drawGrid() {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.fillStyle = '#d8d8d8';
+
+    const step = 1;
+    for (let x = Math.ceil(this.bounds.minX); x <= Math.floor(this.bounds.maxX); x += step) {
+      for (let y = Math.ceil(this.bounds.minY); y <= Math.floor(this.bounds.maxY); y += step) {
+        const cx = this.toCanvasX(x);
+        const cy = this.toCanvasY(y);
+        ctx.beginPath();
+        ctx.arc(cx, cy, 1, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
+
+  // -------------------------------------------------------
+  // 2. ZONE BOUNDARIES - dashed lines only
+  // -------------------------------------------------------
+  drawZoneBoundaries() {
+    const ctx = this.ctx;
+    ctx.save();
+
+    for (const zone of this.data.zones) {
+      const poly = zone.polygon;
+      ctx.beginPath();
+      ctx.setLineDash([6, 4]);
+      ctx.strokeStyle = '#aaa';
+      ctx.lineWidth = 0.5;
+      for (let i = 0; i < poly.length; i++) {
+        const cx = this.toCanvasX(poly[i][0]);
+        const cy = this.toCanvasY(poly[i][1]);
+        if (i === 0) ctx.moveTo(cx, cy);
+        else ctx.lineTo(cx, cy);
+      }
+      ctx.closePath();
+      ctx.stroke();
+    }
+
+    ctx.setLineDash([]);
+    ctx.restore();
+  }
+
+  // -------------------------------------------------------
+  // 2b. ZONE LABELS - top-left corner with white bg
+  // -------------------------------------------------------
+  drawZoneLabels() {
+    const ctx = this.ctx;
+    ctx.save();
+
+    for (const zone of this.data.zones) {
+      const poly = zone.polygon;
+      // Find top-left corner of zone (min x, max y in data = top-left on canvas)
+      let minX = Infinity, maxY = -Infinity;
+      for (const [px, py] of poly) {
+        if (px < minX) minX = px;
+        if (py > maxY) maxY = py;
+      }
+
+      const label = ZONE_LABELS[zone.type] || zone.type;
+      const areaLabel = zone.area_sqm.toFixed(1) + 'm\u00B2';
+      const text = label + ' (' + areaLabel + ')';
+
+      const lx = this.toCanvasX(minX) + 8;
+      const ly = this.toCanvasY(maxY) + 14;
+
+      ctx.font = '11px "Malgun Gothic", sans-serif';
+      const tw = ctx.measureText(text).width;
+
+      // White background rectangle
+      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.fillRect(lx - 3, ly - 10, tw + 6, 14);
+
+      ctx.fillStyle = '#888';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, lx, ly - 3);
+    }
+
+    ctx.restore();
+  }
+
+  // -------------------------------------------------------
+  // 3. WALLS - double-line with door
+  // -------------------------------------------------------
+  drawWalls() {
+    const ctx = this.ctx;
+    ctx.save();
+
+    const b = this.bounds;
+    const wt = this.wallThick;
+
+    const ox1 = this.toCanvasX(b.minX - wt);
+    const oy1 = this.toCanvasY(b.maxY + wt);
+    const ox2 = this.toCanvasX(b.maxX + wt);
+    const oy2 = this.toCanvasY(b.minY - wt);
+
+    const ix1 = this.toCanvasX(b.minX);
+    const iy1 = this.toCanvasY(b.maxY);
+    const ix2 = this.toCanvasX(b.maxX);
+    const iy2 = this.toCanvasY(b.minY);
+
+    // Door opening on bottom wall
+    const doorStartM = b.minX + this.doorPos.offset;
+    const doorEndM = doorStartM + this.doorWidth;
+    const doorStartPx = this.toCanvasX(doorStartM);
+    const doorEndPx = this.toCanvasX(doorEndM);
+    const bottomWallInnerY = this.toCanvasY(b.minY);
+
+    ctx.fillStyle = '#000';
+
+    // TOP WALL
+    ctx.fillRect(ox1, oy1, ox2 - ox1, this.mToPx(wt));
+
+    // BOTTOM WALL - with door gap
+    ctx.fillRect(ox1, bottomWallInnerY, doorStartPx - ox1, this.mToPx(wt));
+    ctx.fillRect(doorEndPx, bottomWallInnerY, ox2 - doorEndPx, this.mToPx(wt));
+
+    // LEFT WALL
+    ctx.fillRect(ox1, oy1, this.mToPx(wt), oy2 - oy1 + this.mToPx(wt));
+
+    // RIGHT WALL
+    ctx.fillRect(ix2, oy1, this.mToPx(wt), oy2 - oy1 + this.mToPx(wt));
+
+    // Door swing arc
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 0.8;
+    ctx.setLineDash([4, 3]);
+    ctx.beginPath();
+    const hingeX = doorStartPx;
+    const hingeY = bottomWallInnerY;
+    const arcRadius = this.mToPx(this.doorWidth);
+    ctx.arc(hingeX, hingeY, arcRadius, 0, -Math.PI / 2, true);
+    ctx.stroke();
+
+    // Door leaf line (open position)
+    ctx.setLineDash([]);
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(hingeX, hingeY);
+    ctx.lineTo(hingeX, hingeY - arcRadius);
+    ctx.stroke();
+
+    // Door leaf line (closed position - along wall)
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(hingeX, hingeY);
+    ctx.lineTo(hingeX + arcRadius, hingeY);
+    ctx.stroke();
+
+    // Small filled circle at hinge
+    ctx.fillStyle = '#000';
+    ctx.beginPath();
+    ctx.arc(hingeX, hingeY, 2.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    ctx.restore();
+  }
+
+  // -------------------------------------------------------
+  // 4. EQUIPMENT - clean rectangles with adaptive labels
+  // -------------------------------------------------------
+  drawEquipment() {
+    const ctx = this.ctx;
+    ctx.save();
+
+    for (const p of this.data.placements) {
+      // Handle rotation: if rotation=90, swap width/depth for rendering
+      let rw, rh;
+      if (p.rotation === 90 || p.rotation === 270) {
+        rw = this.mToPx(p.depth);
+        rh = this.mToPx(p.width);
+      } else {
+        rw = this.mToPx(p.width);
+        rh = this.mToPx(p.depth);
+      }
+
+      const rx = this.toCanvasX(p.x);
+      const ry = this.toCanvasY(p.y) - rh; // top-left on canvas
+
+      // Equipment rectangle - clean 1px black stroke
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 1;
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(rx, ry, rw, rh);
+      ctx.strokeRect(rx, ry, rw, rh);
+
+      // Compute actual dimensions for label
+      const heightMM = getEquipmentHeight(p.equipment_id);
+      const wmm = mToMM(p.width);
+      const dmm = mToMM(p.depth);
+      const dimText = `${wmm}\u00D7${dmm}\u00D7${heightMM}`;
+      const nameText = p.equipment_name;
+      const num = this.equipNumMap[p.equipment_id];
+
+      const minDimPx = Math.min(rw, rh);
+      const centerX = rx + rw / 2;
+      const centerY = ry + rh / 2;
+
+      if (minDimPx < 25) {
+        // VERY SMALL: number badge only inside, leader line outside
+        this.drawNumberBadge(ctx, rx, ry, num);
+        this.drawLeaderLabel(ctx, rx, ry, rw, rh, num, nameText, dimText);
+      } else if (minDimPx < 45) {
+        // SMALL: name only (no dimensions), plus badge
+        this.drawNumberBadge(ctx, rx, ry, num);
+        const fontSize = 8;
+        ctx.fillStyle = '#000';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = `bold ${fontSize}px "Malgun Gothic", sans-serif`;
+        // Clip text to rectangle width
+        const maxTextW = rw - 4;
+        this.fillTextClipped(ctx, nameText, centerX, centerY, maxTextW);
+      } else {
+        // NORMAL: name + dimensions, plus badge
+        this.drawNumberBadge(ctx, rx, ry, num);
+        const fontSize = 9;
+        ctx.fillStyle = '#000';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        const maxTextW = rw - 6;
+
+        // Line 1: name (bold)
+        ctx.font = `bold ${fontSize}px "Malgun Gothic", sans-serif`;
+        this.fillTextClipped(ctx, nameText, centerX, centerY - fontSize * 0.55, maxTextW);
+
+        // Line 2: dimensions
+        ctx.font = `${fontSize - 1}px "Malgun Gothic", sans-serif`;
+        this.fillTextClipped(ctx, '(' + dimText + ')', centerX, centerY + fontSize * 0.55, maxTextW);
+      }
+    }
+
+    ctx.restore();
+  }
+
+  // Draw text clipped to maxWidth (ellipsis if too long)
+  fillTextClipped(ctx, text, x, y, maxWidth) {
+    let measured = ctx.measureText(text).width;
+    if (measured <= maxWidth) {
+      ctx.fillText(text, x, y);
+      return;
+    }
+    // Truncate with ellipsis
+    let truncated = text;
+    while (truncated.length > 1) {
+      truncated = truncated.slice(0, -1);
+      if (ctx.measureText(truncated + '..').width <= maxWidth) {
+        ctx.fillText(truncated + '..', x, y);
+        return;
+      }
+    }
+    ctx.fillText(text[0], x, y);
+  }
+
+  // Number badge: 12px diameter circle at top-left of equipment rect
+  drawNumberBadge(ctx, rx, ry, num) {
+    const badgeR = 6;
+    const bx = rx + badgeR + 1;
+    const by = ry + badgeR + 1;
+
+    ctx.save();
+    ctx.fillStyle = '#fff';
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 0.8;
+    ctx.beginPath();
+    ctx.arc(bx, by, badgeR, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.fillStyle = '#000';
+    ctx.font = 'bold 7px "Malgun Gothic", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(num.toString(), bx, by);
+    ctx.restore();
+  }
+
+  // Leader line for very small equipment
+  drawLeaderLabel(ctx, rx, ry, rw, rh, num, name, dims) {
+    const cx = rx + rw / 2;
+    const cy = ry + rh / 2;
+
+    // Determine direction to avoid overlap: try multiple angles
+    let bestLx, bestLy, bestAngle;
+    const angles = [
+      { dx: 25, dy: -20 },
+      { dx: 30, dy: -30 },
+      { dx: -30, dy: -20 },
+      { dx: 25, dy: 20 },
+      { dx: -30, dy: 20 },
+      { dx: 35, dy: -15 },
+    ];
+
+    bestLx = cx + 25;
+    bestLy = cy - 20;
+
+    // Check for overlap with existing leader endpoints
+    for (const a of angles) {
+      const tlx = cx + a.dx;
+      const tly = cy + a.dy;
+      let overlap = false;
+      for (const ep of this.leaderEndpoints) {
+        if (Math.abs(ep.x - tlx) < 50 && Math.abs(ep.y - tly) < 16) {
+          overlap = true;
+          break;
+        }
+      }
+      if (!overlap) {
+        bestLx = tlx;
+        bestLy = tly;
+        break;
+      }
+    }
+
+    this.leaderEndpoints.push({ x: bestLx, y: bestLy });
+
+    ctx.save();
+    ctx.strokeStyle = '#666';
+    ctx.lineWidth = 0.5;
+    ctx.setLineDash([2, 2]);
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.lineTo(bestLx, bestLy);
+    ctx.lineTo(bestLx + 45, bestLy);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Small dot at equipment center
+    ctx.fillStyle = '#666';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 1.5, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Label background
+    const fontSize = 7;
+    ctx.font = `bold ${fontSize}px "Malgun Gothic", sans-serif`;
+    const nameW = ctx.measureText(name).width;
+    ctx.font = `${fontSize}px "Malgun Gothic", sans-serif`;
+    const dimW = ctx.measureText('(' + dims + ')').width;
+    const labelW = Math.max(nameW, dimW) + 4;
+
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.fillRect(bestLx, bestLy - fontSize - 2, labelW, fontSize * 2 + 4);
+
+    ctx.fillStyle = '#000';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+    ctx.font = `bold ${fontSize}px "Malgun Gothic", sans-serif`;
+    ctx.fillText(name, bestLx + 2, bestLy - fontSize - 1);
+    ctx.font = `${fontSize}px "Malgun Gothic", sans-serif`;
+    ctx.fillText('(' + dims + ')', bestLx + 2, bestLy - 1);
+
+    ctx.restore();
+  }
+
+  // -------------------------------------------------------
+  // 5. DIMENSION LINES - only the most important 5-6
+  // -------------------------------------------------------
+  drawDimensionLines() {
+    const dims = this.computeDimensionLines();
+    const ctx = this.ctx;
+    ctx.save();
+
+    for (const d of dims) {
+      this.drawOneDimLine(ctx, d);
+    }
+
+    ctx.restore();
+  }
+
+  computeDimensionLines() {
+    const b = this.bounds;
+    const dims = [];
+
+    // 1. Overall kitchen width (bottom, outside wall)
+    dims.push({
+      x1: b.minX, y1: b.minY,
+      x2: b.maxX, y2: b.minY,
+      offset: -0.55,
+      direction: 'horizontal',
+      label: mToMM(b.width)
+    });
+
+    // 2. Overall kitchen height (left, outside wall)
+    dims.push({
+      x1: b.minX, y1: b.minY,
+      x2: b.minX, y2: b.maxY,
+      offset: -0.55,
+      direction: 'vertical',
+      label: mToMM(b.height)
+    });
+
+    // 3. Left-right zone split at x ~ 6.14m (bottom)
+    const storeCookX = 6.1384213141148685;
+    dims.push({
+      x1: b.minX, y1: b.minY,
+      x2: storeCookX, y2: b.minY,
+      offset: -0.35,
+      direction: 'horizontal',
+      label: mToMM(storeCookX - b.minX)
+    });
+
+    dims.push({
+      x1: storeCookX, y1: b.minY,
+      x2: b.maxX, y2: b.minY,
+      offset: -0.35,
+      direction: 'horizontal',
+      label: mToMM(b.maxX - storeCookX)
+    });
+
+    // 4. Top-bottom zone split at y ~ 4.13m (left side)
+    const zoneYBoundary = 4.1319840108409345;
+    dims.push({
+      x1: b.minX, y1: b.minY,
+      x2: b.minX, y2: zoneYBoundary,
+      offset: -0.35,
+      direction: 'vertical',
+      label: mToMM(zoneYBoundary - b.minY)
+    });
+
+    // 5. Cooking/Washing Y boundary on right side
+    const cookWashY = 5.053426070968536;
+    dims.push({
+      x1: b.maxX, y1: b.minY,
+      x2: b.maxX, y2: cookWashY,
+      offset: 0.35,
+      direction: 'vertical',
+      label: mToMM(cookWashY - b.minY)
+    });
+
+    return dims;
+  }
+
+  drawOneDimLine(ctx, d) {
+    const arrowSize = 4;
+    const extLen = 6;
+
+    if (d.direction === 'horizontal') {
+      const sx = this.toCanvasX(d.x1);
+      const ex = this.toCanvasX(d.x2);
+      const baseY = this.toCanvasY(d.y1);
+      const dimY = baseY + (-d.offset) * this.pxPerMeter;
+
+      ctx.strokeStyle = '#000';
+      ctx.fillStyle = '#000';
+      ctx.lineWidth = 0.5;
+
+      // Extension lines
+      ctx.beginPath();
+      ctx.moveTo(sx, baseY);
+      ctx.lineTo(sx, dimY + (d.offset < 0 ? extLen : -extLen));
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(ex, baseY);
+      ctx.lineTo(ex, dimY + (d.offset < 0 ? extLen : -extLen));
+      ctx.stroke();
+
+      // Main dimension line
+      ctx.lineWidth = 0.6;
+      ctx.beginPath();
+      ctx.moveTo(sx, dimY);
+      ctx.lineTo(ex, dimY);
+      ctx.stroke();
+
+      // Filled triangle arrows
+      this.drawArrowH(ctx, sx, dimY, 1, arrowSize);
+      this.drawArrowH(ctx, ex, dimY, -1, arrowSize);
+
+      // Label with white knockout
+      const midX = (sx + ex) / 2;
+      ctx.font = '9px "Malgun Gothic", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const tw = ctx.measureText(d.label.toString()).width + 8;
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(midX - tw / 2, dimY - 7, tw, 14);
+      ctx.fillStyle = '#000';
+      ctx.fillText(d.label.toString(), midX, dimY);
+
+    } else {
+      const sy = this.toCanvasY(d.y1);
+      const ey = this.toCanvasY(d.y2);
+      const baseX = this.toCanvasX(d.x1);
+      const dimX = baseX + (-d.offset) * this.pxPerMeter;
+
+      ctx.strokeStyle = '#000';
+      ctx.fillStyle = '#000';
+      ctx.lineWidth = 0.5;
+
+      // Extension lines
+      ctx.beginPath();
+      ctx.moveTo(baseX, sy);
+      ctx.lineTo(dimX + (d.offset < 0 ? -extLen : extLen), sy);
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.moveTo(baseX, ey);
+      ctx.lineTo(dimX + (d.offset < 0 ? -extLen : extLen), ey);
+      ctx.stroke();
+
+      // Main dimension line
+      ctx.lineWidth = 0.6;
+      ctx.beginPath();
+      ctx.moveTo(dimX, sy);
+      ctx.lineTo(dimX, ey);
+      ctx.stroke();
+
+      // Arrows
+      this.drawArrowV(ctx, dimX, sy, 1, arrowSize);
+      this.drawArrowV(ctx, dimX, ey, -1, arrowSize);
+
+      // Label (rotated)
+      const midY = (sy + ey) / 2;
+      ctx.save();
+      ctx.translate(dimX, midY);
+      ctx.rotate(-Math.PI / 2);
+      ctx.font = '9px "Malgun Gothic", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      const tw = ctx.measureText(d.label.toString()).width + 8;
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(-tw / 2, -7, tw, 14);
+      ctx.fillStyle = '#000';
+      ctx.fillText(d.label.toString(), 0, 0);
+      ctx.restore();
+    }
+  }
+
+  drawArrowH(ctx, x, y, dir, size) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x - dir * size, y - size / 2);
+    ctx.lineTo(x - dir * size, y + size / 2);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  drawArrowV(ctx, x, y, dir, size) {
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.lineTo(x - size / 2, y - dir * size);
+    ctx.lineTo(x + size / 2, y - dir * size);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  // -------------------------------------------------------
+  // 6. SCALE BAR - alternating black/white segments
+  // -------------------------------------------------------
+  drawScaleBar() {
+    const ctx = this.ctx;
+    ctx.save();
+
+    const barX = this.margin.left;
+    const barY = this.canvasH - this.margin.bottom + 30;
+    const segmentCount = 4;
+    const segLenM = 1;
+    const segLenPx = this.mToPx(segLenM);
+    const barH = 5;
+
+    ctx.strokeStyle = '#000';
+    ctx.fillStyle = '#000';
+    ctx.lineWidth = 1;
+
+    // Outer border
+    ctx.strokeRect(barX, barY, segmentCount * segLenPx, barH);
+
+    for (let i = 0; i < segmentCount; i++) {
+      const sx = barX + i * segLenPx;
+      if (i % 2 === 0) {
+        ctx.fillStyle = '#000';
+        ctx.fillRect(sx, barY, segLenPx, barH);
+      }
+    }
+
+    // Tick labels
+    ctx.fillStyle = '#000';
+    ctx.font = '9px "Malgun Gothic", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    for (let i = 0; i <= segmentCount; i++) {
+      ctx.fillText(i + 'm', barX + i * segLenPx, barY + barH + 3);
+    }
+
+    // Scale ratio
+    ctx.font = 'bold 10px "Malgun Gothic", sans-serif';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('SCALE 1:' + this.scaleDenom, barX + (segmentCount + 0.3) * segLenPx, barY + barH / 2);
+
+    ctx.restore();
+  }
+
+  // -------------------------------------------------------
+  // 7. TITLE BLOCK - professional 4-column grid
+  // -------------------------------------------------------
+  drawTitleBlock() {
+    const ctx = this.ctx;
+    ctx.save();
+
+    const tbW = this.canvasW - this.margin.left - this.margin.right;
+    const tbH = 80;
+    const tbX = this.margin.left;
+    const tbY = this.canvasH - tbH - 12;
+
+    // Outer border (thick)
+    ctx.strokeStyle = '#000';
+    ctx.lineWidth = 2;
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(tbX, tbY, tbW, tbH);
+    ctx.strokeRect(tbX, tbY, tbW, tbH);
+
+    // 4-column layout
+    const col1W = tbW * 0.14;  // Labels column
+    const col2W = tbW * 0.36;  // Values column
+    const col3W = tbW * 0.14;  // Labels column
+    const col4W = tbW * 0.36;  // Values column
+
+    const col1X = tbX;
+    const col2X = tbX + col1W;
+    const col3X = col2X + col2W;
+    const col4X = col3X + col3W;
+
+    // 4 rows
+    const rowH = tbH / 4;
+
+    ctx.lineWidth = 0.8;
+
+    // Horizontal dividers
+    for (let r = 1; r < 4; r++) {
+      ctx.beginPath();
+      ctx.moveTo(tbX, tbY + r * rowH);
+      ctx.lineTo(tbX + tbW, tbY + r * rowH);
+      ctx.stroke();
+    }
+
+    // Vertical dividers
+    [col2X, col3X, col4X].forEach(vx => {
+      ctx.beginPath();
+      ctx.moveTo(vx, tbY);
+      ctx.lineTo(vx, tbY + tbH);
+      ctx.stroke();
+    });
+
+    // Text content
+    const headFont = '8px "Malgun Gothic", sans-serif';
+    const valueFont = 'bold 10px "Malgun Gothic", sans-serif';
+    const pad = 5;
+
+    function drawCell(col, row, text, isHeader) {
+      let cx, cy;
+      if (col === 0) cx = col1X + pad;
+      else if (col === 1) cx = col2X + pad;
+      else if (col === 2) cx = col3X + pad;
+      else cx = col4X + pad;
+      cy = tbY + row * rowH + rowH / 2;
+
+      ctx.font = isHeader ? headFont : valueFont;
+      ctx.fillStyle = isHeader ? '#666' : '#000';
+      ctx.textAlign = 'left';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, cx, cy);
+    }
+
+    // Row 0
+    drawCell(0, 0, 'PROJECT', true);
+    drawCell(1, 0, '\uD55C\uC2DD 50\uC11D \uC8FC\uBC29 \uBC30\uCE58', false);
+    drawCell(2, 0, 'DRAWN BY', true);
+    drawCell(3, 0, 'AI Auto-Layout', false);
+
+    // Row 1
+    drawCell(0, 1, 'DRAWING', true);
+    drawCell(1, 1, '\uC8FC\uBC29 \uBC30\uCE58\uB3C4\uBA74 (Floor Plan)', false);
+    drawCell(2, 1, 'SCALE', true);
+    drawCell(3, 1, '1:' + this.scaleDenom, false);
+
+    // Row 2
+    drawCell(0, 2, 'COMPANY', true);
+    drawCell(1, 2, '\uBD80\uC131\uD2F0\uCF00\uC774 | \uC5C5\uC18C\uC6A9 \uC8FC\uBC29\uC124\uBE44 \uC804\uBB38', false);
+    drawCell(2, 2, 'DATE', true);
+    drawCell(3, 2, '2026-02-07', false);
+
+    // Row 3
+    drawCell(0, 3, 'AREA', true);
+    drawCell(1, 3, this.data.total_area_sqm + 'm\u00B2 (' + this.data.input_summary.seat_count + '\uC11D)', false);
+    drawCell(2, 3, 'SHEET', true);
+    drawCell(3, 3, '1 / 1', false);
+
+    // Score in rightmost cell of row 3 - small overlay
+    const score = this.data.scores.overall;
+    ctx.font = '8px "Malgun Gothic", sans-serif';
+    ctx.fillStyle = '#888';
+    ctx.textAlign = 'right';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Score: ' + score + '/100', tbX + tbW - pad, tbY + 3 * rowH + rowH / 2);
+
+    ctx.restore();
+  }
+
+  // -------------------------------------------------------
+  // 8. EQUIPMENT LEGEND - numbered list below scale bar
+  // -------------------------------------------------------
+  drawEquipmentLegend() {
+    const ctx = this.ctx;
+    ctx.save();
+
+    const startX = this.margin.left;
+    const startY = this.canvasH - this.margin.bottom + 52;
+    const colWidth = 195;
+    const lineH = 11;
+    const maxCols = 5;
+    const maxRows = Math.ceil(this.sortedEquip.length / maxCols);
+
+    ctx.font = '8px "Malgun Gothic", sans-serif';
+    ctx.fillStyle = '#444';
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'top';
+
+    // Header
+    ctx.font = 'bold 9px "Malgun Gothic", sans-serif';
+    ctx.fillStyle = '#000';
+    ctx.fillText('\uC7A5\uBE44 \uBAA9\uB85D (Equipment List)', startX, startY);
+
+    ctx.font = '8px "Malgun Gothic", sans-serif';
+    ctx.fillStyle = '#333';
+
+    for (let i = 0; i < this.sortedEquip.length; i++) {
+      const p = this.sortedEquip[i];
+      const num = i + 1;
+      const col = Math.floor(i / maxRows);
+      const row = i % maxRows;
+      const x = startX + col * colWidth;
+      const y = startY + 14 + row * lineH;
+
+      const heightMM = getEquipmentHeight(p.equipment_id);
+      const wmm = mToMM(p.width);
+      const dmm = mToMM(p.depth);
+      const text = `${num}. ${p.equipment_name} (${wmm}\u00D7${dmm}\u00D7${heightMM})`;
+      ctx.fillText(text, x, y);
+    }
+
+    ctx.restore();
+  }
+}
+
+// ============================================================
+// INITIALIZATION
+// ============================================================
+
+let renderer;
+
+function render(scaleDenom) {
+  const canvas = document.getElementById('cad-canvas');
+  renderer = new CADRenderer(canvas, DATA, scaleDenom || 50);
+  renderer.draw();
+}
+
+// Scale selector
+document.getElementById('scaleSelect').addEventListener('change', function () {
+  render(parseInt(this.value));
+});
+
+// PNG download
+document.getElementById('btnDownload').addEventListener('click', function () {
+  const canvas = document.getElementById('cad-canvas');
+  const link = document.createElement('a');
+  link.download = 'kitchen_floorplan_2d.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+});
+
+// Print
+document.getElementById('btnPrint').addEventListener('click', function () {
+  window.print();
+});
+
+// Initial render
+render(50);
+</script>
+</body>
+</html>

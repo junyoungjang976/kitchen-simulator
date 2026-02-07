@@ -15,6 +15,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         width=1.19, depth=0.35, height=0.56,
         clearance_front=0.3,
         requires_wall=True,
+        workflow_order=1,
     ),
     EquipmentSpec(
         id="overhead_shelf",
@@ -24,6 +25,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         width=1.31, depth=0.37, height=0.77,
         clearance_front=0.3,
         requires_wall=True,
+        workflow_order=1,
     ),
     EquipmentSpec(
         id="multi_tier_shelf",
@@ -33,6 +35,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         width=1.17, depth=0.60, height=1.78,
         clearance_front=0.6,
         requires_wall=True,
+        workflow_order=1,
     ),
     EquipmentSpec(
         id="back_shelf",
@@ -42,6 +45,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         width=1.24, depth=0.35, height=0.56,
         clearance_front=0.3,
         requires_wall=True,
+        workflow_order=1,
     ),
     # ── 냉장류 (CAD 신규 8종) ──
     EquipmentSpec(
@@ -51,6 +55,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         category=EquipmentCategory.STORAGE,
         width=1.37, depth=0.70, height=0.85,
         clearance_front=0.6,
+        workflow_order=2,
     ),
     EquipmentSpec(
         id="batt_table_refrigerator",
@@ -59,6 +64,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         category=EquipmentCategory.STORAGE,
         width=1.23, depth=0.68, height=0.85,
         clearance_front=0.6,
+        workflow_order=2,
     ),
     EquipmentSpec(
         id="table_freezer",
@@ -67,6 +73,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         category=EquipmentCategory.STORAGE,
         width=1.20, depth=0.70, height=0.85,
         clearance_front=0.6,
+        workflow_order=2,
     ),
     EquipmentSpec(
         id="box45_refrigerator_freezer",
@@ -76,6 +83,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         width=1.26, depth=0.80, height=1.89,
         clearance_front=0.9,
         requires_wall=True,
+        workflow_order=3,
     ),
     EquipmentSpec(
         id="box45_refrigerator",
@@ -85,6 +93,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         width=1.26, depth=0.80, height=1.90,
         clearance_front=0.9,
         requires_wall=True,
+        workflow_order=3,
     ),
     EquipmentSpec(
         id="beverage_showcase",
@@ -94,6 +103,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         width=0.65, depth=0.61, height=1.84,
         clearance_front=0.6,
         requires_wall=True,
+        workflow_order=4,
     ),
     EquipmentSpec(
         id="broth_refrigerator",
@@ -102,6 +112,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         category=EquipmentCategory.STORAGE,
         width=0.68, depth=0.51, height=0.93,
         clearance_front=0.6,
+        workflow_order=4,
     ),
     EquipmentSpec(
         id="ice_maker",
@@ -112,6 +123,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         clearance_front=0.6,
         requires_water=True,
         requires_drain=True,
+        workflow_order=4,
     ),
     # ── 기존 유지 (크기 보정 포함) ──
     EquipmentSpec(
@@ -122,6 +134,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         width=0.66, depth=0.76, height=2.0,
         clearance_front=0.9,
         requires_wall=True,
+        workflow_order=3,
     ),
     EquipmentSpec(
         id="reach_in_refrigerator_2door",
@@ -131,6 +144,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         width=1.32, depth=0.76, height=2.0,
         clearance_front=0.9,
         requires_wall=True,
+        workflow_order=3,
     ),
     EquipmentSpec(
         id="reach_in_freezer_1door",
@@ -140,6 +154,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         width=0.66, depth=0.76, height=2.0,
         clearance_front=0.9,
         requires_wall=True,
+        workflow_order=3,
     ),
     EquipmentSpec(
         id="dry_storage_shelf",
@@ -149,6 +164,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         width=1.2, depth=0.45, height=1.8,
         clearance_front=0.6,
         requires_wall=True,
+        workflow_order=1,
     ),
     EquipmentSpec(
         id="undercounter_refrigerator",
@@ -157,6 +173,7 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
         category=EquipmentCategory.STORAGE,
         width=0.7, depth=0.61, height=0.86,
         clearance_front=0.6,
+        workflow_order=2,
     ),
 ]
 
@@ -171,6 +188,7 @@ PREPARATION_EQUIPMENT: List[EquipmentSpec] = [
         category=EquipmentCategory.PREPARATION,
         width=0.9, depth=0.6, height=0.86,
         clearance_front=0.9,
+        workflow_order=1,
     ),
     EquipmentSpec(
         id="work_table_medium",
@@ -179,6 +197,7 @@ PREPARATION_EQUIPMENT: List[EquipmentSpec] = [
         category=EquipmentCategory.PREPARATION,
         width=1.01, depth=0.65, height=0.86,  # CAD 평균
         clearance_front=0.9,
+        workflow_order=1,
     ),
     EquipmentSpec(
         id="prep_sink",
@@ -189,6 +208,7 @@ PREPARATION_EQUIPMENT: List[EquipmentSpec] = [
         clearance_front=0.9,
         requires_water=True,
         requires_drain=True,
+        workflow_order=2,
     ),
     EquipmentSpec(
         id="food_processor_station",
@@ -197,6 +217,7 @@ PREPARATION_EQUIPMENT: List[EquipmentSpec] = [
         category=EquipmentCategory.PREPARATION,
         width=0.6, depth=0.5, height=0.86,
         clearance_front=0.6,
+        workflow_order=3,
     ),
 ]
 
@@ -212,6 +233,7 @@ COOKING_EQUIPMENT: List[EquipmentSpec] = [
         width=1.24, depth=0.61, height=0.91,  # CAD 평균
         clearance_front=0.91, clearance_sides=0.46,
         requires_ventilation=True,
+        workflow_order=2,
     ),
     EquipmentSpec(
         id="gas_range_4burner",
@@ -221,6 +243,7 @@ COOKING_EQUIPMENT: List[EquipmentSpec] = [
         width=0.6, depth=0.7, height=0.91,
         clearance_front=0.91, clearance_sides=0.46,
         requires_ventilation=True,
+        workflow_order=2,
     ),
     EquipmentSpec(
         id="deep_fryer_single",
@@ -230,6 +253,7 @@ COOKING_EQUIPMENT: List[EquipmentSpec] = [
         width=0.4, depth=0.76, height=1.1,
         clearance_front=0.91,
         requires_ventilation=True,
+        workflow_order=3,
     ),
     EquipmentSpec(
         id="deep_fryer_double",
@@ -239,6 +263,7 @@ COOKING_EQUIPMENT: List[EquipmentSpec] = [
         width=0.8, depth=0.76, height=1.1,
         clearance_front=0.91,
         requires_ventilation=True,
+        workflow_order=3,
     ),
     EquipmentSpec(
         id="convection_oven",
@@ -248,6 +273,7 @@ COOKING_EQUIPMENT: List[EquipmentSpec] = [
         width=0.9, depth=0.76, height=1.5,
         clearance_front=1.2,
         requires_ventilation=True,
+        workflow_order=4,
     ),
     EquipmentSpec(
         id="griddle",
@@ -257,6 +283,7 @@ COOKING_EQUIPMENT: List[EquipmentSpec] = [
         width=0.9, depth=0.6, height=0.91,
         clearance_front=0.91,
         requires_ventilation=True,
+        workflow_order=1,
     ),
     EquipmentSpec(
         id="salamander",
@@ -267,6 +294,7 @@ COOKING_EQUIPMENT: List[EquipmentSpec] = [
         clearance_front=0.6,
         requires_ventilation=True,
         requires_wall=True,
+        workflow_order=5,
     ),
 ]
 
@@ -284,6 +312,7 @@ WASHING_EQUIPMENT: List[EquipmentSpec] = [
         clearance_front=0.9,
         requires_water=True,
         requires_drain=True,
+        workflow_order=2,
     ),
     EquipmentSpec(
         id="dishwasher_pre_sink",
@@ -294,6 +323,7 @@ WASHING_EQUIPMENT: List[EquipmentSpec] = [
         clearance_front=0.9,
         requires_water=True,
         requires_drain=True,
+        workflow_order=2,
     ),
     EquipmentSpec(
         id="dish_drying_rack",
@@ -302,6 +332,7 @@ WASHING_EQUIPMENT: List[EquipmentSpec] = [
         category=EquipmentCategory.WASHING,
         width=0.77, depth=0.70, height=0.85,
         clearance_front=0.6,
+        workflow_order=4,
     ),
     EquipmentSpec(
         id="scrap_table",
@@ -310,6 +341,7 @@ WASHING_EQUIPMENT: List[EquipmentSpec] = [
         category=EquipmentCategory.WASHING,
         width=0.68, depth=0.69, height=0.85,
         clearance_front=0.6,
+        workflow_order=1,
     ),
     # ── 기존 (크기 보정) ──
     EquipmentSpec(
@@ -321,6 +353,7 @@ WASHING_EQUIPMENT: List[EquipmentSpec] = [
         clearance_front=0.9,
         requires_water=True,
         requires_drain=True,
+        workflow_order=2,
     ),
     EquipmentSpec(
         id="dishwasher_undercounter",
@@ -331,6 +364,7 @@ WASHING_EQUIPMENT: List[EquipmentSpec] = [
         clearance_front=0.9,
         requires_water=True,
         requires_drain=True,
+        workflow_order=3,
     ),
     EquipmentSpec(
         id="dishwasher_door_type",
@@ -341,6 +375,7 @@ WASHING_EQUIPMENT: List[EquipmentSpec] = [
         clearance_front=1.2,
         requires_water=True,
         requires_drain=True,
+        workflow_order=3,
     ),
     EquipmentSpec(
         id="drying_rack",
@@ -350,6 +385,7 @@ WASHING_EQUIPMENT: List[EquipmentSpec] = [
         width=1.0, depth=0.5, height=1.7,
         clearance_front=0.6,
         requires_wall=True,
+        workflow_order=4,
     ),
     EquipmentSpec(
         id="hand_wash_sink",
@@ -361,6 +397,7 @@ WASHING_EQUIPMENT: List[EquipmentSpec] = [
         requires_water=True,
         requires_drain=True,
         requires_wall=True,
+        workflow_order=5,
     ),
 ]
 

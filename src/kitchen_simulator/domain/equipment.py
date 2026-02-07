@@ -25,6 +25,7 @@ class EquipmentSpec:
     requires_ventilation: bool = False
     requires_water: bool = False
     requires_drain: bool = False
+    workflow_order: int = 0  # 구역 내 작업 순서 (1=첫 공정, 숫자 클수록 후공정)
 
 @dataclass
 class EquipmentPlacement:
