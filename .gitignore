@@ -23,11 +23,16 @@ dist/
 .coverage
 htmlcov/
 
-# Results (keep examples)
-result.json
-result2.json
+# Results (keep examples/)
+result*.json
 simulations/
 *.png
+
+# Analysis / temp
+analyze_equipment.py
+equipment_analysis.json
+gap_analysis.md
+nul
 
 # OS
 .DS_Store
