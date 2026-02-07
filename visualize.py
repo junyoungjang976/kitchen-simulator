@@ -192,8 +192,7 @@ def draw_layout(data, ax, title=None):
             "num": idx,
             "name": equip_name,
             "zone": ZONE_NAMES.get(zone_type, zone_type),
-            "size": f"{placement.get('width', w):.2f}×{placement.get('depth', h):.2f}",
-            "pos": f"({x:.1f}, {y:.1f})",
+            "size": f"{placement.get('width', w)*1000:.0f}×{placement.get('depth', h)*1000:.0f}",
             "zone_type": zone_type,
         })
 
@@ -225,7 +224,7 @@ def _draw_equipment_table(equipment_list, title_text, output_path):
         grouped[zt].append(eq)
 
     # 테이블 데이터 구성
-    col_labels = ["No.", "설비명", "구역", "크기(m)", "위치(x,y)"]
+    col_labels = ["No.", "설비명", "구역", "크기(mm)"]
     table_data = []
     cell_colors = []
 
@@ -239,13 +238,12 @@ def _draw_equipment_table(equipment_list, title_text, output_path):
                 eq["name"],
                 eq["zone"],
                 eq["size"],
-                eq["pos"],
             ])
-            cell_colors.append([zone_color] * 5)
+            cell_colors.append([zone_color] * 4)
 
     n_rows = len(table_data)
     fig_height = max(3, 1.0 + n_rows * 0.35)
-    fig, ax = plt.subplots(figsize=(10, fig_height))
+    fig, ax = plt.subplots(figsize=(8, fig_height))
     ax.axis('off')
     ax.set_title(title_text, fontsize=11, fontweight='bold', pad=12)
 
@@ -253,7 +251,7 @@ def _draw_equipment_table(equipment_list, title_text, output_path):
         cellText=table_data,
         colLabels=col_labels,
         cellColours=cell_colors,
-        colColours=["#E0E0E0"] * 5,
+        colColours=["#E0E0E0"] * 4,
         cellLoc='center',
         loc='center',
     )
@@ -266,7 +264,7 @@ def _draw_equipment_table(equipment_list, title_text, output_path):
         table[0, j].set_text_props(fontweight='bold', fontsize=9)
 
     # 열 너비 조정
-    col_widths = [0.06, 0.30, 0.10, 0.16, 0.16]
+    col_widths = [0.08, 0.38, 0.14, 0.20]
     for j, w in enumerate(col_widths):
         for i in range(n_rows + 1):
             table[i, j].set_width(w)
