@@ -1,9 +1,119 @@
-"""장비 카탈로그 - 식당 주방 표준 장비 규격"""
+"""장비 카탈로그 - 한국 CAD DB 기반 표준 장비 규격 (396건, 1,416종 분석)"""
 from typing import Dict, List
 from ..domain.equipment import EquipmentSpec, EquipmentCategory
 
-# 저장 구역 장비
+# ═══════════════════════════════════════════════════════════════
+# 저장 구역 장비 (17종: 선반 4 + 냉장 8 + 기존 5)
+# ═══════════════════════════════════════════════════════════════
 STORAGE_EQUIPMENT: List[EquipmentSpec] = [
+    # ── 선반류 (CAD 신규 4종) ──
+    EquipmentSpec(
+        id="wall_shelf",
+        name="Wall Shelf",
+        name_ko="벽선반",
+        category=EquipmentCategory.STORAGE,
+        width=1.19, depth=0.35, height=0.56,
+        clearance_front=0.3,
+        requires_wall=True,
+    ),
+    EquipmentSpec(
+        id="overhead_shelf",
+        name="Overhead Shelf",
+        name_ko="상부선반",
+        category=EquipmentCategory.STORAGE,
+        width=1.31, depth=0.37, height=0.77,
+        clearance_front=0.3,
+        requires_wall=True,
+    ),
+    EquipmentSpec(
+        id="multi_tier_shelf",
+        name="Multi-tier Shelf",
+        name_ko="다단식선반",
+        category=EquipmentCategory.STORAGE,
+        width=1.17, depth=0.60, height=1.78,
+        clearance_front=0.6,
+        requires_wall=True,
+    ),
+    EquipmentSpec(
+        id="back_shelf",
+        name="Back Shelf",
+        name_ko="백선반",
+        category=EquipmentCategory.STORAGE,
+        width=1.24, depth=0.35, height=0.56,
+        clearance_front=0.3,
+        requires_wall=True,
+    ),
+    # ── 냉장류 (CAD 신규 8종) ──
+    EquipmentSpec(
+        id="table_refrigerator",
+        name="Table Refrigerator",
+        name_ko="테이블냉장고",
+        category=EquipmentCategory.STORAGE,
+        width=1.37, depth=0.70, height=0.85,
+        clearance_front=0.6,
+    ),
+    EquipmentSpec(
+        id="batt_table_refrigerator",
+        name="Batt Table Refrigerator",
+        name_ko="밧드테이블냉장고",
+        category=EquipmentCategory.STORAGE,
+        width=1.23, depth=0.68, height=0.85,
+        clearance_front=0.6,
+    ),
+    EquipmentSpec(
+        id="table_freezer",
+        name="Table Freezer",
+        name_ko="테이블냉동고",
+        category=EquipmentCategory.STORAGE,
+        width=1.20, depth=0.70, height=0.85,
+        clearance_front=0.6,
+    ),
+    EquipmentSpec(
+        id="box45_refrigerator_freezer",
+        name="45-Box Refrigerator-Freezer",
+        name_ko="45BOX냉동냉장고",
+        category=EquipmentCategory.STORAGE,
+        width=1.26, depth=0.80, height=1.89,
+        clearance_front=0.9,
+        requires_wall=True,
+    ),
+    EquipmentSpec(
+        id="box45_refrigerator",
+        name="45-Box Refrigerator",
+        name_ko="45BOX올냉장고",
+        category=EquipmentCategory.STORAGE,
+        width=1.26, depth=0.80, height=1.90,
+        clearance_front=0.9,
+        requires_wall=True,
+    ),
+    EquipmentSpec(
+        id="beverage_showcase",
+        name="Beverage Showcase",
+        name_ko="음료쇼케이스",
+        category=EquipmentCategory.STORAGE,
+        width=0.65, depth=0.61, height=1.84,
+        clearance_front=0.6,
+        requires_wall=True,
+    ),
+    EquipmentSpec(
+        id="broth_refrigerator",
+        name="Broth Refrigerator",
+        name_ko="육수냉장고",
+        category=EquipmentCategory.STORAGE,
+        width=0.68, depth=0.51, height=0.93,
+        clearance_front=0.6,
+    ),
+    EquipmentSpec(
+        id="ice_maker",
+        name="Ice Maker",
+        name_ko="제빙기",
+        category=EquipmentCategory.STORAGE,
+        width=0.59, depth=0.61, height=0.96,
+        clearance_front=0.6,
+        requires_water=True,
+        requires_drain=True,
+    ),
+    # ── 기존 유지 (크기 보정 포함) ──
     EquipmentSpec(
         id="reach_in_refrigerator_1door",
         name="Reach-in Refrigerator (1-door)",
@@ -50,7 +160,9 @@ STORAGE_EQUIPMENT: List[EquipmentSpec] = [
     ),
 ]
 
-# 전처리/준비 구역 장비
+# ═══════════════════════════════════════════════════════════════
+# 전처리/준비 구역 장비 (4종 - work_table_large 제거, 통합)
+# ═══════════════════════════════════════════════════════════════
 PREPARATION_EQUIPMENT: List[EquipmentSpec] = [
     EquipmentSpec(
         id="work_table_small",
@@ -62,18 +174,10 @@ PREPARATION_EQUIPMENT: List[EquipmentSpec] = [
     ),
     EquipmentSpec(
         id="work_table_medium",
-        name="Work Table (medium)",
-        name_ko="작업대 중형",
+        name="Work Table",
+        name_ko="작업대",
         category=EquipmentCategory.PREPARATION,
-        width=1.5, depth=0.75, height=0.86,
-        clearance_front=0.9,
-    ),
-    EquipmentSpec(
-        id="work_table_large",
-        name="Work Table (large)",
-        name_ko="작업대 대형",
-        category=EquipmentCategory.PREPARATION,
-        width=2.0, depth=0.75, height=0.86,
+        width=1.01, depth=0.65, height=0.86,  # CAD 평균
         clearance_front=0.9,
     ),
     EquipmentSpec(
@@ -96,23 +200,25 @@ PREPARATION_EQUIPMENT: List[EquipmentSpec] = [
     ),
 ]
 
-# 조리 구역 장비
+# ═══════════════════════════════════════════════════════════════
+# 조리 구역 장비 (7종 - gas_range_6burner → gas_range_3burner)
+# ═══════════════════════════════════════════════════════════════
 COOKING_EQUIPMENT: List[EquipmentSpec] = [
+    EquipmentSpec(
+        id="gas_range_3burner",
+        name="Gas Range (3-burner)",
+        name_ko="가스3구렌지",
+        category=EquipmentCategory.COOKING,
+        width=1.24, depth=0.61, height=0.91,  # CAD 평균
+        clearance_front=0.91, clearance_sides=0.46,
+        requires_ventilation=True,
+    ),
     EquipmentSpec(
         id="gas_range_4burner",
         name="Gas Range (4-burner)",
         name_ko="가스레인지 4구",
         category=EquipmentCategory.COOKING,
         width=0.6, depth=0.7, height=0.91,
-        clearance_front=0.91, clearance_sides=0.46,
-        requires_ventilation=True,
-    ),
-    EquipmentSpec(
-        id="gas_range_6burner",
-        name="Gas Range (6-burner)",
-        name_ko="가스레인지 6구",
-        category=EquipmentCategory.COOKING,
-        width=0.91, depth=0.7, height=0.91,
         clearance_front=0.91, clearance_sides=0.46,
         requires_ventilation=True,
     ),
@@ -164,14 +270,54 @@ COOKING_EQUIPMENT: List[EquipmentSpec] = [
     ),
 ]
 
-# 세척 구역 장비
+# ═══════════════════════════════════════════════════════════════
+# 세척 구역 장비 (9종: 신규 4종 + 기존 5종, 크기 보정)
+# ═══════════════════════════════════════════════════════════════
 WASHING_EQUIPMENT: List[EquipmentSpec] = [
+    # ── 신규 세정대류 (CAD 4종) ──
     EquipmentSpec(
-        id="three_compartment_sink",
-        name="3-Compartment Sink",
-        name_ko="3조 싱크대",
+        id="one_comp_sink",
+        name="1-Compartment Sink",
+        name_ko="1조세정대",
         category=EquipmentCategory.WASHING,
-        width=1.8, depth=0.6, height=1.1,
+        width=0.76, depth=0.64, height=0.85,
+        clearance_front=0.9,
+        requires_water=True,
+        requires_drain=True,
+    ),
+    EquipmentSpec(
+        id="dishwasher_pre_sink",
+        name="Dishwasher Pre-rinse Sink",
+        name_ko="1조세척기세정대",
+        category=EquipmentCategory.WASHING,
+        width=1.17, depth=0.70, height=0.85,
+        clearance_front=0.9,
+        requires_water=True,
+        requires_drain=True,
+    ),
+    EquipmentSpec(
+        id="dish_drying_rack",
+        name="Dish Drying Rack",
+        name_ko="식기건조대",
+        category=EquipmentCategory.WASHING,
+        width=0.77, depth=0.70, height=0.85,
+        clearance_front=0.6,
+    ),
+    EquipmentSpec(
+        id="scrap_table",
+        name="Scrap Table",
+        name_ko="잔반처리대",
+        category=EquipmentCategory.WASHING,
+        width=0.68, depth=0.69, height=0.85,
+        clearance_front=0.6,
+    ),
+    # ── 기존 (크기 보정) ──
+    EquipmentSpec(
+        id="two_comp_sink",
+        name="2-Compartment Sink",
+        name_ko="2조세정대",
+        category=EquipmentCategory.WASHING,
+        width=1.40, depth=0.68, height=1.1,  # CAD 평균 (기존 three_compartment_sink 대체)
         clearance_front=0.9,
         requires_water=True,
         requires_drain=True,
@@ -179,9 +325,9 @@ WASHING_EQUIPMENT: List[EquipmentSpec] = [
     EquipmentSpec(
         id="dishwasher_undercounter",
         name="Undercounter Dishwasher",
-        name_ko="언더카운터 식기세척기",
+        name_ko="식기세척기",
         category=EquipmentCategory.WASHING,
-        width=0.6, depth=0.6, height=0.86,
+        width=0.89, depth=0.68, height=0.86,  # CAD 평균 (도어형)
         clearance_front=0.9,
         requires_water=True,
         requires_drain=True,
@@ -208,7 +354,7 @@ WASHING_EQUIPMENT: List[EquipmentSpec] = [
     EquipmentSpec(
         id="hand_wash_sink",
         name="Hand Wash Sink",
-        name_ko="손 세척 싱크",
+        name_ko="손세정대",
         category=EquipmentCategory.WASHING,
         width=0.4, depth=0.35, height=0.86,
         clearance_front=0.6,
@@ -226,181 +372,224 @@ EQUIPMENT_CATALOG: Dict[str, EquipmentSpec] = {
     for eq in eq_list
 }
 
-# 식당 유형별 기본 장비 세트
+# ═══════════════════════════════════════════════════════════════
+# 식당 유형별 기본 장비 세트 (CAD top_10_by_business_type 기반)
+# ═══════════════════════════════════════════════════════════════
 DEFAULT_EQUIPMENT_SETS = {
-    "fast_food": [
-        "reach_in_refrigerator_2door",
-        "reach_in_freezer_1door",
+    "korean": [
+        # CAD 한식 상위 18종
+        "work_table_medium",        # 2단작업대 → 작업대
+        "wall_shelf",               # 벽선반
+        "overhead_shelf",           # 상부선반
+        "one_comp_sink",            # 1조세정대
+        "table_refrigerator",       # 테이블냉장고
+        "multi_tier_shelf",         # 다단식선반
+        "dishwasher_undercounter",  # 식기세척기
+        "back_shelf",               # 백선반
+        "batt_table_refrigerator",  # 밧드테이블냉장고
+        "work_table_medium",        # 작업대 (2번째)
+        "gas_range_3burner",        # 가스3구렌지
+        "box45_refrigerator_freezer",  # 45BOX냉동냉장고
+        "broth_refrigerator",       # 육수냉장고
+        "dish_drying_rack",         # 식기건조대
+        "two_comp_sink",            # 2조세정대
+        "scrap_table",              # 잔반처리대
+        "hand_wash_sink",           # 손세정대
+        "box45_refrigerator",       # 45BOX올냉장고
+    ],
+    "chinese": [
         "work_table_medium",
+        "wall_shelf",
+        "overhead_shelf",
+        "one_comp_sink",
+        "table_refrigerator",
+        "gas_range_3burner",
+        "gas_range_4burner",
+        "deep_fryer_double",
+        "multi_tier_shelf",
+        "dishwasher_undercounter",
+        "box45_refrigerator_freezer",
+        "hand_wash_sink",
+        "back_shelf",
+        "two_comp_sink",
+    ],
+    "japanese": [
+        "work_table_medium",
+        "wall_shelf",
+        "overhead_shelf",
+        "one_comp_sink",
+        "table_refrigerator",
+        "reach_in_refrigerator_1door",
+        "reach_in_freezer_1door",
+        "multi_tier_shelf",
+        "gas_range_4burner",
+        "deep_fryer_single",
+        "dishwasher_undercounter",
+        "hand_wash_sink",
+        "back_shelf",
+        "two_comp_sink",
+    ],
+    "western": [
+        "work_table_medium",
+        "wall_shelf",
+        "overhead_shelf",
+        "one_comp_sink",
+        "table_refrigerator",
+        "gas_range_3burner",
+        "convection_oven",
+        "deep_fryer_single",
+        "griddle",
+        "multi_tier_shelf",
+        "dishwasher_undercounter",
+        "hand_wash_sink",
+        "back_shelf",
+        "two_comp_sink",
+        "box45_refrigerator_freezer",
+    ],
+    "cafe": [
+        "work_table_medium",
+        "wall_shelf",
+        "overhead_shelf",
+        "one_comp_sink",
+        "table_refrigerator",
+        "beverage_showcase",
+        "ice_maker",
+        "undercounter_refrigerator",
+        "multi_tier_shelf",
+        "hand_wash_sink",
+        "two_comp_sink",
+    ],
+    "fast_food": [
+        "work_table_medium",
+        "wall_shelf",
+        "table_refrigerator",
         "gas_range_4burner",
         "deep_fryer_double",
         "griddle",
-        "three_compartment_sink",
+        "one_comp_sink",
         "hand_wash_sink",
+        "multi_tier_shelf",
+        "box45_refrigerator_freezer",
+        "overhead_shelf",
     ],
     "casual": [
-        "reach_in_refrigerator_2door",
-        "reach_in_freezer_1door",
-        "dry_storage_shelf",
-        "work_table_large",
-        "prep_sink",
-        "gas_range_6burner",
+        "work_table_medium",
+        "wall_shelf",
+        "overhead_shelf",
+        "one_comp_sink",
+        "table_refrigerator",
+        "gas_range_3burner",
         "deep_fryer_single",
         "convection_oven",
-        "three_compartment_sink",
+        "multi_tier_shelf",
         "dishwasher_undercounter",
         "hand_wash_sink",
+        "back_shelf",
+        "two_comp_sink",
+        "box45_refrigerator_freezer",
     ],
     "fine_dining": [
-        "reach_in_refrigerator_2door",
+        "work_table_medium",
+        "work_table_medium",
+        "wall_shelf",
+        "overhead_shelf",
+        "one_comp_sink",
+        "table_refrigerator",
         "reach_in_refrigerator_2door",
         "reach_in_freezer_1door",
-        "dry_storage_shelf",
-        "dry_storage_shelf",
-        "work_table_large",
-        "work_table_large",
-        "prep_sink",
-        "food_processor_station",
-        "gas_range_6burner",
+        "gas_range_3burner",
         "gas_range_4burner",
         "convection_oven",
         "salamander",
-        "three_compartment_sink",
+        "multi_tier_shelf",
         "dishwasher_door_type",
-        "drying_rack",
+        "dish_drying_rack",
         "hand_wash_sink",
+        "two_comp_sink",
+        "back_shelf",
     ],
     "cafeteria": [
-        "reach_in_refrigerator_2door",
-        "reach_in_refrigerator_2door",
-        "reach_in_freezer_1door",
-        "dry_storage_shelf",
-        "dry_storage_shelf",
-        "work_table_large",
-        "work_table_large",
         "work_table_medium",
-        "prep_sink",
-        "gas_range_6burner",
+        "work_table_medium",
+        "wall_shelf",
+        "overhead_shelf",
+        "one_comp_sink",
+        "table_refrigerator",
+        "batt_table_refrigerator",
+        "box45_refrigerator_freezer",
+        "gas_range_3burner",
         "deep_fryer_double",
         "convection_oven",
         "griddle",
-        "three_compartment_sink",
+        "multi_tier_shelf",
         "dishwasher_door_type",
-        "drying_rack",
+        "dish_drying_rack",
+        "scrap_table",
         "hand_wash_sink",
-        "hand_wash_sink",
+        "two_comp_sink",
+        "back_shelf",
     ],
     "ghost_kitchen": [
-        "reach_in_refrigerator_2door",
-        "reach_in_freezer_1door",
         "work_table_medium",
-        "gas_range_6burner",
+        "wall_shelf",
+        "table_refrigerator",
+        "box45_refrigerator_freezer",
+        "gas_range_3burner",
         "deep_fryer_single",
         "convection_oven",
-        "three_compartment_sink",
+        "one_comp_sink",
         "hand_wash_sink",
-    ],
-    "korean": [
-        "reach_in_refrigerator_2door",
-        "reach_in_freezer_1door",
-        "dry_storage_shelf",
-        "work_table_large",
-        "prep_sink",
-        "gas_range_6burner",
-        "deep_fryer_single",
-        "griddle",
-        "three_compartment_sink",
-        "hand_wash_sink",
-    ],
-    "cafe": [
-        "reach_in_refrigerator_1door",
-        "undercounter_refrigerator",
-        "work_table_small",
-        "work_table_medium",
-        "prep_sink",
-        "convection_oven",
-        "three_compartment_sink",
-        "hand_wash_sink",
-    ],
-    "western": [
-        "reach_in_refrigerator_2door",
-        "reach_in_freezer_1door",
-        "dry_storage_shelf",
-        "work_table_large",
-        "prep_sink",
-        "gas_range_6burner",
-        "deep_fryer_single",
-        "convection_oven",
-        "griddle",
-        "three_compartment_sink",
-        "dishwasher_undercounter",
-        "hand_wash_sink",
-    ],
-    "chinese": [
-        "reach_in_refrigerator_2door",
-        "reach_in_freezer_1door",
-        "work_table_large",
-        "work_table_medium",
-        "prep_sink",
-        "gas_range_6burner",
-        "gas_range_4burner",
-        "deep_fryer_double",
-        "three_compartment_sink",
-        "hand_wash_sink",
-    ],
-    "japanese": [
-        "reach_in_refrigerator_2door",
-        "reach_in_refrigerator_1door",
-        "reach_in_freezer_1door",
-        "work_table_large",
-        "work_table_medium",
-        "prep_sink",
-        "gas_range_4burner",
-        "deep_fryer_single",
-        "three_compartment_sink",
-        "dishwasher_undercounter",
-        "hand_wash_sink",
+        "overhead_shelf",
     ],
     "franchise": [
-        "reach_in_refrigerator_2door",
-        "reach_in_freezer_1door",
         "work_table_medium",
+        "wall_shelf",
+        "table_refrigerator",
         "gas_range_4burner",
         "deep_fryer_double",
         "griddle",
         "convection_oven",
-        "three_compartment_sink",
+        "one_comp_sink",
         "hand_wash_sink",
+        "multi_tier_shelf",
+        "box45_refrigerator_freezer",
+        "overhead_shelf",
     ],
     "snack_bar": [
-        "reach_in_refrigerator_1door",
-        "reach_in_freezer_1door",
         "work_table_small",
+        "wall_shelf",
+        "table_refrigerator",
         "gas_range_4burner",
         "deep_fryer_single",
         "griddle",
-        "three_compartment_sink",
+        "one_comp_sink",
         "hand_wash_sink",
+        "overhead_shelf",
     ],
     "bakery": [
+        "work_table_medium",
+        "work_table_medium",
+        "wall_shelf",
+        "overhead_shelf",
+        "table_refrigerator",
         "reach_in_refrigerator_1door",
         "dry_storage_shelf",
         "dry_storage_shelf",
-        "work_table_large",
-        "work_table_medium",
         "convection_oven",
         "convection_oven",
-        "three_compartment_sink",
+        "one_comp_sink",
         "hand_wash_sink",
+        "multi_tier_shelf",
     ],
     "other": [
-        "reach_in_refrigerator_2door",
-        "reach_in_freezer_1door",
         "work_table_medium",
-        "prep_sink",
+        "wall_shelf",
+        "table_refrigerator",
+        "one_comp_sink",
         "gas_range_4burner",
-        "three_compartment_sink",
         "hand_wash_sink",
+        "overhead_shelf",
+        "multi_tier_shelf",
     ],
 }
 
@@ -430,21 +619,32 @@ _PATTERN_CAT_TO_ENUM = {
 # 카테고리별 기본 장비 선택 우선순위
 _CATEGORY_DEFAULTS = {
     EquipmentCategory.STORAGE: [
+        "table_refrigerator",
+        "box45_refrigerator_freezer",
+        "wall_shelf",
+        "overhead_shelf",
+        "multi_tier_shelf",
+        "back_shelf",
+        "batt_table_refrigerator",
+        "box45_refrigerator",
+        "beverage_showcase",
+        "broth_refrigerator",
+        "ice_maker",
         "reach_in_refrigerator_2door",
         "reach_in_freezer_1door",
         "dry_storage_shelf",
         "reach_in_refrigerator_1door",
         "undercounter_refrigerator",
+        "table_freezer",
     ],
     EquipmentCategory.PREPARATION: [
-        "work_table_large",
         "work_table_medium",
-        "prep_sink",
         "work_table_small",
+        "prep_sink",
         "food_processor_station",
     ],
     EquipmentCategory.COOKING: [
-        "gas_range_6burner",
+        "gas_range_3burner",
         "gas_range_4burner",
         "deep_fryer_single",
         "convection_oven",
@@ -453,9 +653,13 @@ _CATEGORY_DEFAULTS = {
         "salamander",
     ],
     EquipmentCategory.WASHING: [
-        "three_compartment_sink",
+        "one_comp_sink",
+        "two_comp_sink",
         "hand_wash_sink",
         "dishwasher_undercounter",
+        "dishwasher_pre_sink",
+        "dish_drying_rack",
+        "scrap_table",
         "drying_rack",
         "dishwasher_door_type",
     ],

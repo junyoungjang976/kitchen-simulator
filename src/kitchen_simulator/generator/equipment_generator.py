@@ -8,9 +8,43 @@ from ..patterns.provider import PatternProvider
 from ..data.equipment_catalog import EQUIPMENT_CATALOG, EquipmentCategory
 
 # 한국어 장비명 → 카탈로그 ID 매핑 (패턴 데이터의 장비를 카탈로그에 연결)
-# 패턴 데이터의 한국어 장비명을 카탈로그의 표준 장비로 매핑
+# CAD DB 1,416종 분석 기반 ~120+ 매핑
 PATTERN_TO_CATALOG = {
-    # 냉장/냉동
+    # ═══ 선반류 ═══
+    "벽선반": "wall_shelf",
+    "벽 선반": "wall_shelf",
+    "상부선반": "overhead_shelf",
+    "상부 선반": "overhead_shelf",
+    "다단식선반": "multi_tier_shelf",
+    "다단식 선반": "multi_tier_shelf",
+    "다단선반": "multi_tier_shelf",
+    "백선반": "back_shelf",
+    "역까치선반": "back_shelf",
+    "선반": "dry_storage_shelf",
+
+    # ═══ 냉장/냉동 ═══
+    "테이블냉장고": "table_refrigerator",
+    "테이블 냉장고": "table_refrigerator",
+    "냉장 테이블": "table_refrigerator",
+    "냉장테이블": "table_refrigerator",
+    "밧드테이블냉장고": "batt_table_refrigerator",
+    "밧드 테이블냉장고": "batt_table_refrigerator",
+    "밧드냉장고": "batt_table_refrigerator",
+    "테이블냉동고": "table_freezer",
+    "테이블 냉동고": "table_freezer",
+    "45BOX냉동냉장고": "box45_refrigerator_freezer",
+    "45box냉동냉장고": "box45_refrigerator_freezer",
+    "45박스냉동냉장고": "box45_refrigerator_freezer",
+    "45BOX올냉장고": "box45_refrigerator",
+    "45box올냉장고": "box45_refrigerator",
+    "45박스올냉장고": "box45_refrigerator",
+    "음료쇼케이스": "beverage_showcase",
+    "음료냉장고": "beverage_showcase",
+    "음료 냉장고": "beverage_showcase",
+    "쇼케이스": "beverage_showcase",
+    "육수냉장고": "broth_refrigerator",
+    "육수 냉장고": "broth_refrigerator",
+    "제빙기": "ice_maker",
     "업소용냉장고": "reach_in_refrigerator_2door",
     "업소용 냉장고": "reach_in_refrigerator_2door",
     "냉장고": "reach_in_refrigerator_2door",
@@ -18,38 +52,60 @@ PATTERN_TO_CATALOG = {
     "1도어냉장고": "reach_in_refrigerator_1door",
     "냉동고": "reach_in_freezer_1door",
     "업소용냉동고": "reach_in_freezer_1door",
-    "테이블냉장고": "undercounter_refrigerator",
-    "테이블냉동고": "undercounter_refrigerator",
     "언더카운터냉장고": "undercounter_refrigerator",
     "김치냉장고": "reach_in_refrigerator_1door",
 
-    # 작업대/전처리
+    # ═══ 작업대/전처리 ═══
     "작업대": "work_table_medium",
     "2단작업대": "work_table_medium",
-    "3단작업대": "work_table_large",
-    "작업대(대)": "work_table_large",
+    "2단 작업대": "work_table_medium",
+    "3단작업대": "work_table_medium",
+    "작업대(대)": "work_table_medium",
     "작업대(소)": "work_table_small",
     "전처리대": "work_table_medium",
     "준비대": "work_table_medium",
-    "선반": "dry_storage_shelf",
-    "벽선반": "dry_storage_shelf",
-    "상부선반": "dry_storage_shelf",
+    "조리대": "work_table_medium",
 
-    # 싱크대
-    "싱크대": "three_compartment_sink",
-    "3조싱크대": "three_compartment_sink",
-    "2조싱크대": "three_compartment_sink",
-    "1조싱크대": "prep_sink",
+    # ═══ 세정대류 ═══
+    "1조세정대": "one_comp_sink",
+    "1조 세정대": "one_comp_sink",
+    "1조세척기세정대": "dishwasher_pre_sink",
+    "2조세척기세정대": "dishwasher_pre_sink",
+    "세척기세정대": "dishwasher_pre_sink",
+    "2조세정대": "two_comp_sink",
+    "2조 세정대": "two_comp_sink",
+    "3조세정대": "two_comp_sink",
+    "식기건조대": "dish_drying_rack",
+    "식기 건조대": "dish_drying_rack",
+    "잔반처리대": "scrap_table",
+    "잔반 처리대": "scrap_table",
+    "잔반대": "scrap_table",
+
+    # ═══ 싱크대 (레거시 호환) ═══
+    "싱크대": "two_comp_sink",
+    "3조싱크대": "two_comp_sink",
+    "2조싱크대": "two_comp_sink",
+    "1조싱크대": "one_comp_sink",
     "전처리싱크": "prep_sink",
     "손세정대": "hand_wash_sink",
+    "손 세정대": "hand_wash_sink",
     "손세척싱크": "hand_wash_sink",
     "핸드워시": "hand_wash_sink",
 
-    # 조리 장비
-    "가스레인지": "gas_range_6burner",
-    "가스렌지": "gas_range_6burner",
+    # ═══ 조리 장비 ═══
+    "가스3구렌지": "gas_range_3burner",
+    "가스3구레인지": "gas_range_3burner",
+    "가스 3구렌지": "gas_range_3burner",
+    "가스5구렌지": "gas_range_3burner",
+    "가스5구레인지": "gas_range_3burner",
+    "가스렌지": "gas_range_3burner",
+    "가스레인지": "gas_range_3burner",
+    "가스1구낮은렌지": "gas_range_4burner",
+    "가스1구렌지": "gas_range_4burner",
     "4구가스레인지": "gas_range_4burner",
-    "6구가스레인지": "gas_range_6burner",
+    "6구가스레인지": "gas_range_3burner",
+    "가스그리들": "griddle",
+    "가스튀김기": "deep_fryer_single",
     "튀김기": "deep_fryer_single",
     "더블튀김기": "deep_fryer_double",
     "오븐": "convection_oven",
@@ -58,23 +114,24 @@ PATTERN_TO_CATALOG = {
     "철판": "griddle",
     "샐러맨더": "salamander",
 
-    # 세척
+    # ═══ 세척 장비 ═══
     "식기세척기": "dishwasher_undercounter",
     "도어식기세척기": "dishwasher_door_type",
+    "도어형식기세척기": "dishwasher_door_type",
     "건조대": "drying_rack",
     "건조선반": "drying_rack",
 
-    # 푸드프로세서
+    # ═══ 기타 ═══
     "식품가공기": "food_processor_station",
     "푸드프로세서": "food_processor_station",
 }
 
 # 카테고리별 기본 필수 장비 (최소 세트)
 CATEGORY_ESSENTIALS = {
-    "storage": ["reach_in_refrigerator_2door", "reach_in_freezer_1door"],
+    "storage": ["table_refrigerator", "box45_refrigerator_freezer", "wall_shelf"],
     "preparation": ["work_table_medium"],
-    "cooking": ["gas_range_4burner"],
-    "washing": ["three_compartment_sink", "hand_wash_sink"],
+    "cooking": ["gas_range_3burner"],
+    "washing": ["one_comp_sink", "hand_wash_sink"],
 }
 
 
@@ -262,12 +319,12 @@ class EquipmentGenerator:
 
         # 3. 카테고리 기반 기본 매핑
         CATEGORY_DEFAULTS = {
-            "cooking": "gas_range_4burner",
+            "cooking": "gas_range_3burner",
             "prep": "work_table_medium",
             "preparation": "work_table_medium",
-            "refrigeration": "reach_in_refrigerator_1door",
-            "storage": "dry_storage_shelf",
-            "dishwashing": "three_compartment_sink",
-            "washing": "three_compartment_sink",
+            "refrigeration": "table_refrigerator",
+            "storage": "wall_shelf",
+            "dishwashing": "one_comp_sink",
+            "washing": "one_comp_sink",
         }
         return CATEGORY_DEFAULTS.get(category)

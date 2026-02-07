@@ -41,31 +41,59 @@ ZONE_NAMES = {
     "washing": "세척",
 }
 
-# 장비 카탈로그 (크기 정보)
-EQUIPMENT_SIZES = {
-    "reach_in_refrigerator_2door": (1.32, 0.76),
-    "reach_in_refrigerator_1door": (0.66, 0.76),
-    "reach_in_freezer_1door": (0.66, 0.76),
-    "dry_storage_shelf": (1.2, 0.45),
-    "undercounter_refrigerator": (0.7, 0.61),
-    "work_table_small": (0.9, 0.6),
-    "work_table_medium": (1.5, 0.75),
-    "work_table_large": (2.0, 0.75),
-    "prep_sink": (0.6, 0.55),
-    "food_processor_station": (0.6, 0.5),
-    "gas_range_4burner": (0.6, 0.7),
-    "gas_range_6burner": (0.91, 0.7),
-    "deep_fryer_single": (0.4, 0.76),
-    "deep_fryer_double": (0.8, 0.76),
-    "convection_oven": (0.9, 0.76),
-    "griddle": (0.9, 0.6),
-    "salamander": (0.6, 0.5),
-    "three_compartment_sink": (1.8, 0.6),
-    "dishwasher_undercounter": (0.6, 0.6),
-    "dishwasher_door_type": (0.65, 0.75),
-    "drying_rack": (1.0, 0.5),
-    "hand_wash_sink": (0.4, 0.35),
-}
+# 장비 카탈로그 (크기 정보) - 카탈로그에서 자동 import, 실패 시 fallback
+try:
+    from src.kitchen_simulator.data.equipment_catalog import EQUIPMENT_CATALOG
+    EQUIPMENT_SIZES = {
+        eq_id: (eq.width, eq.depth)
+        for eq_id, eq in EQUIPMENT_CATALOG.items()
+    }
+except ImportError:
+    # fallback: 카탈로그 import 실패 시 하드코딩
+    EQUIPMENT_SIZES = {
+        # 선반류
+        "wall_shelf": (1.19, 0.35),
+        "overhead_shelf": (1.31, 0.37),
+        "multi_tier_shelf": (1.17, 0.60),
+        "back_shelf": (1.24, 0.35),
+        # 냉장류
+        "table_refrigerator": (1.37, 0.70),
+        "batt_table_refrigerator": (1.23, 0.68),
+        "table_freezer": (1.20, 0.70),
+        "box45_refrigerator_freezer": (1.26, 0.80),
+        "box45_refrigerator": (1.26, 0.80),
+        "beverage_showcase": (0.65, 0.61),
+        "broth_refrigerator": (0.68, 0.51),
+        "ice_maker": (0.59, 0.61),
+        "reach_in_refrigerator_2door": (1.32, 0.76),
+        "reach_in_refrigerator_1door": (0.66, 0.76),
+        "reach_in_freezer_1door": (0.66, 0.76),
+        "dry_storage_shelf": (1.2, 0.45),
+        "undercounter_refrigerator": (0.7, 0.61),
+        # 작업대
+        "work_table_small": (0.9, 0.6),
+        "work_table_medium": (1.01, 0.65),
+        "prep_sink": (0.6, 0.55),
+        "food_processor_station": (0.6, 0.5),
+        # 조리
+        "gas_range_3burner": (1.24, 0.61),
+        "gas_range_4burner": (0.6, 0.7),
+        "deep_fryer_single": (0.4, 0.76),
+        "deep_fryer_double": (0.8, 0.76),
+        "convection_oven": (0.9, 0.76),
+        "griddle": (0.9, 0.6),
+        "salamander": (0.6, 0.5),
+        # 세척
+        "one_comp_sink": (0.76, 0.64),
+        "dishwasher_pre_sink": (1.17, 0.70),
+        "dish_drying_rack": (0.77, 0.70),
+        "scrap_table": (0.68, 0.69),
+        "two_comp_sink": (1.40, 0.68),
+        "dishwasher_undercounter": (0.89, 0.68),
+        "dishwasher_door_type": (0.65, 0.75),
+        "drying_rack": (1.0, 0.5),
+        "hand_wash_sink": (0.4, 0.35),
+    }
 
 def get_equipment_size(equipment_id):
     """장비 ID에서 크기 추출"""
@@ -74,7 +102,7 @@ def get_equipment_size(equipment_id):
     return EQUIPMENT_SIZES.get(base_id, (0.5, 0.5))
 
 def draw_layout(data, ax, title=None):
-    """단일 레이아웃 그리기"""
+    """단일 레이아웃 그리기 (번호 표기)"""
 
     # 전체 주방 경계 계산
     all_x = []
@@ -85,7 +113,7 @@ def draw_layout(data, ax, title=None):
             all_y.append(y)
 
     if not all_x:
-        return
+        return []
 
     min_x, max_x = min(all_x), max(all_x)
     min_y, max_y = min(all_y), max(all_y)
@@ -118,32 +146,56 @@ def draw_layout(data, ax, title=None):
         zone_name = ZONE_NAMES.get(zone_type, zone_type)
         ax.text(cx, cy, f"{zone_name}\n{zone.get('area_sqm', 0):.1f}㎡",
                 ha='center', va='center', fontsize=9, fontweight='bold',
-                color=ZONE_EDGE_COLORS.get(zone_type, "#333333"))
+                color=ZONE_EDGE_COLORS.get(zone_type, "#333333"), alpha=0.5)
 
-    # 2. 장비 그리기
-    for placement in data.get("placements", []):
+    # 2. 장비를 구역 순서대로 정렬 후 번호 부여
+    zone_order = ["storage", "preparation", "cooking", "washing"]
+    placements = data.get("placements", [])
+    sorted_placements = sorted(placements, key=lambda p: (
+        zone_order.index(p.get("zone", "")) if p.get("zone", "") in zone_order else 99,
+        p.get("x", 0), p.get("y", 0)
+    ))
+
+    equipment_list = []
+    for idx, placement in enumerate(sorted_placements, 1):
         x = placement["x"]
         y = placement["y"]
         rotation = placement.get("rotation", 0)
+        equip_name = placement.get("equipment_name", placement["equipment_id"])
+        zone_type = placement.get("zone", "")
 
         # 장비 크기
         w, h = get_equipment_size(placement["equipment_id"])
         if rotation == 90 or rotation == 270:
             w, h = h, w
 
+        # 구역 색상으로 장비 채우기
+        zone_color = ZONE_EDGE_COLORS.get(zone_type, "#666666")
+
         # 장비 사각형
         rect = Rectangle((x, y), w, h,
                          linewidth=1.5,
-                         edgecolor='#333333',
+                         edgecolor=zone_color,
                          facecolor='white',
-                         linestyle='-')
+                         linestyle='-',
+                         zorder=3)
         ax.add_patch(rect)
 
-        # 장비 라벨 (간략히)
-        equip_name = placement["equipment_id"].rsplit("_", 1)[0]
-        short_name = equip_name.replace("_", "\n")[:15]
-        ax.text(x + w/2, y + h/2, "",
-                ha='center', va='center', fontsize=5, color='#666666')
+        # 번호 표기 (장비 중앙)
+        fontsize = 7 if min(w, h) >= 0.5 else 5.5
+        ax.text(x + w/2, y + h/2, str(idx),
+                ha='center', va='center', fontsize=fontsize,
+                color=zone_color, fontweight='bold', zorder=4)
+
+        # 리스트용 데이터 수집
+        equipment_list.append({
+            "num": idx,
+            "name": equip_name,
+            "zone": ZONE_NAMES.get(zone_type, zone_type),
+            "size": f"{placement.get('width', w):.2f}×{placement.get('depth', h):.2f}",
+            "pos": f"({x:.1f}, {y:.1f})",
+            "zone_type": zone_type,
+        })
 
     # 3. 그리드 및 축
     ax.set_aspect('equal')
@@ -153,30 +205,111 @@ def draw_layout(data, ax, title=None):
 
     # 제목
     if title:
-        ax.set_title(title, fontsize=10, fontweight='bold')
-    elif "simulation_name" in data:
-        input_info = data.get("input", {})
-        score = data.get("scores", {}).get("overall", 0)
-        ax.set_title(f"{data['simulation_name']}\n{input_info.get('area_sqm', 0):.0f}㎡ | {input_info.get('restaurant_type', '')} | {score:.0f}점",
-                    fontsize=9)
+        ax.set_title(title, fontsize=11, fontweight='bold', pad=10)
+
+    return equipment_list
+
 
 def visualize_single(json_path, output_path=None):
-    """단일 시뮬레이션 시각화"""
+    """단일 시뮬레이션 시각화 (도면 + 설비 리스트)"""
     with open(json_path, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    fig, ax = plt.subplots(figsize=(10, 8))
-    draw_layout(data, ax)
+    # 점수 정보
+    scores = data.get("scores", {})
+    overall = scores.get("overall", 0)
+    input_info = data.get("input_summary", {})
+    r_type = input_info.get("restaurant_type", "")
+    seats = input_info.get("seat_count", 0)
+    area = data.get("total_area_sqm", 0)
 
-    plt.tight_layout()
+    # 설비 개수에 따라 레이아웃 비율 조정
+    n_equip = len(data.get("placements", []))
+    list_rows = (n_equip + 1) // 2  # 2열 기준 행 수
+    fig_height = max(10, 8 + list_rows * 0.28)
 
-    if output_path:
-        plt.savefig(output_path, dpi=150, bbox_inches='tight', facecolor='white')
-        print(f"저장됨: {output_path}")
-    else:
-        plt.show()
+    fig = plt.figure(figsize=(12, fig_height))
 
+    # 상단: 도면 (70%), 하단: 설비 리스트 (30%)
+    gs = fig.add_gridspec(2, 1, height_ratios=[7, 3], hspace=0.25)
+
+    # --- 도면 ---
+    ax_layout = fig.add_subplot(gs[0])
+    title = f"주방 레이아웃 도면  |  {r_type} {seats}석  |  {area:.0f}㎡  |  종합 {overall:.0f}점"
+    equipment_list = draw_layout(data, ax_layout, title=title)
+
+    # --- 점수 바 ---
+    score_text = (
+        f"동선 {scores.get('workflow_efficiency', 0)*100:.0f}%  |  "
+        f"공간 {scores.get('space_utilization', 0)*100:.0f}%  |  "
+        f"안전 {scores.get('safety_compliance', 0)*100:.0f}%  |  "
+        f"접근 {scores.get('accessibility', 0)*100:.0f}%"
+    )
+    ax_layout.text(0.5, -0.06, score_text,
+                   ha='center', va='top', fontsize=8, color='#666666',
+                   transform=ax_layout.transAxes)
+
+    # --- 설비 리스트 ---
+    ax_list = fig.add_subplot(gs[1])
+    ax_list.axis('off')
+
+    if equipment_list:
+        # 구역별로 그룹핑
+        zone_order = ["storage", "preparation", "cooking", "washing"]
+        grouped = {}
+        for eq in equipment_list:
+            zt = eq["zone_type"]
+            if zt not in grouped:
+                grouped[zt] = []
+            grouped[zt].append(eq)
+
+        # 테이블 데이터 구성
+        col_labels = ["No.", "설비명", "구역", "크기(m)", "위치(x,y)"]
+        table_data = []
+        cell_colors = []
+
+        for zt in zone_order:
+            if zt not in grouped:
+                continue
+            zone_color = ZONE_COLORS.get(zt, "#FFFFFF")
+            for eq in grouped[zt]:
+                table_data.append([
+                    str(eq["num"]),
+                    eq["name"],
+                    eq["zone"],
+                    eq["size"],
+                    eq["pos"],
+                ])
+                cell_colors.append([zone_color] * 5)
+
+        table = ax_list.table(
+            cellText=table_data,
+            colLabels=col_labels,
+            cellColours=cell_colors,
+            colColours=["#E0E0E0"] * 5,
+            cellLoc='center',
+            loc='center',
+        )
+        table.auto_set_font_size(False)
+        table.set_fontsize(7.5)
+        table.scale(1.0, 1.3)
+
+        # 헤더 스타일
+        for j in range(len(col_labels)):
+            table[0, j].set_text_props(fontweight='bold', fontsize=8)
+
+        # 열 너비 조정
+        col_widths = [0.06, 0.28, 0.10, 0.16, 0.16]
+        for j, w in enumerate(col_widths):
+            for i in range(len(table_data) + 1):
+                table[i, j].set_width(w)
+
+        # 제목은 테이블 헤더로 대체 (겹침 방지)
+
+    plt.savefig(output_path or "layout.png", dpi=150, bbox_inches='tight', facecolor='white')
+    print(f"저장됨: {output_path or 'layout.png'}")
     plt.close()
+
 
 def visualize_grid(json_dir, output_path=None, cols=4):
     """여러 시뮬레이션 그리드 시각화"""
