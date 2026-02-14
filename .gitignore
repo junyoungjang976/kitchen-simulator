@@ -8,11 +8,6 @@ __pycache__/
 venv/
 ENV/
 
-# IDE
-.idea/
-.vscode/
-*.swp
-
 # Build
 build/
 dist/
@@ -23,17 +18,20 @@ dist/
 .coverage
 htmlcov/
 
-# Results (keep examples/)
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Results
 result*.json
 simulations/
 *.png
 
-# Analysis / temp
-analyze_equipment.py
-equipment_analysis.json
-gap_analysis.md
-nul
-
 # OS
 .DS_Store
 Thumbs.db
+nul
+
+# Claude / OMC
+.omc/
