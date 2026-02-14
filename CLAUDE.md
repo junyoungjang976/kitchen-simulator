@@ -1,153 +1,91 @@
-# CLAUDE.md - 부성티케이 프로젝트 운영 규칙
+# busungtk-kitchen-simulator - 주방 시뮬레이터
 
-## 회사/개발 컨텍스트
-- **회사**: 부성티케이
-  - **업종**: 업소용 주방설비 전문 기업 (설치 · 유지보수 · 판매)
-  - **고객층**: 식당, 호텔, 급식소, 병원, 학교 등 업소/시설 대상 (B2B, 가정용 제외)
-  - **영업 지역**: 서울/수도권 중심, 일정 규모 이상 프로젝트는 전국 대응
-- **개발자**: junyoungjang976
-- **GitHub**: https://github.com/junyoungjang976
-- **활동 대시보드**: https://junyoungjang976.github.io/work-history/
+업소용 주방 레이아웃 자동 생성 알고리즘 (CLI)
 
-## 프로젝트 생태계 (12개 시스템)
-| 프로젝트 | 역할 | 기술 스택 | 배포 |
-|----------|------|-----------|------|
-| busungtk-asms | A/S 관리 시스템 | React + Vite + Supabase | Vercel |
-| order-tracker | 발주 추적 | React + Vite + Supabase + Google APIs | Vercel |
-| field-check | 현장 진단 | React + Vite + Supabase + Kakao Maps | Vercel |
-| sales-pipeline | 영업 파이프라인 | React + Vite + Supabase + Vitest | Vercel |
-| equipment-manager | 장비 관리 | React + Vite + Supabase + Chart.js | Vercel |
-| hvac-mentor | HVAC 기술 가이드 | React + Vite + Supabase + Gemini AI | Vercel |
-| as-diagnosis-tool | A/S 진단 도구 | Next.js 16 + Prisma + LibSQL | Vercel |
-| kitchen-simulator | 주방 레이아웃 | Python + Typer + Shapely | CLI |
-| portal | 통합 포털 | Static HTML | Vercel |
-| purchase-data | 매입 데이터 뷰어 | Python 스크립트 | 로컬 |
-| busungtk-docs | 프로젝트 문서 | Markdown | GitHub |
-| work-history | 활동 대시보드 | Static HTML + Chart.js | GitHub Pages |
+## 기술 스택
+- **Language**: Python 3.11+
+- **CLI**: Typer
+- **Geometry**: Shapely
+- **Validation**: Pydantic
+- **Test**: pytest
 
-## 공통 기술 스택
-- **Frontend**: React 18-19, TypeScript, Tailwind CSS
-- **Backend**: Supabase (PostgreSQL) - 대부분 프로젝트가 동일 인스턴스 공유
-- **Build**: Vite / Next.js
-- **Deploy**: Vercel / GitHub Pages
-- **Export**: ExcelJS, jsPDF, XLSX (엑셀/PDF 내보내기)
-- **Charts**: Chart.js, Recharts
+## 프로젝트 구조
+src/kitchen_simulator/
+├── domain/        # 도메인 모델
+├── engine/        # 배치 엔진
+├── evaluation/    # 평가 시스템
+├── generator/     # 레이아웃 생성기
+├── geometry/      # 기하학 연산
+├── patterns/      # 배치 패턴
+├── schemas/       # 스키마
+└── data/          # 데이터
 
-## DB 공유 관계
-- order-tracker와 field-check는 **동일 Supabase 프로젝트**를 공유
-- 대부분의 Supabase 프로젝트가 동일 인스턴스 사용
-- 하나의 스키마 변경이 여러 프로젝트에 영향을 줄 수 있음
+## 주요 기능
+- 주방 레이아웃 자동 생성 알고리즘
+- 4-zone 파티셔닝 기반 설비 배치
+- 공간 분석 (Shapely)
+- 레이아웃 평가 및 점수화
+
+## 명령어
+- `pip install -e .` - 개발 설치
+- `pip install -e ".[dev]"` - dev 의존성 포함 설치
+- `pytest` - 테스트 실행
+
+## 배포
+- 로컬 CLI (웹 배포 없음)
 
 ---
 
-## 최우선 원칙
-1. 기존 기능/데이터를 깨뜨릴 가능성이 있으면 **즉시 중단하고 보고**한다.
-2. 보안/권한/RLS/시크릿 관련 작업은 **승인 없이 진행하지 않는다**.
-3. 한 번에 크게 바꾸지 않는다. (**작게, 자주, 검증하며**)
-4. 결정 권한은 항상 사용자에게 있으며, Claude는 실행 담당이다.
+## 부성티케이 프로젝트 생태계
 
----
+| 레포 | 역할 | 스택 | 배포 |
+|------|------|------|------|
+| busungtk-equipment | 장비관리 포털 | React 19 + Vite + Supabase | Vercel |
+| busungtk-asms | A/S 관리 시스템 | React 19 + Vite + Supabase | Vercel |
+| busungtk-as-diagnosis | 설비 A/S 진단 도구 | Next.js 16 + Prisma + LibSQL | Vercel |
+| busungtk-hub | 통합 운영 플랫폼 | Next.js 16 + Supabase SSR | Vercel |
+| busungtk-portal | 업무 포털 | Static HTML | Vercel |
+| busungtk-landing | B2B 랜딩페이지 | Static HTML | Vercel |
+| busungtk-work-history | 작업 히스토리 | Static HTML + Chart.js | GitHub Pages |
+| busungtk-daily-report | 일일 보고 | Next.js 16 + Supabase | Vercel |
+| busungtk-order-tracker | 주문 추적 | React 19 + Vite + Google APIs | Vercel |
+| busungtk-marketing | 마케팅 | Next.js 16 + Recharts | Vercel |
+| busungtk-sales-crm | CRM | React 19 + Vite + Supabase | Vercel |
+| busungtk-sales-pipeline | 영업 파이프라인 | React 19 + Vite + Vitest | Vercel |
+| busungtk-field-check | 현장 점검 | React 19 + Vite + Kakao Maps + PWA | Vercel |
+| busungtk-kitchen-planner | 주방 설계 | React 19 + Vite + Konva | Vercel |
+| busungtk-kitchen-simulator | 주방 시뮬레이터 | Python + Typer + Shapely | CLI |
+| busungtk-purchase-data | 매입 데이터 | Python 스크립트 | 로컬 |
+| busungtk-hvac-mentor | HVAC 멘토 | React 19 + Vite + Gemini AI | Vercel |
+| busungtk-ai-ideation | AI 아이디에이션 | Documentation | GitHub |
+| busungtk-ai-trends | AI 트렌드 | Next.js 14 + OpenAI | Vercel |
 
-## 수정 가능 / 금지 영역
+## 공통 운영 규칙
 
-### 수정 가능
-- src/, app/, pages/, components/, lib/, utils/
+### 최우선 원칙
+1. 기존 기능/데이터를 깨뜨릴 가능성이 있으면 **즉시 중단하고 보고**
+2. 보안/권한/RLS/시크릿 관련 작업은 **승인 없이 진행하지 않음**
+3. 한 번에 크게 바꾸지 않음 (**작게, 자주, 검증하며**)
+4. 결정 권한은 항상 사용자에게 있으며 Claude는 실행 담당
 
-### 절대 수정 금지 (승인 없이)
-- .env, .env.* (API 키, DB 키 포함)
-- Supabase RLS 정책(Policy)
+### 수정 금지 영역 (승인 필수)
+- `.env`, `.env.*` (API 키, DB 키)
+- Supabase RLS 정책
 - DB 스키마 변경 (테이블/컬럼/인덱스/트리거)
-- 마이그레이션 파일 (Supabase, Prisma 모두)
-- Edge Functions / Triggers
-- auth 관련 핵심 흐름 (로그인/세션/권한)
-- AI 프롬프트 핵심 로직 (hvac-mentor 등)
-- GitHub Actions 워크플로우
-- 이메일 발송 설정
+- 마이그레이션 파일
+- auth 관련 핵심 흐름
 
-위 항목이 필요하면 **"변경 제안서"를 작성하고 승인을 기다린다**.
-
----
-
-## 작업 규칙
-
-### 작업 단위
-- 한 작업 = 하나의 목적
-- 수정 파일은 **최대 3개** 원칙
-- DB/RLS 작업은 코드 작업과 **반드시 분리**
+### 작업 규칙
+- 한 작업 = 하나의 목적, 수정 파일 최대 3개
+- DB/RLS 작업은 코드 작업과 분리
 - "겸사겸사 개선" 금지
+- 작업 후 변경 사항을 자연어로 설명
 
-### 작업 시작 전 사전 보고 (승인 게이트)
-1. 목적 (한 문장)
-2. 변경 범위 (수정 파일/폴더 목록)
-3. 위험도 (낮음/중간/높음) + 이유
-4. 롤백 계획
+### Supabase 안전 규칙
+- 대부분의 프로젝트가 동일 Supabase 인스턴스(`fgnkrhgbvohmxaetejyx`) 공유
+- 스키마 변경 시 다른 프로젝트 영향도 반드시 확인
+- SQL 실행 시 왜 필요한지 쉽게 설명
 
-사용자 승인 없이는 작업을 시작하지 않는다.
-
----
-
-## Supabase 안전 규칙
-
-### RLS(권한) 규칙
-- RLS/Policy 절대 임의 수정 금지
-- 필요 시 "정책 제안서" 작성:
-  - 대상 테이블/행
-  - 대상 역할/사용자
-  - 허용/차단 조건 (select/insert/update/delete)
-  - 보안상 위험 포인트
-
-### DB 스키마/마이그레이션 규칙
-- "스키마 변경 설계안" 먼저 승인:
-  - 변경 전/후 스키마 요약
-  - 데이터 마이그레이션 필요 여부
-  - 다운타임/리스크
-  - 되돌리는 방법
-- **DB를 공유하는 프로젝트 영향도 반드시 확인**
-
-### SQL 실행 안내
-- SQL 실행이 필요할 때 **왜 해야 하는지 쉽게 설명**
-- 예: "사진 메타데이터를 저장하려면 데이터베이스에 칸(컬럼)이 필요해서 추가합니다"
-
----
-
-## 구현 규칙
-작업 후 반드시 **자연어로 설명**한다:
-- 무엇을 바꿨는지
-- 왜 바꿨는지
-- 사용자가 체감하는 변화
-- 바꾸지 않으면 어떤 문제가 있었는지
-
-코드 설명은 선택 사항이며, 이해 가능한 수준으로만 한다.
-
----
-
-## 검증 규칙
-코드 수정 후 가능한 범위에서 반드시 수행:
-- lint
-- typecheck (있다면)
-- test (있다면 - Vitest, pytest 등)
-- dev 서버 실행 또는 빌드
-
-실패 시:
-- 에러 로그를 그대로 붙이지 말고 **원인을 한글로 요약**
-- 해결책 1~2개 제시
-- **임의로 계속 진행하지 않는다** (중단 후 질문)
-
----
-
-## 결과 보고 포맷
-작업 완료 시:
-- 변경된 파일 목록
-- 핵심 변경 요약 (비개발자도 이해 가능)
-- 확인이 필요한 사용자 체크리스트 (3개 이내)
-- 다음 작업 제안 (우선순위 포함)
-
----
-
-## Git 운영
-- 작업 시작: feature 브랜치 생성
-- 커밋: 작은 단위(목적별)로
+### Git 규칙
 - 커밋 메시지 접두사: `feat:`, `fix:`, `refactor:`, `docs:`, `chore:`
-- 큰 변경은 PR 단위로 분리
-- 불확실하면 커밋 전에 중단하고 질문
-- 배포/push/commit은 사용자가 "작업 끝났다"라고 말할 때 물어보고 진행
+- 배포/push/commit은 사용자가 "작업 끝났다"라고 말할 때 진행
